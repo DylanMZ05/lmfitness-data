@@ -4,7 +4,7 @@ import useActiveSection from './useActiveSection';
 
 const Header: React.FC = () => {
     const isScrolled = useScroll(50);
-    const sectionIds = ['inicio', 'inspiracion', 'precios', 'ubicaciones', 'contacto'];
+    const sectionIds = ['inicio', 'productos', 'sobrenosotros'];
     const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -65,7 +65,7 @@ const Header: React.FC = () => {
                                 : ''
                         }`}
                     >
-                        <a href="/nach-barber-new/#inicio" onClick={() => handleClick('inicio')}>
+                        <a href="/lmfitness/#inicio" onClick={() => handleClick('inicio')}>
                             Inicio
                         </a>
                     </li>
@@ -76,19 +76,8 @@ const Header: React.FC = () => {
                                 : ''
                         }`}
                     >
-                        <a href="/nach-barber-new/#inspiracion" onClick={() => handleClick('inspiracion')}>
-                            Inspiración
-                        </a>
-                    </li>
-                    <li
-                        className={`relative font-medium hover:text-red-500 hover:scale-105 hover:underline hover:underline-offset-5 hover:decoration-2 transition-all duration-100 ${
-                            activeSection === 'precios'
-                                ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105'
-                                : ''
-                        }`}
-                    >
-                        <a href="/nach-barber-new/#precios" onClick={() => handleClick('precios')}>
-                            Precios
+                        <a href="/lmfitness/#inspiracion" onClick={() => handleClick('inspiracion')}>
+                            Productos
                         </a>
                     </li>
                     <li
@@ -98,8 +87,8 @@ const Header: React.FC = () => {
                                 : ''
                         }`}
                     >
-                        <a href="/nach-barber-new/#ubicaciones" onClick={() => handleClick('ubicaciones')}>
-                            Ubicaciones
+                        <a href="/lmfitness/#ubicaciones" onClick={() => handleClick('ubicaciones')}>
+                            Sobre Nosotros
                         </a>
                     </li>
                     <li
@@ -109,7 +98,7 @@ const Header: React.FC = () => {
                                 : ''
                         }`}
                     >
-                        <a href="/nach-barber-new/#contacto" onClick={() => handleClick('contacto')}>
+                        <a href="/lmfitness/#contacto" onClick={() => handleClick('contacto')}>
                             Contacto
                         </a>
                     </li>
@@ -117,12 +106,12 @@ const Header: React.FC = () => {
 
                 {/* Menú móvil */}
                 <div
-                    className={`lg:hidden fixed z-20 top-0 left-0 w-full h-110 bg-neutral-950 text-white flex flex-col items-center justify-end space-y-8 pb-10 transform ${
+                    className={`lg:hidden fixed z-20 top-0 left-0 w-full h-90 bg-black text-white flex flex-col items-center justify-end space-y-8 pb-10 transform ${
                         menuOpen ? 'translate-y-0' : '-translate-y-full'
                     } transition-transform duration-500`}
                 >
                     <a
-                        href="/nach-barber-new/#inicio"
+                        href="/lmfitness/#inicio"
                         className={`text-2xl ${
                             activeSection === 'inicio' ? 'text-red-500 underline' : ''
                         }`}
@@ -131,38 +120,29 @@ const Header: React.FC = () => {
                         Inicio
                     </a>
                     <a
-                        href="/nach-barber-new/#inspiracion"
+                        href="/lmfitness/#inspiracion"
                         className={`text-2xl ${
                             activeSection === 'inspiracion' ? 'text-red-500 underline' : ''
                         }`}
                         onClick={() => handleClick('inspiracion')}
                     >
-                        Inspiración
+                        Productos
                     </a>
                     <a
-                        href="/nach-barber-new/#precios"
+                        href="/lmfitness/#precios"
                         className={`text-2xl ${
                             activeSection === 'precios' ? 'text-red-500 underline' : ''
                         }`}
                         onClick={() => handleClick('precios')}
                     >
-                        Precios
+                        Sobre Nostroso
                     </a>
                     <a
-                        href="/nach-barber-new/#ubicaciones"
+                        href="/lmfitness/#ubicaciones"
                         className={`text-2xl ${
                             activeSection === 'ubicaciones' ? 'text-red-500 underline' : ''
                         }`}
                         onClick={() => handleClick('ubicaciones')}
-                    >
-                        Ubicaciones
-                    </a>
-                    <a
-                        href="/nach-barber-new/#contacto"
-                        className={`text-2xl ${
-                            activeSection === 'contacto' ? 'text-red-500 underline' : ''
-                        }`}
-                        onClick={() => handleClick('contacto')}
                     >
                         Contacto
                     </a>

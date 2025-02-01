@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 
 const ProductAnimation = () => {
     const images = [
-        { src: "/assets/pre-1.png", alt: "Pre-Workout", direction: "right", size: "w-40 h-40", scale: 1.05, position: "left-30 top-20" },
-        { src: "/assets/creatina-1.png", alt: "Creatina", direction: "left", size: "w-40 h-40", scale: 1.0, position: "right-30 top-20" },
-        { src: "/assets/prote-1.png", alt: "Proteína", direction: "bottom", size: "w-48 h-48", scale: 1.2, position: "top-15" }, // Cambiado el `direction`
+        { src: "/assets/pre-1.png", alt: "Pre-Workout", direction: "right", size: "w-max h-40", scale: 1.05, position: "left-34 top-20" },
+        { src: "/assets/creatina-1.png", alt: "Creatina", direction: "left", size: "w-max h-40", scale: 1.0, position: "right-30 top-20" },
+        { src: "/assets/prote-1.png", alt: "Proteína", direction: "bottom", size: "w-max h-48", scale: 1.3, position: "top-15" }, // Cambiado el `direction`
     ];
 
     return (
