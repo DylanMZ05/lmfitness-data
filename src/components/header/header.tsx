@@ -26,7 +26,7 @@ const Header: React.FC = () => {
                     <img
                         src="public/assets/logo.jpeg"
                         alt="Logo"
-                        className="h-20 mr-2 img-shadow"
+                        className="h-13 mr-2 img-shadow"
                     />
                     <p className="hidden sm:flex text-lg font-semibold crimsontext tracking-wider ts-xl">
                         LM <br />
