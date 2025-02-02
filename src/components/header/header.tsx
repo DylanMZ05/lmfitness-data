@@ -24,7 +24,7 @@ const Header: React.FC = () => {
                 {/* Logo */}
                 <div className="flex z-50 items-center p-2 pl-0 ml-5 xl:ml-15">
                     <img
-                        src="public/assets/logo.jpeg"
+                        src="assets/logo.jpeg"
                         alt="Logo"
                         className="h-13 mr-2 img-shadow"
                     />
