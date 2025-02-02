@@ -1,5 +1,5 @@
 import React from "react";
-import ProductAnimation from "../hooks/ProductAnimation";
+import ProductAnimation from "./ProductAnimation";
 
 const Main: React.FC = () => {
 
