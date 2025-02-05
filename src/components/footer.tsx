@@ -17,10 +17,10 @@ const Footer: React.FC = () => {
                 <div className="flex flex-col items-center justify-center mt-5">
                     <h2 className="text-3xl font-bold mb-4 text-white text-center">Contacto</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        <a href="https://www.instagram.com/nachbarbershop/" target="_blank">
+                        <a href="https://www.instagram.com/lm.fitness_1/" target="_blank">
                             <img src="assets/instagram.png" alt="" className="h-13"/>
                         </a>
-                        <a href="https://wa.me/5491155862570" target="_blank">
+                        <a href="https://wa.me/5492257531656" target="_blank">
                             <img src="assets/whatsapp.png" alt="" className="h-13 rounded-[12px]"/>
                         </a>
                     </div>
