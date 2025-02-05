@@ -18,7 +18,7 @@ const ParallaxBanner: React.FC<ParallaxBannerProps> = ({ imageUrl, text }) => {
   }, []);
 
   return (
-    <div className="relative h-64 w-full overflow-hidden rounded-lg">
+    <div className="relative h-64 w-[96vw] overflow-hidden rounded-lg">
       <div
         className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
         style={{

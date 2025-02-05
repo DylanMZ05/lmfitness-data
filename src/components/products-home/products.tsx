@@ -4,10 +4,11 @@ import ParallaxBanner from "../ParallaxBanner";
 
 const Products: React.FC = () => {
     const products = [
-        { title: "Proteínas", bgGradient: "linear-gradient(225deg, #001970, #00c4ff)" },
-        { title: "Creatinas", bgGradient: "linear-gradient(225deg, #2a09e6, #ff2fb2)" },
-        { title: "Vitaminas", bgGradient: "linear-gradient(225deg, #ff0000, #ffa300)" },
-        { title: "Pre-Entreno", bgGradient: "linear-gradient(225deg, #17b617, #ffd643)" }
+        { title: "PROTEÍNAS", bgGradient: "linear-gradient(225deg, #001970, #00c4ff)" },
+        { title: "CREATINAS", bgGradient: "linear-gradient(225deg, #2a09e6, #ff2fb2)" },
+        { title: "PRE ENTRENOS", bgGradient: "linear-gradient(225deg, #17b617, #ffd643)" },
+        { title: "COMBOS LMFITNESS", bgGradient: "linear-gradient(225deg, #ff0000, #ffa300)" },
+        { title: "TODOS NUESTROS PRODUCTOS", bgGradient: "linear-gradient(225deg, #17b617, #ffd643)" }
     ];
 
     return (
@@ -23,9 +24,6 @@ const Products: React.FC = () => {
             {products.map((product, index) => (
                 <ProductCard key={index} title={product.title} bgGradient={product.bgGradient} />
             ))}
-            <div className="mt-5">
-                <a href="" className="bg-neutral-950 py-4 px-7 rounded-[50px] text-white font-medium shadow-2xl">VER TODOS LOS PRODUCTOS</a>
-            </div>
         </section>
     );
 }
