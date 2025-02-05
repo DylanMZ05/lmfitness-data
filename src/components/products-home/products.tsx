@@ -12,10 +12,14 @@ const Products: React.FC = () => {
 
     return (
         <section className="h-max flex justify-center items-center gap-6 flex-wrap pb-[50px]">
-            <div className="p-4">
-                <ParallaxBanner imageUrl="/images/banner.jpg" text="ENVIOS A TODO EL PAÍS" />
+            <div className="mt-4 mx-3 shadow-lg">
+                <ParallaxBanner imageUrl="assets/suplementos.jpg" text="TENEMOS ENVÍOS A TODO EL PAÍS" />
             </div>
-            <h3 className="text-[36px] text-center font-semibold opacity-95">NUESTROS PRODUCTOS</h3>
+            <div className="flex flex-col items-center gap-2">
+                <h3 className="text-[36px] text-center font-semibold ">CATÁLOGO</h3>
+                <div className="w-[320px] h-[2px] bg-red-500 mb-2 rounded-2xl"></div>
+                <h4 className="text-[24px] text-center font-semibold opacity-95">NUESTROS PRODUCTOS</h4>
+            </div>
             {products.map((product, index) => (
                 <ProductCard key={index} title={product.title} bgGradient={product.bgGradient} />
             ))}
