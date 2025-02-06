@@ -1,38 +1,119 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { FaShoppingCart, FaCheckCircle, FaBoxOpen, FaClipboardList, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-interface ParallaxBannerProps {
+interface Slide {
   imageUrl: string;
   text: string;
+  icon: JSX.Element;
 }
 
-const ParallaxBanner: React.FC<ParallaxBannerProps> = ({ imageUrl, text }) => {
-  const [offsetY, setOffsetY] = useState(0);
+const slides: Slide[] = [
+  {
+    imageUrl: "/images/step1.jpg",
+    text: "Comprá tus productos en tres simples pasos",
+    icon: <FaClipboardList className="text-5xl text-white" />,
+  },
+  {
+    imageUrl: "/images/step1.jpg",
+    text: "Paso 1: Selecciona tus productos",
+    icon: <FaShoppingCart className="text-5xl text-white" />,
+  },
+  {
+    imageUrl: "/images/step2.jpg",
+    text: "Paso 2: Agrega al carrito y procede al pago",
+    icon: <FaCheckCircle className="text-5xl text-white" />,
+  },
+  {
+    imageUrl: "/images/step3.jpg",
+    text: "Paso 3: Recibe tu pedido y disfruta",
+    icon: <FaBoxOpen className="text-5xl text-white" />,
+  },
+];
 
-  const handleScroll = () => {
-    setOffsetY(window.scrollY);
-  };
+const ParallaxSlider: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const autoSlideDelay = 7000;
+  let autoSlideTimeout: ReturnType<typeof setTimeout>;
+
+  const resetAutoSlide = useCallback(() => {
+    clearTimeout(autoSlideTimeout);
+    autoSlideTimeout = setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    }, autoSlideDelay);
+  }, [currentIndex]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    resetAutoSlide();
+    return () => clearTimeout(autoSlideTimeout);
+  }, [currentIndex, resetAutoSlide]);
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+    resetAutoSlide();
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + slides.length) % slides.length);
+    resetAutoSlide();
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+    resetAutoSlide();
+  };
 
   return (
-    <div className="relative h-64 w-[96vw] overflow-hidden rounded-lg">
+    <div className="relative w-[96vw] overflow-hidden rounded-lg">
+      {/* Contenedor deslizante */}
       <div
-        className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${imageUrl})`,
-          transform: `translateY(${offsetY * 0.1}px) scale(1.7)`,
-        }}
-      />
-      <div className="relative flex items-center justify-center h-full bg-black/80">
-        <h1 className="text-white text-3xl font-bold text-center px-4">
-          {text}
-        </h1>
+        className="flex transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
+        {slides.map((slide, index) => (
+          <div key={index} className="w-full flex-shrink-0 relative h-64">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${slide.imageUrl})` }}
+            />
+            <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center">
+              {slide.icon}
+              <h1 className="text-white text-3xl font-bold text-center mt-4">
+                {slide.text}
+              </h1>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Flechas de navegación */}
+      <button
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black transition"
+        onClick={prevSlide}
+      >
+        <FaChevronLeft size={24} />
+      </button>
+
+      <button
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black transition"
+        onClick={nextSlide}
+      >
+        <FaChevronRight size={24} />
+      </button>
+
+      {/* Controles del slider */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            className={`h-3 w-3 rounded-full ${
+              index === currentIndex ? "bg-white" : "bg-gray-400"
+            }`}
+            onClick={() => goToSlide(index)}
+          />
+        ))}
       </div>
     </div>
   );
 };
 
-export default ParallaxBanner;
+export default ParallaxSlider;
