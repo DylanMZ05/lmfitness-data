@@ -7,7 +7,7 @@ const ProductAnimation = () => {
             alt: "Pre-Workout", 
             direction: "right", 
             size: "w-max h-40", 
-            scale: 1.05, 
+            scale: 1, 
             mdScale: 1.2, 
             position: "left-35 top-24 md:-left-5 md:-top-8",
             rotation: 15,
@@ -17,7 +17,7 @@ const ProductAnimation = () => {
             alt: "Creatina", 
             direction: "left", 
             size: "w-max h-40", 
-            scale: 1.0, 
+            scale: .9, 
             mdScale: 1.15, 
             position: "right-31 top-24 md:right-25 md:top-30 lg:right-32",
             rotation: -15,
@@ -27,7 +27,7 @@ const ProductAnimation = () => {
             alt: "Proteína", 
             direction: "bottom", 
             size: "w-max h-48", 
-            scale: 1.3, 
+            scale: 1.25, 
             mdScale: 1.65,
             position: "top-15 md:top-20 md:left-25",
             rotation: 0,
@@ -51,7 +51,7 @@ const ProductAnimation = () => {
                         x: 0, 
                         y: 0, 
                         scale: window.innerWidth >= 768 && image.mdScale ? image.mdScale : image.scale,
-                        rotate: window.innerWidth >= 0 ? image.rotation : 0, 
+                        rotate: window.innerWidth >= 768 ? image.rotation : 0, 
                     }} 
                     transition={{ duration: 0.5, delay: index * 0.3 }}
                     className={`absolute flex justify-center items-center ${image.size} ${image.position}`}
