@@ -64,7 +64,6 @@ const ParallaxSlider: React.FC = () => {
 
   return (
     <div className="relative w-[96vw] overflow-hidden rounded-lg">
-      {/* Contenedor deslizante */}
       <div
         className="flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -77,7 +76,7 @@ const ParallaxSlider: React.FC = () => {
             />
             <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center">
               {slide.icon}
-              <h1 className="text-white text-3xl font-bold text-center mt-4">
+              <h1 className="text-white text-3xl font-bold text-center mt-4 px-20">
                 {slide.text}
               </h1>
             </div>
@@ -85,7 +84,6 @@ const ParallaxSlider: React.FC = () => {
         ))}
       </div>
 
-      {/* Flechas de navegación */}
       <button
         className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black transition"
         onClick={prevSlide}
@@ -100,7 +98,6 @@ const ParallaxSlider: React.FC = () => {
         <FaChevronRight size={24} />
       </button>
 
-      {/* Controles del slider */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
         {slides.map((_, index) => (
           <button
