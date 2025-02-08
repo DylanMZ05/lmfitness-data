@@ -1,6 +1,6 @@
 import React from "react";
 import ProductCard from "./product-card";
-import ParallaxBanner from "../ParallaxBanner";
+import ParallaxBanner from "../Slider";
 
 const Products: React.FC = () => {
     const products = [
@@ -14,7 +14,7 @@ const Products: React.FC = () => {
     return (
         <section className="h-max flex justify-center items-center gap-6 flex-wrap pb-[75px]">
             <div className="mt-4 mx-3 shadow-lg">
-                <ParallaxBanner imageUrl="assets/suplementos.jpg" text="TENEMOS ENVÍOS A TODO EL PAÍS" />
+                <ParallaxBanner />
             </div>
             
             {/* Contenedor de productos con flex-wrap en md */}

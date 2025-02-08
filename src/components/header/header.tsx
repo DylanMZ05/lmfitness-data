@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Search } from 'lucide-react';
 import useScroll from './useScroll';
 import useActiveSection from './useActiveSection';
 
@@ -22,28 +22,30 @@ const Header: React.FC = () => {
             }`}
         >
             <div className="flex justify-between items-center text-white p-4">
-                {/* Logo */}
-                <div className="flex items-center z-50 ml-5 xl:ml-15">
-                    <img src="assets/logo.jpeg" alt="Logo" className="h-13 mr-2 img-shadow" />
-                    <p className="hidden sm:flex text-lg font-semibold crimsontext tracking-wider ts-xl">
-                        LM <br /> FITNESS
-                    </p>
-                </div>
-
-                {/* Carrito en menú móvil */}
-                <button className="lg:hidden absolute right-24 text-white z-50">
-                    <ShoppingCart size={30} />
-                </button>
-
                 {/* Botón Hamburguesa */}
                 <button
-                    className="lg:hidden mr-5 text-white focus:outline-none z-50"
+                    className="w-[80px] mx-5 text-white focus:outline-none z-50 lg:hidden"
                     onClick={() => setMenuOpen(!menuOpen)}
                 >
                     <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`} />
                     <div className={`w-8 h-1 bg-white my-1.5 rounded transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
                     <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? '-rotate-45 -translate-y-2.5' : ''}`} />
                 </button>
+
+                {/* Logo */}
+                <div className="flex items-center justify-center z-50 mx-5 w-[80px] xl:ml-15">
+                    <img src="assets/logo.jpeg" alt="Logo" className="h-13 img-shadow" />
+                </div>
+
+                {/* Carrito en menú móvil */}
+                <div className="right-24 text-white z-50 mx-5 flex w-[80px] justify-between lg:hidden">
+                <button>
+                    <Search size={30} />
+                </button>
+                <button>
+                    <ShoppingCart size={30} />
+                </button>
+                </div>
 
                 {/* Menú principal */}
                 <div className="hidden lg:flex items-center">
