@@ -24,7 +24,7 @@ const Header: React.FC = () => {
             <div className="flex justify-between items-center text-white p-4">
                 {/* Botón Hamburguesa */}
                 <button
-                    className="w-[80px] mx-5 text-white focus:outline-none z-50 lg:hidden"
+                    className="w-[70px] ml-2 text-white focus:outline-none z-50 lg:hidden"
                     onClick={() => setMenuOpen(!menuOpen)}
                 >
                     <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`} />
@@ -33,17 +33,17 @@ const Header: React.FC = () => {
                 </button>
 
                 {/* Logo */}
-                <div className="flex items-center justify-center z-50 mx-5 w-[80px] xl:ml-15">
+                <div className="flex items-center justify-center z-50 mx-5 w-[70px] xl:ml-15">
                     <img src="assets/logo.jpeg" alt="Logo" className="h-13 img-shadow" />
                 </div>
 
                 {/* Carrito en menú móvil */}
-                <div className="right-24 text-white z-50 mx-5 flex w-[80px] justify-between lg:hidden">
+                <div className="right-24 text-white z-50 mr-2 flex w-[70px] justify-between lg:hidden">
                 <button>
-                    <Search size={30} />
+                    <Search size={26} />
                 </button>
                 <button>
-                    <ShoppingCart size={30} />
+                    <ShoppingCart size={26} />
                 </button>
                 </div>
 
