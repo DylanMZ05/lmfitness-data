@@ -5,6 +5,12 @@
     src: url(../fonts/Montserrat/Montserrat-VariableFont_wght.ttf);
 }
 
+@font-face {
+  font-family: 'Rubik Dirt';
+  src: url('./fonts/Rubik_Dirt/RubikDirt-Regular.ttf') format('truetype');
+}
+
+
 body {
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
@@ -14,32 +20,6 @@ html {
     scroll-behavior: smooth;
 }
 
-@keyframes bgRandom {
-    0% {
-      background-position: 0% 50%;
-    }
-    20% {
-      background-position: 30% 40%;
-    }
-    40% {
-      background-position: 70% 60%;
-    }
-    60% {
-      background-position: 40% 30%;
-    }
-    80% {
-      background-position: 80% 70%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-  
-  .animate-bgRandom {
-    background-size: 300% 300%;
-    animation: bgRandom 12s infinite ease-in-out;
-  }
-
-  .personal-sw {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-  }
+.font-rubik {
+  font-family: 'Rubik Dirt', sans-serif;
+}

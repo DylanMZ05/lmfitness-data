@@ -2,13 +2,18 @@ import React from "react";
 import ProductCard from "./product-card";
 import ParallaxBanner from "../Slider";
 
+interface Product {
+    title: string;
+    spacing?: string;
+}
+
 const Products: React.FC = () => {
-    const products = [
-        { title: "PROTEÍNAS", bgGradient: "linear-gradient(225deg, #001970, #00c4ff)" },
-        { title: "CREATINAS", bgGradient: "linear-gradient(225deg, #2a09e6, #ff2fb2)" },
-        { title: "PRE ENTRENOS", bgGradient: "linear-gradient(225deg, #17b617, #ffd643)" },
-        { title: "COMBOS LMFITNESS", bgGradient: "linear-gradient(225deg, #ff0000, #ffa300)" },
-        { title: "TODOS NUESTROS PRODUCTOS", bgGradient: "linear-gradient(225deg, #17b617, #ffd643)" }
+    const products: Product[] = [
+        { title: "PROTEÍNAS", spacing: "mt-15" },
+        { title: "CREATINAS", spacing: "mt-15" },
+        { title: "PRE ENTRENOS", spacing: "mt-10" },
+        { title: "COMBOS LMFITNESS", spacing: "mt-10" },
+        { title: "TODOS NUESTROS PRODUCTOS", spacing: "mt-5" }
     ];
 
     return (
@@ -17,7 +22,6 @@ const Products: React.FC = () => {
                 <ParallaxBanner />
             </div>
             
-            {/* Contenedor de productos con flex-wrap en md */}
             <div className="flex flex-wrap justify-center gap-6 w-full px-4">
                 <div className="w-full text-center">
                     <h3 className="text-[36px] font-semibold">CATÁLOGO</h3>
@@ -25,9 +29,8 @@ const Products: React.FC = () => {
                     <h4 className="text-[24px] font-semibold opacity-95">NUESTROS PRODUCTOS</h4>
                 </div>
 
-                {/* Ahora los productos se envolverán en md */}
                 {products.map((product, index) => (
-                    <ProductCard key={index} title={product.title} bgGradient={product.bgGradient} />
+                    <ProductCard key={index} title={product.title} spacing={product.spacing} />
                 ))}
             </div>
         </section>

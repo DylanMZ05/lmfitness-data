@@ -3,7 +3,7 @@ import React from "react";
 const AboutUs: React.FC = () => {
     return (
         <section className="h-max flex justify-center items-center gap-6 flex-wrap bg-neutral-900 md:bg-white">
-            <div className="flex flex-col w-screen max-w-[500px] items-center gap-2 bg-neutral-900 px-7 py-[50px] md:max-w-max md:flex-row md:items-start md:rounded-2xl md:mx-5 md:mb-5 lg:max-w-[1300px] lg:justify-around">
+            <div className="flex flex-col text-center w-screen max-w-[500px] items-center gap-2 bg-neutral-900 px-7 py-[50px] md:text-start md:max-w-max md:flex-row md:items-start md:rounded-2xl md:mx-5 md:mb-5 lg:max-w-[1300px] lg:justify-around">
                 <div className="px-3 max-w-[500px] md:mr-5 md:mt-6">
                     <h3 className="text-[32px] text-center font-semibold text-white md:text-start">¿QUIENES SOMOS?</h3>
                     <div className="w-[50px] h-[2px] bg-red-500 mb-2 mx-auto rounded-2xl md:ml-1 md:mt-1"></div>
