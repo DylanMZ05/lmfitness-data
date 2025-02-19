@@ -97,7 +97,7 @@ const ParallaxSlider: React.FC<ParallaxSliderProps> = ({ slides, width = "w-[96v
           <button
             key={index}
             className={`h-3 w-3 rounded-full ${
-              index === currentIndex ? "bg-white" : "bg-gray-400"
+              index === currentIndex ? "bg-white" : "bg-gray-400 cursor-pointer"
             }`}
             onClick={() => goToSlide(index)}
           />

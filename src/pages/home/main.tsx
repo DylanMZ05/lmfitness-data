@@ -1,6 +1,8 @@
 import React from "react";
 import ProductAnimation from "./ProductAnimation";
 
+import { Link } from "react-router-dom";
+
 const Main: React.FC = () => {
 
     return (
@@ -10,7 +12,12 @@ const Main: React.FC = () => {
                 <h1 className="text-[44px] font-bold md:text-[50px]">LM FITNESS</h1>
                 <div className="bg-red-600 h-[3px] w-60 ml-0.5 mb-3 rounded-2xl md:h-[2px]"></div>
                 <h2 className="text-[18px] font-[600] leading-tight md:text-[24px]">LLEVA TUS ENTRENAMIENTOS<br className="lg:hidden"></br>AL <br className="hidden lg:block xl:hidden"></br>SIGUIENTE NIVEL</h2>
-                <button className="mt-5 bg-amber-50 text-black font-semibold pb-[5px] pt-[7px] px-6 rounded-4xl">VER PRODUCTOS</button>
+                <Link
+                    to="/catalogo"
+                        className="mt-5 bg-amber-50 text-black font-semibold pb-[5px] pt-[7px] px-6 rounded-4xl inline-block text-center"
+                    >
+                    VER PRODUCTOS
+                </Link>
             </div>
 
             <div>
