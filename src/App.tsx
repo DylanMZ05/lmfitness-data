@@ -1,23 +1,31 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/header/header";
-import Main from "./components/main";
-import Products from "./components/products-home/products";
-import AboutUs from "./components/AboutUs";
+import Main from "./pages/home/main";
+import Products from "./pages/home/products-home/products";
+import AboutUs from "./pages/home/AboutUs";
 import Footer from "./components/footer";
+
+import Catalogo from "./pages/products/Catalogo"
 
 function App() {
   return (
-    <Router>
+    <Router basename="/lmfitness">
       <Header />
       <Routes>
         <Route
-          path="/lmfitness"
+          path="/"
           element={
             <>
               <Main />
               <Products />
               <AboutUs />
             </>
+          }
+        />
+        <Route 
+          path="/catalogo" 
+          element={
+            <Catalogo />
           }
         />
       </Routes>

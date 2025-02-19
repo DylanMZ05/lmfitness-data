@@ -5,7 +5,7 @@ import useActiveSection from './useActiveSection';
 
 const Header: React.FC = () => {
     const isScrolled = useScroll(50);
-    const sectionIds = ['inicio', 'productos', 'sobrenosotros'];
+    const sectionIds = ['inicio', 'productos', 'about', 'contacto'];
     const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -53,11 +53,11 @@ const Header: React.FC = () => {
                         <li className={`relative font-medium hover:text-red-500 transition-all duration-100 ${activeSection === 'inicio' ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''}`}>
                             <a href="/lmfitness/#inicio" onClick={() => handleClick('inicio')}>Inicio</a>
                         </li>
-                        <li className={`relative font-medium hover:text-red-500 transition-all duration-100 ${activeSection === 'inspiracion' ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''}`}>
-                            <a href="/lmfitness/#inspiracion" onClick={() => handleClick('inspiracion')}>Productos</a>
+                        <li className={`relative font-medium hover:text-red-500 transition-all duration-100 ${activeSection === 'productos' ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''}`}>
+                            <a href="/lmfitness/#productos" onClick={() => handleClick('productos')}>Productos</a>
                         </li>
-                        <li className={`relative font-medium hover:text-red-500 transition-all duration-100 ${activeSection === 'ubicaciones' ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''}`}>
-                            <a href="/lmfitness/#ubicaciones" onClick={() => handleClick('ubicaciones')}>Sobre Nosotros</a>
+                        <li className={`relative font-medium hover:text-red-500 transition-all duration-100 ${activeSection === 'about' ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''}`}>
+                            <a href="/lmfitness/#about" onClick={() => handleClick('about')}>Sobre Nosotros</a>
                         </li>
                         <li className={`relative font-medium hover:text-red-500 transition-all duration-100 ${activeSection === 'contacto' ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''}`}>
                             <a href="/lmfitness/#contacto" onClick={() => handleClick('contacto')}>Contacto</a>
@@ -65,7 +65,10 @@ const Header: React.FC = () => {
                     </ul>
 
                     {/* Carrito en escritorio */}
-                    <button className="mr-7 text-white">
+                    <button>
+                    <Search size={26} />
+                    </button>
+                    <button className="ml-7 mr-3 text-white">
                         <ShoppingCart size={24} />
                     </button>
                 </div>
@@ -75,13 +78,13 @@ const Header: React.FC = () => {
                     <a href="/lmfitness/#inicio" className={`text-2xl ${activeSection === 'inicio' ? 'text-red-500 underline' : ''}`} onClick={() => handleClick('inicio')}>
                         Inicio
                     </a>
-                    <a href="/lmfitness/#inspiracion" className={`text-2xl ${activeSection === 'inspiracion' ? 'text-red-500 underline' : ''}`} onClick={() => handleClick('inspiracion')}>
+                    <a href="/lmfitness/#productos" className={`text-2xl ${activeSection === 'productos' ? 'text-red-500 underline' : ''}`} onClick={() => handleClick('productos')}>
                         Productos
                     </a>
-                    <a href="/lmfitness/#precios" className={`text-2xl ${activeSection === 'precios' ? 'text-red-500 underline' : ''}`} onClick={() => handleClick('precios')}>
+                    <a href="/lmfitness/#about" className={`text-2xl ${activeSection === 'about' ? 'text-red-500 underline' : ''}`} onClick={() => handleClick('about')}>
                         Sobre Nosotros
                     </a>
-                    <a href="/lmfitness/#ubicaciones" className={`text-2xl ${activeSection === 'ubicaciones' ? 'text-red-500 underline' : ''}`} onClick={() => handleClick('ubicaciones')}>
+                    <a href="/lmfitness/#about" className={`text-2xl ${activeSection === 'about' ? 'text-red-500 underline' : ''}`} onClick={() => handleClick('about')}>
                         Contacto
                     </a>
                 </div>

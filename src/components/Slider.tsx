@@ -1,5 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { FaShoppingCart, FaCheckCircle, FaBoxOpen, FaClipboardList, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight
+} from "react-icons/fa";
 
 interface Slide {
   imageUrl: string;
@@ -7,30 +10,12 @@ interface Slide {
   icon: JSX.Element;
 }
 
-const slides: Slide[] = [
-  {
-    imageUrl: "/images/step1.jpg",
-    text: "Comprá tus productos en tres simples pasos",
-    icon: <FaClipboardList className="text-5xl text-white" />,
-  },
-  {
-    imageUrl: "/images/step1.jpg",
-    text: "Paso 1: Selecciona tus productos",
-    icon: <FaShoppingCart className="text-5xl text-white" />,
-  },
-  {
-    imageUrl: "/images/step2.jpg",
-    text: "Paso 2: Agrega al carrito y procede al pago",
-    icon: <FaCheckCircle className="text-5xl text-white" />,
-  },
-  {
-    imageUrl: "/images/step3.jpg",
-    text: "Paso 3: Recibe tu pedido y disfruta",
-    icon: <FaBoxOpen className="text-5xl text-white" />,
-  },
-];
+interface ParallaxSliderProps {
+  slides: Slide[];
+  width?: string; // Permite personalizar el ancho
+}
 
-const ParallaxSlider: React.FC = () => {
+const ParallaxSlider: React.FC<ParallaxSliderProps> = ({ slides, width = "w-[96vw]" }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoSlideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoSlideDelay = 7000;
@@ -42,7 +27,7 @@ const ParallaxSlider: React.FC = () => {
     autoSlideTimeout.current = setTimeout(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     }, autoSlideDelay);
-  }, [autoSlideDelay]);
+  }, [autoSlideDelay, slides.length]);
 
   useEffect(() => {
     resetAutoSlide();
@@ -69,7 +54,7 @@ const ParallaxSlider: React.FC = () => {
   };
 
   return (
-    <div className="relative w-[96vw] overflow-hidden rounded-lg">
+    <div className={`relative overflow-hidden rounded-lg ${width}`}>
       {/* Contenedor deslizante */}
       <div
         className="flex transition-transform duration-700 ease-in-out"
@@ -93,14 +78,14 @@ const ParallaxSlider: React.FC = () => {
 
       {/* Flechas de navegación */}
       <button
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black transition"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black transition cursor-pointer"
         onClick={prevSlide}
       >
         <FaChevronLeft size={15} />
       </button>
 
       <button
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black transition"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black transition cursor-pointer"
         onClick={nextSlide}
       >
         <FaChevronRight size={15} />

@@ -9,7 +9,8 @@ const ProductAnimation = () => {
             size: "w-max h-40", 
             scale: 1, 
             mdScale: 1.2, 
-            position: "left-35 top-24 md:-left-5 md:-top-8",
+            lgScale: 1.8,
+            position: "left-35 top-24 md:-left-[5vw] md:-top-8",
             rotation: 15,
         },
         { 
@@ -19,7 +20,8 @@ const ProductAnimation = () => {
             size: "w-max h-40", 
             scale: .9, 
             mdScale: 1.15, 
-            position: "right-31 top-24 md:right-25 md:top-30 lg:right-32",
+            lgScale: 1.6,
+            position: "right-31 top-24 md:right-[14vw] md:top-30 lg:top-40",
             rotation: -15,
         },
         { 
@@ -29,7 +31,8 @@ const ProductAnimation = () => {
             size: "w-max h-48", 
             scale: 1.25, 
             mdScale: 1.65,
-            position: "top-15 md:top-20 md:left-25",
+            lgScale: 2.1,
+            position: "top-15 md:top-20 md:left-25 lg:top-30",
             rotation: 0,
         },
     ];
@@ -50,7 +53,11 @@ const ProductAnimation = () => {
                         opacity: 1, 
                         x: 0, 
                         y: 0, 
-                        scale: window.innerWidth >= 768 && image.mdScale ? image.mdScale : image.scale,
+                        scale: window.innerWidth >= 1024 
+                            ? image.lgScale 
+                            : window.innerWidth >= 768 
+                            ? image.mdScale 
+                            : image.scale,
                         rotate: window.innerWidth >= 768 ? image.rotation : 0, 
                     }} 
                     transition={{ duration: 0.5, delay: index * 0.3 }}
