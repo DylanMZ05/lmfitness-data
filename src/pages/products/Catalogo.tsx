@@ -31,16 +31,22 @@ const Catalogo: React.FC = () => {
     return (
         <>
             <div className="h-[100px]"></div>
-            <section className="mx-4 bg-neutral-300 rounded-2xl">
-                <div className="rounded-2xl">
+            <section className="mx-4 rounded-2xl flex justify-center">
+                <div className="rounded-2xl max-w-4xl w-full">
                     <div className="bg-[url('/assets/fondo-2.jpeg')] flex flex-col items-center justify-center bg-cover bg-center max-w-4xl rounded-lg mb-2 border-3 border-neutral-800/40">
-                        <img src="public/assets/logo.jpeg" alt="" className="h-25"/>
-                        <p className="text-white text-4xl font-semibold">LM FITNESS</p>
+                        <div className="w-[100%] flex flex-col items-center justify-center bg-black/60 py-5">
+                            <img src="public/assets/logo.jpeg" alt="" className="h-25"/>
+                            <h3 className="text-center text-white font-semibold text-4xl">NUESTRAS OFERTAS</h3>
+                            <div className="bg-red-600 h-[3px] w-60 mx-auto mb-3 mt-1 rounded-full"></div>
+                        </div>
                     </div>
-                    <Slider slides={slidesData} width="max-w-4xl"/>
+                    <div>
+
+                        <Slider slides={slidesData} width="max-w-4xl"/>
+                    </div>
                 </div>
             </section>
-            <section className="mx-4">
+            <section>
                 <CatalogoCard />
             </section>
         </>
