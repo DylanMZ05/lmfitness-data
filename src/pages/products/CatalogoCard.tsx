@@ -114,7 +114,7 @@ const CatalogoCard: React.FC = () => {
 
             {/* Popup para seleccionar la cantidad */}
             {selectedProduct && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-black/70 bg-opacity-50 flex justify-center items-center px-4 z-[1000]">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                         <h2 className="text-lg font-bold">{selectedProduct.title}</h2>
                         <p className="text-gray-600">{selectedProduct.description}</p>
