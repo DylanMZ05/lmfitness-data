@@ -7,30 +7,29 @@ import Footer from "./components/footer";
 
 import Catalogo from "./pages/products/Catalogo"
 
+import { CartProvider } from "./context/CartContext";
+
 function App() {
   return (
-    <Router basename="/lmfitness">
-      <Header />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Main />
-              <Products />
-              <AboutUs />
-            </>
-          }
-        />
-        <Route 
-          path="/catalogo" 
-          element={
-            <Catalogo />
-          }
-        />
-      </Routes>
-      <Footer />
-    </Router>
+      <CartProvider>
+          <Router basename="/lmfitness">
+              <Header />
+              <Routes>
+                  <Route
+                      path="/"
+                      element={
+                          <>
+                              <Main />
+                              <Products />
+                              <AboutUs />
+                          </>
+                      }
+                  />
+                  <Route path="/catalogo" element={<Catalogo />} />
+              </Routes>
+              <Footer />
+          </Router>
+      </CartProvider>
   );
 }
 
