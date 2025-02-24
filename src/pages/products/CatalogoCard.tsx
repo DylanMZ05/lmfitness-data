@@ -19,19 +19,19 @@ const productData: Category[] = [
     {
         name: "PROTEÍNA",
         products: [
-            { id: 1, image: "assets/prote-1.png", title: "STAR NUTRITION WHEY ISOLATE", description: "Proteína de alta calidad.", price: "$32.000" },
-            { id: 2, image: "assets/prote-1.png", title: "STAR NUTRITION PLATINUM DOYPACK", description: "Proteína avanzada.", price: "$57.000" },
-            { id: 3, image: "assets/prote-1.png", title: "ENA TRUE MADE", description: "Ideal para recuperación.", price: "$36.300" },
-            { id: 4, image: "assets/prote-1.png", title: "PROTEINA WHEY ADVANCED XTRENGHT", description: "Para entrenamientos intensos.", price: "$29.800" }
+            { id: 1, image: "assets/prote-1.png", title: "STAR NUTRITION WHEY ISOLATE", description: "Proteína de alta calidad.", price: "$32,000" },
+            { id: 2, image: "assets/prote-1.png", title: "STAR NUTRITION PLATINUM DOYPACK", description: "Proteína avanzada.", price: "$57,000" },
+            { id: 3, image: "assets/prote-1.png", title: "ENA TRUE MADE", description: "Ideal para recuperación.", price: "$36,300" },
+            { id: 4, image: "assets/prote-1.png", title: "PROTEINA WHEY ADVANCED XTRENGHT", description: "Para entrenamientos intensos.", price: "$29,800" }
         ]
     },
     {
         name: "CREATINA",
         products: [
-            { id: 5, image: "assets/creatina-1.png", title: "CREATINA STAR NUTRITION POTE", description: "Mejora el rendimiento.", price: "$27.700" },
-            { id: 6, image: "assets/creatina-1.png", title: "MAXI GAIN GENTECH", description: "Gana masa muscular.", price: "$28.200" },
-            { id: 7, image: "assets/creatina-1.png", title: "NITROGAIN XTRENGHT", description: "Fuerza y resistencia.", price: "$27.500" },
-            { id: 8, image: "assets/creatina-1.png", title: "CREATINA STAR NUTRITION DOYPACK", description: "Alta pureza.", price: "$20.000" }
+            { id: 5, image: "assets/creatina-1.png", title: "CREATINA STAR NUTRITION POTE", description: "Mejora el rendimiento.", price: "$27700" },
+            { id: 6, image: "assets/creatina-1.png", title: "MAXI GAIN GENTECH", description: "Gana masa muscular.", price: "$28,200" },
+            { id: 7, image: "assets/creatina-1.png", title: "NITROGAIN XTRENGHT", description: "Fuerza y resistencia.", price: "$27,500" },
+            { id: 8, image: "assets/creatina-1.png", title: "CREATINA STAR NUTRITION DOYPACK", description: "Alta pureza.", price: "$20,000" }
         ]
     }
 ];

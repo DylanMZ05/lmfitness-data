@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Search, X } from 'lucide-react';
+import { ShoppingCart, Search } from 'lucide-react';
 import useScroll from './useScroll';
 import useActiveSection from './useActiveSection';
 import { useCart } from '../../context/useCart';
@@ -10,31 +10,53 @@ const Header: React.FC = () => {
     const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
     const [menuOpen, setMenuOpen] = useState(false);
     const [cartOpen, setCartOpen] = useState(false);
-    const [showCheckout, setShowCheckout] = useState(false); // Estado del popup de compra
     const { cart, removeFromCart, clearCart } = useCart();
+    const [showCheckout, setShowCheckout] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'transferencia'>('transferencia');
+    const [fullName, setFullName] = useState('');
+    const [location, setLocation] = useState('');
+    const [street, setStreet] = useState('');
+    const [betweenStreets, setBetweenStreets] = useState('');
+    
 
-    // Estado para los datos del formulario
-    const [formData, setFormData] = useState({
-        nombre: '',
-        localidad: '',
-        direccion: '',
-        entreCalles: '',
-        metodoPago: 'transferencia', // Valor por defecto
-    });
+    // Calcular el total multiplicando la cantidad por el precio de cada producto
+    const total = cart.reduce((acc: number, item) => {
+        const price = parseFloat(item.product.price.toString().replace(/[^0-9.-]+/g, ""));
+        const quantity = Number(item.quantity);
+        return acc + quantity * price;
+    }, 0);
 
-    const envio = 1500; // Costo del envío
+    const handleClick = (id: string) => {
+        setActiveSectionManually(id);
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        setMenuOpen(false);
+    };
 
-    // Cálculo del total del carrito
-    const totalPedido = cart.reduce((total, item) => 
-        total + parseInt(item.product.price.replace(/[^0-9]/g, ""), 10) * item.quantity
-    , 0);
+    const discount = paymentMethod === 'efectivo' ? 0.05 : 0;  
+    const totalToPay = (total + 3000) * (1 - discount);
 
-    // Aplicar 5% de descuento si elige efectivo
-    const descuento = formData.metodoPago === 'efectivo' ? totalPedido * 0.05 : 0;
-    const totalFinal = totalPedido - descuento + envio;
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleConfirmPurchase = () => {
+        // Obtener los nombres de los productos
+        const productList = cart.map(item => `- ${item.product.title} (${item.quantity}x)`).join("\n");
+    
+        // Construir el mensaje
+        const message = `Hola! Me gustaría realizar una compra.%0A%0A`
+            + `*Productos elegidos*: %0A${productList}%0A%0A`
+            + `*Nombre completo*: ${fullName}%0A`
+            + `*Localidad*: ${location}%0A`
+            + `*Calle*: ${street}%0A`
+            + `*Entre calles*: ${betweenStreets || 'N/A'}%0A%0A`
+            + `*Método de pago*: ${paymentMethod}%0A`
+            + `*Precio total*: $${totalToPay.toFixed(2)}`;
+    
+        // Número de WhatsApp (reemplaza con tu número en formato internacional sin "+")
+        const phoneNumber = "+5492257531656"; // 📌 Reemplázalo con el número real
+    
+        // Crear enlace de WhatsApp
+        const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+    
+        // Abrir WhatsApp
+        window.open(whatsappURL, "_blank");
     };
 
     return (
@@ -56,16 +78,47 @@ const Header: React.FC = () => {
 
                 {/* Logo */}
                 <div className="flex items-center justify-center z-50 mx-5 w-[70px] xl:ml-15">
-                    <img src="/assets/logo.jpeg" alt="Logo" className="h-13 img-shadow" />
+                    <img src="assets/logo.jpeg" alt="Logo" className="h-13 img-shadow" />
                 </div>
 
-                {/* Carrito */}
+                {/* Carrito en menú móvil */}
                 <div className="right-24 text-white z-50 mr-2 flex w-[70px] justify-between lg:hidden">
                     <button>
                         <Search size={26} />
                     </button>
-                    <button onClick={() => setCartOpen(!cartOpen)} className="relative">
+                    <button onClick={() => setCartOpen(!cartOpen)} className="relative cursor-pointer">
                         <ShoppingCart size={26} />
+                        {cart.length > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+                                {cart.reduce((acc, item) => acc + item.quantity, 0)}
+                            </span>
+                        )}
+                    </button>
+                </div>
+
+                {/* Menú principal */}
+                <div className="hidden lg:flex items-center">
+                    <ul className="flex justify-between items-center w-150 mr-10 font-medium text-xl xl:mr-20">
+                        {sectionIds.map((id) => (
+                            <li
+                                key={id}
+                                className={`relative font-medium hover:text-red-500 transition-all duration-100 ${
+                                    activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''
+                                }`}
+                            >
+                                <a href={`/lmfitness/#${id}`} onClick={() => handleClick(id)}>
+                                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+
+                    {/* Botón de búsqueda y carrito */}
+                    <button>
+                        <Search size={26} />
+                    </button>
+                    <button onClick={() => setCartOpen(!cartOpen)} className="ml-7 mr-3 relative text-white cursor-pointer">
+                        <ShoppingCart size={24} />
                         {cart.length > 0 && (
                             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
                                 {cart.reduce((acc, item) => acc + item.quantity, 0)}
@@ -75,99 +128,178 @@ const Header: React.FC = () => {
                 </div>
             </div>
 
-            {/* Modal del carrito */}
-{cartOpen && (
-    <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-lg p-4 text-black z-50">
-        <button 
-            className="absolute top-4 right-6 text-gray-600 hover:text-gray-900 z-50" 
-            onClick={() => setCartOpen(false)}
-        >
-            <X size={26} />
-        </button>
-
-        <h2 className="text-xl font-bold text-center">Carrito</h2>
-
-        {cart.length === 0 ? (
-            <p className="text-gray-500 text-center mt-4">El carrito está vacío.</p>
-        ) : (
-            <div className="mt-6">
-                {cart.map((item) => (
-                    <div key={item.product.id} className="flex justify-between items-center border-b py-2">
-                        <img src={item.product.image} alt={item.product.title} className="h-12 w-12 object-cover" />
-                        <div>
-                            <h3 className="text-sm font-semibold">{item.product.title}</h3>
-                            <p className="text-sm">{item.quantity} x {item.product.price}</p>
-                        </div>
-                        <button onClick={() => removeFromCart(item.product.id)} className="text-red-500">❌</button>
-                    </div>
-                ))}
-
-                {/* Total */}
-                <div className="border-t mt-4 pt-4 text-lg font-bold flex justify-between">
-                    <span>Total:</span>
-                    <span>${totalPedido.toLocaleString("es-ES")},00</span>
-                </div>
-
-                {/* Botón "Comprar" actualizado */}
-                <button 
-                    onClick={() => {
-                        setCartOpen(false); // Cierra el carrito
-                        setShowCheckout(true); // Abre el popup de compra
-                    }} 
-                    className="w-full mt-2 bg-green-500 text-white py-2 rounded-lg"
-                >
-                    Comprar
-                </button>
-            </div>
-        )}
-    </div>
-)}
-
-        {/* Popup de compra */}
-        {showCheckout && (
-            <div className="fixed inset-0 bg-black/70 flex justify-center items-center">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-                    {/* Botón "X" para cerrar */}
-                    <button className="absolute top-4 right-4 text-gray-600 hover:text-gray-900" onClick={() => setShowCheckout(false)}>
-                        <X size={24} />
-                    </button>
-        
-                    <h2 className="text-xl font-bold mb-4 text-center">Finalizar Compra</h2>
-        
-                    {/* Campos del formulario */}
-                    <input type="text" name="nombre" placeholder="Nombre completo" value={formData.nombre} onChange={handleChange} className="w-full border p-2 px-4 mb-2 rounded-full" />
-                    <input type="text" name="localidad" placeholder="Localidad" value={formData.localidad} onChange={handleChange} className="w-full border p-2 px-4 mb-2 rounded-full" />
-                    <input type="text" name="direccion" placeholder="Dirección" value={formData.direccion} onChange={handleChange} className="w-full border p-2 px-4 mb-2 rounded-full" />
-                    <input type="text" name="entreCalles" placeholder="Entre calles" value={formData.entreCalles} onChange={handleChange} className="w-full border p-2 px-4 mb-2 rounded-full" />
-        
-                    {/* Método de pago */}
-                    <label className="block text-sm font-semibold mb-1">Método de Pago:</label>
-                    <select name="metodoPago" value={formData.metodoPago} onChange={handleChange} className="w-full border p-2 px-3 mb-2 rounded-full">
-                        <option value="transferencia">Transferencia</option>
-                        <option value="efectivo">Efectivo (5% de descuento)</option>
-                    </select>
-        
-                    {/* Total a pagar */}
-                    <p className="text-lg font-bold mt-4 text-center">
-                        Total a pagar: <span className="text-green-600">${totalFinal.toLocaleString("es-ES")},00</span>
-                    </p>
-        
-                    {/* Botones de acción */}
-                    <button className="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">
-                        Enviar Pedido
-                    </button>
-        
-                    {/* Botón "Cerrar" para salir del popup */}
-                    <button 
-                        className="w-full mt-2 bg-gray-300 text-black py-2 rounded-lg hover:bg-gray-400 transition"
-                        onClick={() => setShowCheckout(false)}
+            {/* Menú móvil */}
+            <div
+                className={`lg:hidden fixed z-20 top-0 left-0 w-full h-90 bg-black text-white flex flex-col items-center justify-end space-y-8 pb-10 transform ${
+                    menuOpen ? 'translate-y-0' : '-translate-y-full'
+                } transition-transform duration-500`}
+            >
+                {sectionIds.map((id) => (
+                    <a
+                        key={id}
+                        href={`/lmfitness/#${id}`}
+                        className={`text-2xl ${activeSection === id ? 'text-red-500 underline' : ''}`}
+                        onClick={() => handleClick(id)}
                     >
-                        Cerrar
-                    </button>
-                </div>
+                        {id.charAt(0).toUpperCase() + id.slice(1)}
+                    </a>
+                ))}
             </div>
-        )}
 
+            {/* Modal del carrito */}
+            {cartOpen && (
+                <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-lg p-4 text-black z-60">
+                    {/* Botón para cerrar el carrito */}
+                    <button
+                        onClick={() => setCartOpen(false)}
+                        className="absolute top-4 right-4 text-black text-2xl font-bold cursor-pointer"
+                    >
+                        ✖
+                    </button>
+
+                    <h2 className="text-xl font-bold">Carrito</h2>
+                    {cart.length === 0 ? (
+                        <p className="text-gray-500">El carrito está vacío.</p>
+                    ) : (
+                        <div>
+                            {cart.map((item) => (
+                                <div key={item.product.id} className="flex justify-between items-center border-b py-2">
+                                    <div className='w-12 flex items-center justify-center mr-2'>
+                                        <img src={item.product.image} alt={item.product.title} className="h-12 object-cover" />
+                                    </div>
+                                    <div className='w-[300px]'>
+                                        <h3 className="text-sm font-semibold">{item.product.title}</h3>
+                                        <p className="text-sm">
+                                            {item.quantity} x ${item.product.price}
+                                        </p>
+                                    </div>
+                                    <button onClick={() => removeFromCart(item.product.id)} className="text-red-500 cursor-pointer">
+                                        ❌
+                                    </button>
+                                </div>
+                            ))}
+
+                            {/* Mostrar el total del carrito */}
+                            <div className="flex justify-between items-center font-bold mt-4">
+                                <span>Total:</span>
+                                <span>${total.toFixed(2)}</span>
+                            </div>
+
+                            <button onClick={clearCart} className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg cursor-pointer">
+                                Vaciar carrito
+                            </button>
+                            <button 
+                                onClick={() => setShowCheckout(true)} 
+                                className="w-full mt-2 bg-green-500 text-white py-2 rounded-lg cursor-pointer"
+                            >
+                                Comprar
+                            </button>
+
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {showCheckout && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/70 bg-opacity-50 z-70">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+                        {/* Botón para cerrar el popup */}
+                        <button 
+                            onClick={() => setShowCheckout(false)} 
+                            className="absolute top-2 right-2 text-black text-2xl font-bold"
+                        >
+                            ✖
+                        </button>
+            
+                        <h2 className="text-xl font-bold mb-4">Finalizar Compra</h2>
+            
+                        {/* Formulario */}
+                        <form className="space-y-3">
+                        <input 
+                            type="text" 
+                            placeholder="Nombre Completo" 
+                            className="w-full border p-2 px-4 rounded-full" 
+                            value={fullName} 
+                            onChange={(e) => setFullName(e.target.value)}
+                            required 
+                        />
+                        <input 
+                            type="text" 
+                            placeholder="Localidad" 
+                            className="w-full border p-2 px-4 rounded-full" 
+                            value={location} 
+                            onChange={(e) => setLocation(e.target.value)}
+                            required 
+                        />
+                        <input 
+                            type="text" 
+                            placeholder="Calle" 
+                            className="w-full border p-2 px-4 rounded-full" 
+                            value={street} 
+                            onChange={(e) => setStreet(e.target.value)}
+                            required 
+                        />
+                        <input 
+                            type="text" 
+                            placeholder="Entre calles" 
+                            className="w-full border p-2 px-4 rounded-full" 
+                            value={betweenStreets} 
+                            onChange={(e) => setBetweenStreets(e.target.value)}
+                        />
+                            {/* Método de pago */}
+                            <div className="mt-3">
+                                <label className="block font-semibold">Método de Pago:</label>
+                                <div className="flex flex-col items-center space-y-2">
+                                    <label 
+                                        className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                                    ${paymentMethod === 'efectivo' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                                        onClick={() => setPaymentMethod('efectivo')}
+                                    >
+                                        <input 
+                                            type="radio" 
+                                            name="pago" 
+                                            value="efectivo" 
+                                            className="hidden" 
+                                        />
+                                        Efectivo (5% de descuento)
+                                    </label>
+                                        
+                                    <label 
+                                        className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                                    ${paymentMethod === 'transferencia' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                                        onClick={() => setPaymentMethod('transferencia')}
+                                    >
+                                        <input 
+                                            type="radio" 
+                                            name="pago" 
+                                            value="transferencia" 
+                                            className="hidden" 
+                                        />
+                                        Transferencia
+                                    </label>
+                                </div>
+                            </div>
+            
+                            {/* Resumen de precios */}
+                            <div className="mt-4 font-bold">
+                                <p>Envío: <span className="text-blue-500">$3000</span></p>
+                                <p>Total Productos: <span className="text-blue-500">${total.toFixed(2)}</span></p>
+                                <p>Total a Pagar: <span className="text-green-700">${totalToPay.toFixed(2)}</span></p>
+                            </div>
+            
+                            {/* Botón de compra */}
+                            <button 
+                                type="button" 
+                                onClick={handleConfirmPurchase}
+                                className="w-full mt-3 bg-blue-500 text-white py-2 rounded-lg"
+                            >
+                                Confirmar Compra
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+            
         </header>
     );
 };
