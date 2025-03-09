@@ -28,7 +28,7 @@ const productData: Category[] = [
     {
         name: "CREATINA",
         products: [
-            { id: 5, image: "assets/creatina-1.png", title: "CREATINA STAR NUTRITION POTE", description: "Mejora el rendimiento.", price: "$27700" },
+            { id: 5, image: "assets/creatina-1.png", title: "CREATINA STAR NUTRITION POTE", description: "Mejora el rendimiento.", price: "$27,700" },
             { id: 6, image: "assets/creatina-1.png", title: "MAXI GAIN GENTECH", description: "Gana masa muscular.", price: "$28,200" },
             { id: 7, image: "assets/creatina-1.png", title: "NITROGAIN XTRENGHT", description: "Fuerza y resistencia.", price: "$27,500" },
             { id: 8, image: "assets/creatina-1.png", title: "CREATINA STAR NUTRITION DOYPACK", description: "Alta pureza.", price: "$20,000" }
