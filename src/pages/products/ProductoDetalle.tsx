@@ -57,9 +57,18 @@ const ProductoDetalle: React.FC = () => {
     setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  // Handler para abrir y cerrar el zoom
+  // Handlers para abrir y cerrar el zoom
   const openZoom = () => setZoomOpen(true);
   const closeZoom = () => setZoomOpen(false);
+
+  // Handler para agregar el producto al carrito con la imagen seleccionada
+  const handleAddToCart = () => {
+    const productToAdd = {
+      ...foundProduct,
+      images: [images[currentSlide], ...foundProduct.images.filter(img => img !== images[currentSlide])]
+    };
+    addToCart(productToAdd, quantity);
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-4 pt-30">
@@ -68,6 +77,7 @@ const ProductoDetalle: React.FC = () => {
         <div className="relative w-full md:w-1/2 flex items-center justify-center">
           <motion.img
             key={currentSlide}
+            // Ajustamos la ruta con "../" si es necesario (verifica que funcione en tu entorno)
             src={`../${images[currentSlide]}`}
             alt={foundProduct.title}
             className="object-contain w-full h-64 cursor-pointer"
@@ -120,7 +130,7 @@ const ProductoDetalle: React.FC = () => {
           {/* Botón para agregar al carrito */}
           <button
             className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
-            onClick={() => addToCart(foundProduct, quantity)}
+            onClick={handleAddToCart}
           >
             Agregar al carrito
           </button>
@@ -130,13 +140,13 @@ const ProductoDetalle: React.FC = () => {
       {/* Modal de zoom */}
       {zoomOpen && (
         <div
-          className="fixed inset-0 bg-black/60 bg-opacity-70 flex items-center justify-center z-[2000] p-25"
+          className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[2000]"
           onClick={closeZoom}
         >
           <div className="relative">
             {/* Botón "X" para cerrar */}
             <button
-              className="absolute top-0 right-0 m-4 bg-black/70 p-2 rounded-full text-white text-xl hover:text-red-500"
+              className="absolute top-0 right-0 m-4 text-white text-3xl font-bold hover:text-red-500"
               onClick={closeZoom}
             >
               <FaTimes />
