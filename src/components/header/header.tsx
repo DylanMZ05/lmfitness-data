@@ -165,7 +165,7 @@ const Header: React.FC = () => {
                             {cart.map((item) => (
                                 <div key={item.product.id} className="flex justify-between items-center border-b py-2">
                                     <div className='w-12 flex items-center justify-center mr-2'>
-                                        <img src={item.product.image} alt={item.product.title} className="h-12 object-cover" />
+                                        <img src={item.product.images[0]} alt={item.product.title} className="h-12 object-cover" />
                                     </div>
                                     <div className='w-[300px]'>
                                         <h3 className="text-sm font-semibold">{item.product.title}</h3>
