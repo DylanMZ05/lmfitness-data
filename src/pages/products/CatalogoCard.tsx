@@ -47,7 +47,16 @@ const CatalogoCard: React.FC = () => {
             className="flex justify-between items-center p-4 rounded-lg bg-gray-200 cursor-pointer"
             onClick={() => toggleCategory(category.name)}
           >
-            <h2 className="text-lg font-bold">{category.name}</h2>
+            <div className="flex items-center gap-2">
+              {category.image && (
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="h-10 w-10 object-contain"
+                />
+              )}
+              <h2 className="text-lg font-bold">{category.name}</h2>
+            </div>
             <button className="text-xl">
               {openCategories[category.name] ? "➖" : "➕"}
             </button>

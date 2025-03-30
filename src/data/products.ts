@@ -9,12 +9,14 @@ export interface Product {
 
 export interface Category {
   name: string;
+  image?: string; // <-- Asegurate de que esto esté incluido
   products: Product[];
 }
 
 export const productData: Category[] = [
   {
     name: "PROTEÍNA",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -139,6 +141,7 @@ export const productData: Category[] = [
   },
   {
     name: "GANADORES DE PESO",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -172,6 +175,7 @@ export const productData: Category[] = [
   },
   {
     name: "CREATINAS MONOHIDRATO",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -247,6 +251,7 @@ export const productData: Category[] = [
   },
   {
     name: "GLUTAMINA",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -259,6 +264,7 @@ export const productData: Category[] = [
   },
   {
     name: "ARGININA - BETA ALANINA",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -278,6 +284,7 @@ export const productData: Category[] = [
   },
   {
     name: "AMINOACIDOS Y BCAA",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -318,6 +325,7 @@ export const productData: Category[] = [
   },
   {
     name: "PRE ENTRENOS",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -372,6 +380,7 @@ export const productData: Category[] = [
   },
   {
     name: "QUEMADORES DE GRASA",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -391,6 +400,7 @@ export const productData: Category[] = [
   },
   {
     name: "MULTIVITAMINICO & COLÁGENO",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -424,6 +434,7 @@ export const productData: Category[] = [
   },
   {
     name: "OMEGA 3 - CAFEÍNA - ZMA",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -450,6 +461,7 @@ export const productData: Category[] = [
   },
   {
     name: "BARRAS PROTEICAS",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -462,6 +474,7 @@ export const productData: Category[] = [
   },
   {
     name: "BEBIDAS ISOTÓNICAS - ELECTROLITOS",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -495,6 +508,7 @@ export const productData: Category[] = [
   },
   {
     name: "GEL ENERGÉTICO",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -507,6 +521,7 @@ export const productData: Category[] = [
   },
   {
     name: "MAGNESIO - POTASIO",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
@@ -540,6 +555,7 @@ export const productData: Category[] = [
   },
   {
     name: "SHAKER MEZCLADOR",
+    image: "assets/prote-1.png",
     products: [
       {
         id: 1,
