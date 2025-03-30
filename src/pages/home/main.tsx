@@ -1,5 +1,7 @@
+// Main
+import { motion } from "framer-motion";
 import React from "react";
-import ProductAnimation from "./ProductAnimation";
+
 
 import { Link } from "react-router-dom";
 
@@ -20,9 +22,34 @@ const Main: React.FC = () => {
                 </Link>
             </div>
 
-            <div>
-                <ProductAnimation />
-            </div>
+            <div className="relative w-64 h-64 mx-auto">
+                <motion.img
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: .6, delay: 0.2 }}
+                    src="public/assets/pre-1.png"
+                    alt="Pre-Workout"
+                    className="absolute left-25 top-45 transform -translate-y-1/2 z-10 scale-50"
+                />
+
+                <motion.img
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: .6, delay: 0.5 }}
+                    src="public/assets/prote-1.png"
+                    alt="Proteína"
+                    className="absolute left-1/2 top-43 transform -translate-x-1/2 -translate-y-1/2 z-20 scale-70"
+                />
+
+                <motion.img
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: .6, delay: 0.3 }}
+                    src="public/assets/creatina-1.png"
+                    alt="Creatina"
+                    className="absolute right-25 top-45 transform -translate-y-1/2 z-10 scale-64"
+                />
+                </div>
         </main>
     );
 }
