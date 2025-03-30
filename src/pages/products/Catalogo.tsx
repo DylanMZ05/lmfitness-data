@@ -12,7 +12,7 @@ const Catalogo: React.FC = () => {
           {/* Ejemplo de banner */}
           <div className="bg-[url('/assets/fondo-2.jpeg')] flex flex-col items-center justify-center bg-cover bg-center max-w-4xl rounded-lg mb-2 border-3 border-neutral-800/40">
             <div className="w-[100%] flex flex-col items-center justify-center bg-black/60 py-5">
-              <img src="/assets/logo.jpeg" alt="" className="h-25"/>
+              <img src="assets/logo.jpeg" alt="" className="h-25"/>
               <h3 className="text-center text-white font-semibold text-4xl">NUESTRAS OFERTAS</h3>
               <div className="bg-red-600 h-[3px] w-60 mx-auto mb-3 mt-1 rounded-full"></div>
             </div>

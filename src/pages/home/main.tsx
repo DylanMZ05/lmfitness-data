@@ -29,7 +29,7 @@ const Main: React.FC = () => {
                     transition={{ duration: .6, delay: 0.2 }}
                     src="assets/pre-1.png"
                     alt="Pre-Workout"
-                    className="absolute left-25 top-45 transform -translate-y-1/2 z-10 scale-50"
+                    className="absolute left-25 top-45 transform -translate-y-1/2 z-10 scale-50 lg:left-27 lg:scale-70"
                 />
 
                 <motion.img
@@ -38,7 +38,7 @@ const Main: React.FC = () => {
                     transition={{ duration: .6, delay: 0.5 }}
                     src="assets/prote-1.png"
                     alt="Proteína"
-                    className="absolute left-1/2 top-43 transform -translate-x-1/2 -translate-y-1/2 z-20 scale-70"
+                    className="absolute left-1/2 top-43 transform -translate-x-1/2 -translate-y-1/2 z-20 scale-70 lg:top-40 lg:scale-94"
                 />
 
                 <motion.img
@@ -47,7 +47,7 @@ const Main: React.FC = () => {
                     transition={{ duration: .6, delay: 0.3 }}
                     src="assets/creatina-1.png"
                     alt="Creatina"
-                    className="absolute right-25 top-45 transform -translate-y-1/2 z-10 scale-64"
+                    className="absolute right-25 top-45 transform -translate-y-1/2 z-10 scale-64 lg:right-30 lg:scale-88"
                 />
                 </div>
         </main>
