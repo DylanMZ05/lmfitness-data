@@ -82,7 +82,7 @@ const CatalogoCard: React.FC = () => {
                     <img
                       src={product.images[0]} // Muestra SOLO la primera
                       alt={product.title}
-                      className="w-full h-full object-cover"
+                      className="h-full object-cover p-1"
                     />
                   </div>
 
