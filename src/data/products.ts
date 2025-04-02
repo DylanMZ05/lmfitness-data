@@ -1,7 +1,7 @@
 // data/products.ts
 export interface Product {
   id: number;
-  images: string[];     // Arreglo de imágenes
+  images: string[];
   title: string;
   description: string;
   price: string;
@@ -9,7 +9,7 @@ export interface Product {
 
 export interface Category {
   name: string;
-  image?: string; // <-- Asegurate de que esto esté incluido
+  image?: string;
   products: Product[];
 }
 
@@ -111,7 +111,7 @@ export const productData: Category[] = [
       },
       {
         id: 14,
-        images: ["assets/images/PROTEINAS/   .webp"],
+        images: ["assets/images/PROTEINAS/Fit-Whey-Protein.webp"],
         title: "PROTEINA FITWHY GENERATION FIT",
         description: "Rendimiento diario.",
         price: "$24.000",
@@ -141,32 +141,32 @@ export const productData: Category[] = [
   },
   {
     name: "GANADORES DE PESO",
-    image: "assets/prote-1.png",
+    image: "assets/images/GANADORES-DE-PESO/nitrogain-15-kg__1.webp",
     products: [
       {
         id: 1,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/GANADORES-DE-PESO/UltraMass_kilo_vainilla_1024x.webp"],
         title: "ULTRA MASS ENA SPORT",
         description: "Gana masa muscular rápidamente.",
         price: "$27.700",
       },
       {
         id: 2,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/GANADORES-DE-PESO/D_NQ_NP_885422-MLA49910744162_052022-O.webp"],
         title: "MUTANT MASS STAR NUTRITION",
         description: "Fórmula potente para volumen.",
         price: "$28.200",
       },
       {
         id: 3,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/GANADORES-DE-PESO/nitrogain-15-kg__1.webp"],
         title: "NITROGAIN XTRENGHT",
         description: "Aumenta peso y fuerza.",
         price: "$27.500",
       },
       {
         id: 4,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/GANADORES-DE-PESO/1201-4f03bb0a06a31abf3716580805730431-480-0.webp"],
         title: "MAXI GAIN GENTECH",
         description: "Ganador de peso económico y efectivo.",
         price: "$20.000",
@@ -175,74 +175,74 @@ export const productData: Category[] = [
   },
   {
     name: "CREATINAS MONOHIDRATO",
-    image: "assets/prote-1.png",
+    image: "assets/images/CREATINAS/creatina_monohidrato_gold_nutrition_doypack.webp",
     products: [
       {
         id: 1,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/image_1024.webp"],
         title: "CREATINA NUTRILAB (SABORIZADA)",
         description: "300GR de creatina con sabor.",
         price: "$18.500",
       },
       {
         id: 2,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/creatina-of-5850132a403757eda316986845288405-1024-1024.webp"],
         title: "CREATINA ONEFIT NEUTRA",
         description: "200GR de creatina sin sabor.",
         price: "$18.000",
       },
       {
         id: 3,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/CREATINA MONOHIDRATO.webp"],
         title: "CREATINA GENTECH NEUTRA",
         description: "250GR de creatina neutra.",
         price: "$24.400",
       },
       {
         id: 4,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/Creatina_Micronizada_neutra_1600x.webp"],
         title: "CREATINA GENTECH NEUTRA",
         description: "500GR de creatina neutra.",
         price: "$33.400",
       },
       {
         id: 5,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/0617395130818.webp"],
         title: "CREATINA STAR NUTRITION POTE",
         description: "300GR de creatina monohidratada.",
         price: "$33.200",
       },
       {
         id: 6,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/creatina-star-doypack-3bbb6b716a7db752cb17176158563300-1024-1024.webp"],
         title: "CREATINA STAR NUTRITION DOYPACK",
         description: "300GR en empaque doypack.",
         price: "$30.800",
       },
       {
         id: 7,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/image_1920.webp"],
         title: "CREATINA STAR NUTRITION POTE",
         description: "500GR de creatina monohidratada.",
         price: "$47.200",
       },
       {
         id: 8,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/1636989941475-cf5a19930779ebd04916373583067560-640-0.webp"],
         title: "CREATINA STAR NUTRITION POTE",
         description: "1KG de creatina monohidratada.",
         price: "$85.500",
       },
       {
         id: 9,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/Creatina_Micronizada_neutra_1600x.webp"],
         title: "CREATINA ENA SPORT",
         description: "300GR micronizada para mejor absorción.",
         price: "$34.800",
       },
       {
         id: 10,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/CREATINAS/creatina_monohidrato_gold_nutrition_doypack.webp"],
         title: "CREATINA GOLD NUTRITION",
         description: "300GR de creatina de alta pureza.",
         price: "$26.500",
@@ -251,11 +251,11 @@ export const productData: Category[] = [
   },
   {
     name: "GLUTAMINA",
-    image: "assets/prote-1.png",
+    image: "assets/images/GLUTAMINA/GLUTA.webp",
     products: [
       {
         id: 1,
-        images: ["assets/prote-1.png"],
+        images: ["assets/images/GLUTAMINA/GLUTA.webp"],
         title: "GLUTAMINA STAR NUTRITION",
         description: "300GR para recuperación muscular.",
         price: "$26.900",
