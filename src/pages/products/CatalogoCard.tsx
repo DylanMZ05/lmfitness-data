@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { useCart } from "../../context/useCart";
 
+import useScrollToTop from "../../hooks/useScrollToTop";
+
 // Importamos el array de datos y los tipos
 import { productData, Category, Product } from "../../data/products";
 
@@ -13,6 +15,8 @@ const CatalogoCard: React.FC = () => {
   const [openCategories, setOpenCategories] = useState<{ [key: string]: boolean }>({});
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
+
+  const scrollToTop = useScrollToTop();
 
   // Expandir/colapsar categorías
   const toggleCategory = (category: string) => {
@@ -113,6 +117,7 @@ const CatalogoCard: React.FC = () => {
                   {/* Botón/Ícono para ver detalles en otra ruta */}
                   <Link
                     to={`/producto/${product.id}`}
+                    onClick={scrollToTop}
                     className="ml-2 border border-black rounded-full w-9 h-9 flex items-center justify-center hover:bg-gray-200 transition"
                     title="Ver detalles"
                   >
