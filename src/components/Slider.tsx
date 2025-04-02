@@ -7,7 +7,7 @@ import {
 interface Slide {
   imageUrl: string;
   text: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
 }
 
 interface ParallaxSliderProps {

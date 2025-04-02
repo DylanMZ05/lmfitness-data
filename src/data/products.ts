@@ -555,7 +555,7 @@ export const productData: Category[] = [
   },
   {
     name: "SHAKER MEZCLADOR",
-    image: "assets/images/SHAKERS/shaker-vaso-arnold-conquer.webp",
+    image: "assets/images/SHAKERS/Shaker-GOT-PROTEIN-BLENDER_c5417a30-e671-4fea-95ea-b6e0b102dd93.webp",
     products: [
       {
         id: 66,

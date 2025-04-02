@@ -23,7 +23,7 @@ const Header: React.FC = () => {
     const total = cart.reduce((acc: number, item) => {
         const price = parseFloat(item.product.price.toString().replace(/[^0-9.-]+/g, ""));
         const quantity = Number(item.quantity);
-        return acc + quantity * price;
+        return acc + quantity * price * 1000;
     }, 0);
 
     const handleClick = (id: string) => {

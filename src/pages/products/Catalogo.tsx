@@ -1,7 +1,28 @@
 // Catalogo.tsx
 import React from "react";
-import Slider from "../../components/Slider";
 import CatalogoCard from "./CatalogoCard";
+
+import ParallaxSlider from "../../components/Slider";
+
+
+const slidesData = [
+  {
+      imageUrl: "",
+      text: "OFERTA 1",
+  },
+  {
+      imageUrl: "",
+      text: "OFERTA 2",
+  },
+  {
+      imageUrl: "",
+      text: "OFERTA 3",
+  },
+  {
+      imageUrl: "",
+      text: "OFERTA 4",
+  },
+];
 
 const Catalogo: React.FC = () => {
   return (
@@ -17,9 +38,8 @@ const Catalogo: React.FC = () => {
               <div className="bg-red-600 h-[3px] w-60 mx-auto mb-3 mt-1 rounded-full"></div>
             </div>
           </div>
-          {/* Ejemplo de slider */}
-          <div>
-            <Slider slides={[]} width="max-w-4xl"/>
+          <div className="">
+            <ParallaxSlider  slides={slidesData} width=""/>
           </div>
         </div>
       </section>
