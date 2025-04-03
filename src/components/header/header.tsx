@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Search } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import useScroll from './useScroll';
 import useActiveSection from './useActiveSection';
 import { useCart } from '../../context/useCart';
@@ -115,9 +115,9 @@ const Header: React.FC = () => {
                         ))}
                     </ul>
 
-                    <button>
+                    {/* <button>
                         <Search size={26} />
-                    </button>
+                    </button> */}
                     <button onClick={() => setCartOpen(!cartOpen)} className="ml-7 mr-3 relative text-white cursor-pointer">
                         <ShoppingCart size={24} />
                         {cart.length > 0 && (
