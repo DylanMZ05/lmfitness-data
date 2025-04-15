@@ -3,15 +3,10 @@ import { useParams } from "react-router-dom";
 import { useCart } from "../../context/useCart";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
-import ParallaxSlider from "../../components/Slider";
 import { productData, Product, Category } from "../../data/products";
 
-const slidesData = [
-  { imageUrl: "", text: "OFERTA 1" },
-  { imageUrl: "", text: "OFERTA 2" },
-  { imageUrl: "", text: "OFERTA 3" },
-  { imageUrl: "", text: "OFERTA 4" },
-];
+import FeaturedSlider from "../../components/FeaturedSlider";
+
 
 const ProductoDetalle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -73,12 +68,12 @@ const ProductoDetalle: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto p-4 pt-30 min-h-[calc(100vh-216px)] flex flex-col justify-center items-center">
+      <div className="max-w-4xl mx-auto pt-30 min-h-[calc(100vh-216px)] flex flex-col justify-center items-center">
         <header className="mb-6 w-full flex justify-center">
           <h2 className="font-bold text-4xl text-center px-3 mb-10">Detalle del producto</h2>
         </header>
 
-        <div className="flex flex-col md:flex-row gap-4 w-full">
+        <div className="flex flex-col md:flex-row gap-4 w-full mb-10">
           {/* Imagen con flechas */}
           <div className="relative w-full md:w-1/2 flex items-center justify-center">
             <motion.img
@@ -142,8 +137,8 @@ const ProductoDetalle: React.FC = () => {
           </div>
         )}
 
-        <div className="mt-25">
-          <ParallaxSlider slides={slidesData} />
+        <div className="w-screen bg-neutral-200">
+          <FeaturedSlider title="PRODUCTOS DESTACADOS" categories={productData}/>
         </div>
       </div>
 

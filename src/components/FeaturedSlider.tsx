@@ -98,7 +98,7 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories }) => {
                   className="w-[250px] h-[400px] flex-shrink-0 bg-white shadow-md rounded-lg p-4 flex flex-col justify-between"
                 >
                   <img
-                    src={product.images[0]}
+                    src={`${import.meta.env.BASE_URL}${product.images[0]}`}
                     alt={product.title}
                     className="w-full h-40 object-contain mb-4"
                   />

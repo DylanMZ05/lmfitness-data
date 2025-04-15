@@ -29,23 +29,23 @@ const Footer: React.FC = () => {
 
           {/* Contacto */}
           <div>
-            <h3 className="text-xl font-semibold mb-4">Contactános</h3>
-            <div className="flex flex-col items-center md:items-start gap-3 text-sm">
+            <h3 className="text-xl font-semibold mb-4 text-center md:text-left">Contactános</h3>
+            <div className="flex items-center justify-center md:justify-start gap-4 text-2xl">
               <a
                 href="https://wa.me/5492257531656"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:underline"
+                className="hover:scale-110 transition-transform"
               >
-                <FaWhatsapp className="text-xl" /> +54 9 2257 531656
+                <FaWhatsapp className="text-[#25D366] hover:text-[#74f3a3] text-3xl" />
               </a>
               <a
                 href="https://www.instagram.com/lm.fitness_1/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:underline"
+                className="hover:scale-110 transition-transform"
               >
-                <FaInstagram className="text-xl" /> @lm.fitness_1
+                <FaInstagram className="text-[#E1306C] hover:text-[#e0779a] text-3xl" />
               </a>
             </div>
           </div>
