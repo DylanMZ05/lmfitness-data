@@ -56,7 +56,12 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     resetInterval();
-    return () => intervalRef.current && clearInterval(intervalRef.current);
+  
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, []);
 
   return (
