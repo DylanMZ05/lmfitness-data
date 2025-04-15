@@ -27,7 +27,7 @@ function App() {
                 <Main />
                 <HowBuy />
                 <Products />
-                <FeaturedSlider title="Productos Destacados" categories={productData} />
+                <FeaturedSlider title="PRODUCTOS DESTACADOS" categories={productData} />
                 <AboutUs />
               </>
             }

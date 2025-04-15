@@ -21,7 +21,7 @@ const Products: React.FC = () => {
   ];
 
   return (
-    <section id="productos" className="h-max flex justify-center items-center gap-6 flex-wrap py-15">
+    <section id="productos" className="h-max flex justify-center items-center gap-6 flex-wrap py-15 shadow-2xl">
       <div className="flex flex-wrap justify-center gap-6 w-full px-4">
         {products.map((product, index) => (
           <ProductCard

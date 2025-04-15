@@ -3,62 +3,94 @@ import { Category } from "../data/products";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import useScrollToTop from "../hooks/useScrollToTop";
+
 interface Props {
   title: string;
   categories: Category[];
 }
 
+const CARD_WIDTH = 250;
+const GAP = 16;
+const SIDE_PADDING = GAP / 2;
+
 const FeaturedSlider: React.FC<Props> = ({ title, categories }) => {
+  const scrollToTop = useScrollToTop();
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const itemRef = useRef<HTMLDivElement>(null);
-  const [cardWidth, setCardWidth] = useState(0);
+  const [scrollAmount, setScrollAmount] = useState(CARD_WIDTH + GAP);
+  const [totalCarouselWidth, setTotalCarouselWidth] = useState(266); // default for 1 card
 
   const featuredProducts = categories
     .flatMap((cat) => cat.products)
     .filter((p) => p.featuredId !== undefined)
     .sort((a, b) => (a.featuredId ?? 0) - (b.featuredId ?? 0));
 
-  useEffect(() => {
-    const updateCardWidth = () => {
-      if (itemRef.current) {
-        const width = itemRef.current.offsetWidth;
-        const gap = 16; // Tailwind gap-4 = 1rem = 16px
-        setCardWidth(width + gap);
-      }
-    };
+  const updateLayout = () => {
+    const screenWidth = window.innerWidth;
 
-    updateCardWidth();
-    window.addEventListener("resize", updateCardWidth);
-    return () => window.removeEventListener("resize", updateCardWidth);
+    let cardsThatFit = 1;
+    if (screenWidth >= 1280) {
+      cardsThatFit = 4;
+    } else if (screenWidth >= 1024) {
+      cardsThatFit = 3;
+    } else if (screenWidth >= 768) {
+      cardsThatFit = 2;
+    }
+
+    const totalWidth =
+      cardsThatFit * CARD_WIDTH +
+      (cardsThatFit - 1) * GAP +
+      SIDE_PADDING * 2;
+
+    setTotalCarouselWidth(totalWidth);
+    setScrollAmount(CARD_WIDTH + GAP);
+  };
+
+  useEffect(() => {
+    updateLayout();
+    window.addEventListener("resize", updateLayout);
+    return () => window.removeEventListener("resize", updateLayout);
   }, []);
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current && cardWidth > 0) {
+    if (scrollRef.current) {
       scrollRef.current.scrollBy({
-        left: direction === "left" ? -cardWidth : cardWidth,
+        left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
       });
     }
   };
 
   return (
-    <section className="w-full flex flex-col items-center py-10 px-4">
-      <h2 className="text-2xl font-bold mb-6 text-center">{title}</h2>
+    <section className="w-full flex flex-col items-center py-10 px-4 bg-neutral-200 shadow-inner">
+      <h2 className="text-4xl font-bold text-center">{title}</h2>
+      <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full"></div>
 
-      {/* ⚙️ Ancho dinámico según pantalla */}
-      <div className="w-full mx-auto max-w-[600px] sm:max-w-[880px] lg:max-w-[1140px]">
-        <div className="flex items-center justify-between gap-4">
-          {/* Flecha IZQ */}
+      <div className="w-full flex justify-center">
+        <div
+          className="relative flex items-center"
+          style={{ maxWidth: totalCarouselWidth, width: "100%" }}
+        >
+          {/* Flecha izquierda */}
           <button
             onClick={() => scroll("left")}
-            className="bg-black/70 hover:bg-black text-white p-2 rounded-full shrink-0"
+            className="absolute -left-11 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-full cursor-pointer"
           >
             <ChevronLeft size={24} />
           </button>
 
           {/* Carrusel */}
-          <div ref={scrollRef} className="overflow-hidden flex-1">
-            <div className="flex gap-4 transition-all duration-300">
+          <div ref={scrollRef} className="overflow-hidden flex-1 py-2">
+            <div
+              className="flex transition-all duration-300"
+              style={{
+                gap: `${GAP}px`,
+                paddingLeft: `${SIDE_PADDING}px`,
+                paddingRight: `${SIDE_PADDING}px`,
+              }}
+            >
               {featuredProducts.map((product, i) => (
                 <div
                   key={product.featuredId}
@@ -78,7 +110,8 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories }) => {
                     <p className="text-lg font-bold mt-2">{product.price}</p>
                   </div>
                   <Link
-                    to="/catalogo"
+                    to={`/producto/${product.id}`}
+                    onClick={scrollToTop}  
                     className="mt-4 text-center bg-black text-white py-2 rounded-md text-sm"
                   >
                     Ver producto
@@ -88,10 +121,10 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories }) => {
             </div>
           </div>
 
-          {/* Flecha DER */}
+          {/* Flecha derecha */}
           <button
             onClick={() => scroll("right")}
-            className="bg-black/70 hover:bg-black text-white p-2 rounded-full shrink-0"
+            className="absolute -right-11 z-10 bg-black/70 hover:bg-black text-white p-2 rounded-full cursor-pointer"
           >
             <ChevronRight size={24} />
           </button>
