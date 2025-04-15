@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
@@ -9,7 +10,7 @@ const slides = [
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
-      position: "bottom-70 left-1/2 -translate-x-1/2", // centrado abajo
+      position: "top-[53%] left-1/2 -translate-x-1/2", // proporcional al alto
     },
   },
   {
@@ -18,7 +19,7 @@ const slides = [
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
-      position: "bottom-15 left-1/2 -translate-x-1/2", // arriba derecha
+      position: "top-[87%] left-1/2 -translate-x-1/2",
     },
   },
   {
@@ -27,7 +28,7 @@ const slides = [
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
-      position: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2", // centro absoluto
+      position: "top-[58%] left-1/2 -translate-x-1/2",
     },
   },
 ];
@@ -66,25 +67,43 @@ const Main: React.FC = () => {
           className="flex transition-transform duration-700 ease-in-out"
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
-          {slides.map((slide) => (
-            <img
+          {slides.map((slide, slideIndex) => (
+            <div
               key={slide.id}
-              src={slide.bg}
-              alt=""
-              className="w-full h-auto object-cover object-bottom flex-shrink-0 block"
+              className="relative w-full flex-shrink-0"
               style={{ minWidth: "100%" }}
-            />
-          ))}
-        </div>
+            >
+              <div className="relative w-full">
+                <img
+                  src={slide.bg}
+                  alt=""
+                  className="w-full h-auto object-contain block"
+                />
 
-        {/* Botón con posición individual */}
-        <div className={`absolute z-10 transform ${slides[index].button.position}`}>
-          <Link
-            to={slides[index].button.link}
-            className="bg-amber-50 text-black font-semibold py-3 px-8 rounded-full text-lg shadow-lg"
-          >
-            {slides[index].button.text}
-          </Link>
+                <AnimatePresence mode="wait">
+                  {index === slideIndex && (
+                    <motion.div
+                      key={slide.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className={`absolute z-10 transform ${slide.button.position} w-full px-2`}
+                    >
+                      <div className="flex justify-center">
+                        <Link
+                          to={slide.button.link}
+                          className="bg-amber-50 text-black font-semibold py-2 px-4 rounded-full text-md shadow-lg whitespace-nowrap min-w-[140px] text-center md:text-lg"
+                        >
+                          {slide.button.text}
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Flechas */}
