@@ -38,8 +38,7 @@ const Products: React.FC = () => {
         { title: "PROTEÍNAS" },
         { title: "CREATINAS" },
         { title: "PRE ENTRENOS" },
-        { title: "COMBOS LMFITNESS" },
-        { title: "TODOS NUESTROS PRODUCTOS"  }
+        { title: "COMBOS LMFITNESS" }
     ];
 
     return (
