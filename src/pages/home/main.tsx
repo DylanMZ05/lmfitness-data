@@ -3,32 +3,52 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Hook para detectar si es desktop
+const useIsDesktop = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 768);
+    check(); // primera vez
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isDesktop;
+};
+
 const slides = [
   {
     id: 1,
-    bg: "assets/images/SLIDER/HOME/01.webp",
+    bgMobile: "assets/images/SLIDER/HOME/01.webp",
+    bgDesktop: "assets/images/SLIDER/HOME/01-desktop.webp",
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
-      position: "top-[53%] left-1/2 -translate-x-1/2", // proporcional al alto
+      positionMobile: "top-[53%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[75%] left-1/2 -translate-x-1/2",
     },
   },
   {
     id: 2,
-    bg: "assets/images/SLIDER/HOME/02.webp",
+    bgMobile: "assets/images/SLIDER/HOME/02.webp",
+    bgDesktop: "assets/images/SLIDER/HOME/02-desktop.webp",
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
-      position: "top-[87%] left-1/2 -translate-x-1/2",
+      positionMobile: "top-[87%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[75%] left-1/2 -translate-x-1/2",
     },
   },
   {
     id: 3,
-    bg: "assets/images/SLIDER/HOME/03.webp",
+    bgMobile: "assets/images/SLIDER/HOME/03.webp",
+    bgDesktop: "assets/images/SLIDER/HOME/03-desktop.webp",
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
-      position: "top-[58%] left-1/2 -translate-x-1/2",
+      positionMobile: "top-[58%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[75%] left-1/2 -translate-x-1/2",
     },
   },
 ];
@@ -36,6 +56,7 @@ const slides = [
 const Main: React.FC = () => {
   const [index, setIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isDesktop = useIsDesktop();
 
   const handleNext = () => {
     setIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -56,11 +77,8 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     resetInterval();
-  
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
 
@@ -79,11 +97,14 @@ const Main: React.FC = () => {
               style={{ minWidth: "100%" }}
             >
               <div className="relative w-full">
-                <img
-                  src={slide.bg}
-                  alt=""
-                  className="w-full h-auto object-contain block"
-                />
+                <picture>
+                  <source media="(min-width: 768px)" srcSet={slide.bgDesktop} />
+                  <img
+                    src={slide.bgMobile}
+                    alt=""
+                    className="w-full h-auto object-contain block"
+                  />
+                </picture>
 
                 <AnimatePresence mode="wait">
                   {index === slideIndex && (
@@ -93,7 +114,11 @@ const Main: React.FC = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.15 }}
-                      className={`absolute z-10 transform ${slide.button.position} w-full px-2`}
+                      className={`absolute z-10 w-full px-2 transform ${
+                        isDesktop
+                          ? slide.button.positionDesktop
+                          : slide.button.positionMobile
+                      }`}
                     >
                       <div className="flex justify-center">
                         <Link
@@ -114,13 +139,13 @@ const Main: React.FC = () => {
         {/* Flechas */}
         <button
           onClick={handlePrev}
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full hover:bg-black/60"
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
         >
           <ChevronLeft className="text-white/20" size={30} />
         </button>
         <button
           onClick={handleNext}
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full hover:bg-black/60"
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
         >
           <ChevronRight className="text-white/20" size={30} />
         </button>
