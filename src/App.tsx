@@ -9,6 +9,9 @@ import Catalogo from "./pages/products/Catalogo";
 
 import ProductoDetalle from "./pages/products/ProductoDetalle";
 
+import { productData } from "./data/products";
+import FeaturedSlider from "./components/FeaturedSlider";
+
 import { CartProvider } from "./context/CartContext";
 
 function App() {
@@ -24,6 +27,7 @@ function App() {
                 <Main />
                 <HowBuy />
                 <Products />
+                <FeaturedSlider title="Productos Destacados" categories={productData} />
                 <AboutUs />
               </>
             }

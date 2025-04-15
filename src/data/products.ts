@@ -5,6 +5,8 @@ export interface Product {
   title: string;
   description: string;
   price: string;
+
+  featuredId?: number;
 }
 
 export interface Category {
@@ -24,6 +26,7 @@ export const productData: Category[] = [
         title: "STAR NUTRITION PLATINUM DOYPACK",
         description: "Proteína avanzada.",
         price: "$30.000",
+        featuredId: 1,
       },
       {
         id: 2,
@@ -31,6 +34,7 @@ export const productData: Category[] = [
         title: "STAR NUTRITION WHEY ISOLATE",
         description: "Proteína de alta calidad.",
         price: "$57.000",
+        featuredId: 2,
       },
       {
         id: 3,
@@ -38,6 +42,7 @@ export const productData: Category[] = [
         title: "ENA TRUE MADE",
         description: "Ideal para recuperación.",
         price: "$36.300",
+        featuredId: 3,
       },
       {
         id: 4,
@@ -45,6 +50,7 @@ export const productData: Category[] = [
         title: "ENA 100% WHEY",
         description: "Rendimiento y pureza.",
         price: "$29.800",
+        featuredId: 4,
       },
       {
         id: 5,
@@ -52,6 +58,7 @@ export const productData: Category[] = [
         title: "PROTEINA VEGETAL \"SOY PROTEIN\" PULVER",
         description: "Alternativa vegetal saludable.",
         price: "$33.500",
+        featuredId: 5,
       },
       {
         id: 6,
@@ -59,6 +66,7 @@ export const productData: Category[] = [
         title: "PROTEINA VEGETAL GOLD NUTRITION",
         description: "Nutrición natural.",
         price: "$29.800",
+        featuredId: 6,
       },
       {
         id: 7,
