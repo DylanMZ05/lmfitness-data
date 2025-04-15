@@ -123,7 +123,7 @@ const Main: React.FC = () => {
                       <div className="flex justify-center">
                         <Link
                           to={slide.button.link}
-                          className="bg-amber-50 text-black font-semibold py-2 px-4 rounded-full text-md shadow-lg whitespace-nowrap min-w-[140px] text-center md:text-lg"
+                          className="bg-amber-50 text-black font-semibold py-2 px-4 rounded-full text-md shadow-lg whitespace-nowrap min-w-[140px] text-center cursor-pointer hover:scale-102 transition-all md:text-lg"
                         >
                           {slide.button.text}
                         </Link>

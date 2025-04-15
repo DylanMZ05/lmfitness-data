@@ -27,7 +27,7 @@ const steps = [
 
 const HowBuy: React.FC = () => {
   return (
-    <section className="bg-neutral-300 my-5 py-12">
+    <section className="bg-neutral-300 mt-5 py-12">
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
         {steps.map((step, index) => {
           const pasoMatch = step.text.match(/^(Paso \d+:)(.*)/);

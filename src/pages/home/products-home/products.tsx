@@ -1,34 +1,39 @@
 import React from "react";
-import ProductCard from "./product-card";
-
-interface Product {
-    title: string;
-    spacing?: string;
-}
+import ProductCard from "./ProductCard";
 
 const Products: React.FC = () => {
-    const products: Product[] = [
-        { title: "PROTEÍNAS" },
-        { title: "CREATINAS" },
-        { title: "PRE ENTRENOS" },
-        { title: "COMBOS LMFITNESS" }
-    ];
+  const products = [
+    {
+      title: "",
+      imageUrl: "assets/images/HOME-CARDS/01.webp",
+      link: "/catalogo#proteinas",
+    },
+    {
+      title: "",
+      imageUrl: "assets/images/HOME-CARDS/02.webp",
+      link: "/catalogo#preentrenos",
+    },
+    {
+      title: "",
+      imageUrl: "assets/images/HOME-CARDS/03.webp",
+      link: "/catalogo#creatinas",
+    },
+  ];
 
-    return (
-        <section id="productos" className="h-max flex justify-center items-center gap-6 flex-wrap pb-[75px]">           
-            <div className="flex flex-wrap justify-center gap-6 w-full px-4">
-                <div className="w-full text-center">
-                    <h3 className="text-[36px] font-semibold">CATÁLOGO</h3>
-                    <div className="w-[50px] h-[2px] bg-red-500 mb-2 rounded-2xl mx-auto"></div>
-                    <h4 className="text-[24px] font-semibold opacity-95">NUESTROS PRODUCTOS</h4>
-                </div>
-
-                {products.map((product, index) => (
-                    <ProductCard key={index} title={product.title} spacing={product.spacing} />
-                ))}
-            </div>
-        </section>
-    );
+  return (
+    <section id="productos" className="h-max flex justify-center items-center gap-6 flex-wrap py-15">
+      <div className="flex flex-wrap justify-center gap-6 w-full px-4">
+        {products.map((product, index) => (
+          <ProductCard
+            key={index}
+            title={product.title}
+            imageUrl={product.imageUrl}
+            link={product.link}
+          />
+        ))}
+      </div>
+    </section>
+  );
 };
 
 export default Products;
