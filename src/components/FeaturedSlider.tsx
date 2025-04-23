@@ -8,13 +8,14 @@ import useScrollToTop from "../hooks/useScrollToTop";
 interface Props {
   title: string;
   categories: Category[];
+  bgColor?: string; // ← nueva prop opcional
 }
 
 const CARD_WIDTH = 250;
 const GAP = 16;
 const SIDE_PADDING = GAP / 2;
 
-const FeaturedSlider: React.FC<Props> = ({ title, categories }) => {
+const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neutral-200" }) => {
   const scrollToTop = useScrollToTop();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -64,7 +65,7 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories }) => {
   };
 
   return (
-    <section className="w-full flex flex-col items-center py-10 px-4 bg-neutral-200 shadow-inner">
+    <section className={`w-full flex flex-col items-center py-10 px-4 ${bgColor}`}>
       <h2 className="text-4xl font-bold text-center">{title}</h2>
       <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full"></div>
 
@@ -95,7 +96,7 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories }) => {
                 <div
                   key={product.featuredId}
                   ref={i === 0 ? itemRef : null}
-                  className="w-[250px] h-[400px] flex-shrink-0 bg-white shadow-md rounded-lg p-4 flex flex-col justify-between"
+                  className="w-[250px] h-[400px] flex-shrink-0 bg-white border border-black/10 shadow-md rounded-lg p-4 flex flex-col justify-between"
                 >
                   <img
                     src={`${import.meta.env.BASE_URL}${product.images[0]}`}
