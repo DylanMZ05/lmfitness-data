@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../context/useCart";
 import useScrollToTop from "../../hooks/useScrollToTop";
 import { productData, Category, Product } from "../../data/products";
@@ -65,54 +65,54 @@ const CatalogoCard: React.FC = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={
               openCategories[category.name]
-                ? { height: "auto", opacity: 1 }
+                ? { height: "auto", opacity: 1 , border: "1px solid #cccccc67"}
                 : { height: 0, opacity: 0 }
             }
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="p-4 space-y-4">
+            <div className="grid grid-cols-2 mx-1 my-4 sm:grid-cols-3 md:grid-cols-4 gap-1 sm:mx-6 rounded-b-lg">
               {category.products.map((product: Product) => (
                 <motion.div
                   key={product.id}
                   initial={{ opacity: 0, y: -10 }}
-                  animate={
-                    openCategories[category.name]
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 0, y: -10 }
-                  }
+                  animate={openCategories[category.name] ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
                   transition={{ duration: 0.3, delay: 0.1 }}
-                  className="flex items-center border-b pb-4 last:border-b-0"
+                  className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-black/10"
                 >
-                  <div className="h-20 w-20 flex-shrink-0 overflow-hidden flex justify-center">
+                  <div className="h-32 w-full overflow-hidden flex justify-center items-center bg-gray-100">
                     <img
                       src={product.images[0]}
                       alt={product.title}
-                      className="h-full object-cover p-1"
+                      className="h-full object-contain p-2"
                     />
                   </div>
 
-                  <div className="ml-4 flex-1">
-                    <h3 className="text-md font-semibold">{product.title}</h3>
-                    <p className="text-sm text-gray-600">{product.description}</p>
-                    <p className="text-lg font-bold">{product.price}</p>
+                  <div className="p-3 flex flex-col flex-1 justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold mb-1">{product.title}</h3>
+                      <p className="text-base font-bold mb-2">{product.price}</p>
+                    </div>
+
+                    <div className="flex justify-between mt-2 items-center">
+                      <button
+                        className="bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition cursor-pointer flex items-center justify-center"
+                        onClick={() => openPopup(product)}
+                        title="Añadir al carrito"
+                      >
+                        <FaShoppingCart className="text-white text-lg" />
+                      </button>
+
+                      <Link
+                        to={`/producto/${product.id}`}
+                        onClick={scrollToTop}
+                        className="border border-black rounded-full w-9 h-9 flex items-center justify-center hover:bg-gray-200 transition"
+                        title="Ver detalles"
+                      >
+                        <FaEye className="text-black" />
+                      </Link>
+                    </div>
                   </div>
-
-                  <button
-                    className="ml-4 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
-                    onClick={() => openPopup(product)}
-                  >
-                    Añadir
-                  </button>
-
-                  <Link
-                    to={`/producto/${product.id}`}
-                    onClick={scrollToTop}
-                    className="ml-2 border border-black rounded-full w-9 h-9 flex items-center justify-center hover:bg-gray-200 transition"
-                    title="Ver detalles"
-                  >
-                    <FaEye />
-                  </Link>
                 </motion.div>
               ))}
             </div>
