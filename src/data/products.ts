@@ -11,6 +11,7 @@ export interface Product {
 
 export interface Category {
   name: string;
+  slug?: string;
   image?: string;
   products: Product[];
 }
@@ -18,6 +19,7 @@ export interface Category {
 export const productData: Category[] = [
   {
     name: "PROTEÍNA",
+    slug: "proteinas",
     image: "assets/images/PROTEINAS/PWI-2lb-Chocolate.webp",
     products: [
       {
@@ -149,6 +151,7 @@ export const productData: Category[] = [
   },
   {
     name: "GANADORES DE PESO",
+    slug: "ganadores-de-peso",
     image: "assets/images/GANADORES-DE-PESO/nitrogain-15-kg__1.webp",
     products: [
       {
@@ -183,6 +186,7 @@ export const productData: Category[] = [
   },
   {
     name: "CREATINAS MONOHIDRATO",
+    slug: "creatinas",
     image: "assets/images/CREATINAS/creatina_monohidrato_gold_nutrition_doypack.webp",
     products: [
       {
@@ -259,6 +263,7 @@ export const productData: Category[] = [
   },
   {
     name: "GLUTAMINA",
+    slug: "glutamina",
     image: "assets/images/GLUTAMINA/GLUTA.webp",
     products: [
       {
@@ -272,6 +277,7 @@ export const productData: Category[] = [
   },
   {
     name: "ARGININA - BETA ALANINA",
+    slug: "arginina-beta-alanina",
     image: "assets/images/ARGININA-BETA-ALANINA/beta-alanina.webp",
     products: [
       {
@@ -292,6 +298,7 @@ export const productData: Category[] = [
   },
   {
     name: "AMINOACIDOS Y BCAA",
+    slug: "aminoacidos-bcaa",
     image: "assets/images/AMINOACIDOS-BCAA/1547749785269559737.webp",
     products: [
       {
@@ -333,6 +340,7 @@ export const productData: Category[] = [
   },
   {
     name: "PRE ENTRENOS",
+    slug: "pre-entrenos",
     image: "assets/images/PRE-ENTRENOS/killer.webp",
     products: [
       {
@@ -388,6 +396,7 @@ export const productData: Category[] = [
   },
   {
     name: "QUEMADORES DE GRASA",
+    slug: "quemadores",
     image: "assets/images/QUEMADORES/D_NQ_NP_719950-MLA42153030443_062020.webp",
     products: [
       {
@@ -408,6 +417,7 @@ export const productData: Category[] = [
   },
   {
     name: "MULTIVITAMINICO & COLÁGENO",
+    slug: "multivitaminico-colageno",
     image: "assets/images/MULTIVITAMINICO-Y-COLAGENO/multi-vitaminas.webp",
     products: [
       {
@@ -442,6 +452,7 @@ export const productData: Category[] = [
   },
   {
     name: "OMEGA 3 - CAFEÍNA - ZMA",
+    slug: "omega-3-cafeina-zma",
     image: "assets/images/OMEGA-3-ZMA-CAFEINA/zma_gold_nutrition.webp",
     products: [
       {
@@ -469,6 +480,7 @@ export const productData: Category[] = [
   },
   {
     name: "BARRAS PROTEICAS",
+    slug: "barras-proteicas",
     image: "assets/images/BARRAS-PROTEICAS/barras.webp",
     products: [
       {
@@ -482,6 +494,7 @@ export const productData: Category[] = [
   },
   {
     name: "BEBIDAS ISOTÓNICAS - ELECTROLITOS",
+    slug: "bebidas-isotonicas-electrolitos",
     image: "assets/images/BEBIDAS-ISOTONICAS-ELECTROLITOS/1674561753884646192.webp",
     products: [
       {
@@ -516,6 +529,7 @@ export const productData: Category[] = [
   },
   {
     name: "GEL ENERGÉTICO",
+    slug: "gel-energetico",
     image: "assets/images/GELES-ENERGETICOS/MERVICK-ENERGY-GEL-1200x900.webp",
     products: [
       {
@@ -529,6 +543,7 @@ export const productData: Category[] = [
   },
   {
     name: "MAGNESIO - POTASIO",
+    slug: "magnesio-potasio",
     image: "assets/images/POTASIO-MAGNESIO/dad2c1_b2088427c28947468ccd98d196bd30fe~mv2.webp",
     products: [
       {
@@ -563,6 +578,7 @@ export const productData: Category[] = [
   },
   {
     name: "SHAKER MEZCLADOR",
+    slug: "shaker-mezclador",
     image: "assets/images/SHAKERS/Shaker-GOT-PROTEIN-BLENDER_c5417a30-e671-4fea-95ea-b6e0b102dd93.webp",
     products: [
       {

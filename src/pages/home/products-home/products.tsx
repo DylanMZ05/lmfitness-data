@@ -6,12 +6,12 @@ const Products: React.FC = () => {
     {
       title: "",
       imageUrl: "assets/images/HOME-CARDS/01.webp",
-      link: "/catalogo#proteinas",
+      link: "/catalogo#pre-entrenos",
     },
     {
       title: "",
       imageUrl: "assets/images/HOME-CARDS/02.webp",
-      link: "/catalogo#preentrenos",
+      link: "/catalogo#proteinas",
     },
     {
       title: "",
@@ -21,7 +21,10 @@ const Products: React.FC = () => {
   ];
 
   return (
-    <section id="productos" className="h-max flex justify-center items-center gap-6 flex-wrap py-15 shadow-2xl">
+    <section
+      id="productos"
+      className="h-max flex justify-center items-center gap-6 flex-wrap py-15 shadow-2xl"
+    >
       <div className="flex flex-wrap justify-center gap-6 w-full px-4">
         {products.map((product, index) => (
           <ProductCard
