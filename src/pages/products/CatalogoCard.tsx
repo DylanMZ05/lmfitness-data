@@ -71,7 +71,7 @@ const CatalogoCard: React.FC = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="grid grid-cols-2 mx-1 my-4 sm:grid-cols-3 md:grid-cols-4 gap-1 sm:mx-6 rounded-b-lg">
+            <div className="grid grid-cols-2 mx-1 mt-2 mb-1 sm:grid-cols-3 md:grid-cols-4 gap-1 md:gap-2 sm:mx-2 rounded-b-lg">
               {category.products.map((product: Product) => (
                 <motion.div
                   key={product.id}

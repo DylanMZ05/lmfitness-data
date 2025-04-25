@@ -158,7 +158,7 @@ const Header: React.FC = () => {
 
                 {/* Carrito */}
                 {cartOpen && (
-                    <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-lg p-4 text-black z-60">
+                    <div className="fixed top-0 right-0 w-80 h-screen bg-white shadow-lg p-4 text-black z-60 overflow-y-auto">
                         <button
                             onClick={() => setCartOpen(false)}
                             className="absolute top-4 right-4 text-black text-2xl font-bold cursor-pointer"
@@ -206,89 +206,95 @@ const Header: React.FC = () => {
 
                 {/* Checkout */}
                 {showCheckout && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black/70 bg-opacity-50 z-70">
-                        <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-                            <button 
-                                onClick={() => setShowCheckout(false)} 
-                                className="absolute top-2 right-2 text-black text-2xl font-bold"
+                <div
+                    className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center w-screen h-screen"
+                    onClick={() => setShowCheckout(false)}
+                >
+                    <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white w-full max-w-md rounded-xl shadow-xl p-6 relative max-h-[90vh] overflow-y-auto"
+                    >
+                    <button
+                        onClick={() => setShowCheckout(false)}
+                        className="absolute top-3 right-4 text-2xl text-black font-bold"
+                    >
+                        ✖
+                    </button>
+
+                    <h2 className="text-xl font-bold mb-4 text-center">Finalizar Compra</h2>
+
+                    <h2 className="text-xl font-bold mb-4 text-center">Finalizar Compra</h2>
+
+                    <form className="space-y-3">
+                        <input
+                        type="text"
+                        placeholder="Nombre Completo"
+                        className="w-full border p-2 px-4 rounded-full"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
+                        />
+                        <input
+                        type="text"
+                        placeholder="Localidad"
+                        className="w-full border p-2 px-4 rounded-full"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        required
+                        />
+                        <input
+                        type="text"
+                        placeholder="Calle"
+                        className="w-full border p-2 px-4 rounded-full"
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
+                        required
+                        />
+                        <input
+                        type="text"
+                        placeholder="Entre calles"
+                        className="w-full border p-2 px-4 rounded-full"
+                        value={betweenStreets}
+                        onChange={(e) => setBetweenStreets(e.target.value)}
+                        />
+
+                        <div className="mt-3">
+                        <label className="block font-semibold">Método de Pago:</label>
+                        <div className="flex flex-col items-center space-y-2">
+                            <label
+                            className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                ${paymentMethod === 'efectivo' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                            onClick={() => setPaymentMethod('efectivo')}
                             >
-                                ✖
-                            </button>
+                            Efectivo (5% de descuento)
+                            </label>
 
-                            <h2 className="text-xl font-bold mb-4">Finalizar Compra</h2>
-
-                            <form className="space-y-3">
-                                <input 
-                                    type="text" 
-                                    placeholder="Nombre Completo" 
-                                    className="w-full border p-2 px-4 rounded-full" 
-                                    value={fullName} 
-                                    onChange={(e) => setFullName(e.target.value)}
-                                    required 
-                                />
-                                <input 
-                                    type="text" 
-                                    placeholder="Localidad" 
-                                    className="w-full border p-2 px-4 rounded-full" 
-                                    value={location} 
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    required 
-                                />
-                                <input 
-                                    type="text" 
-                                    placeholder="Calle" 
-                                    className="w-full border p-2 px-4 rounded-full" 
-                                    value={street} 
-                                    onChange={(e) => setStreet(e.target.value)}
-                                    required 
-                                />
-                                <input 
-                                    type="text" 
-                                    placeholder="Entre calles" 
-                                    className="w-full border p-2 px-4 rounded-full" 
-                                    value={betweenStreets} 
-                                    onChange={(e) => setBetweenStreets(e.target.value)}
-                                />
-
-                                <div className="mt-3">
-                                    <label className="block font-semibold">Método de Pago:</label>
-                                    <div className="flex flex-col items-center space-y-2">
-                                        <label 
-                                            className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
-                                                ${paymentMethod === 'efectivo' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
-                                            onClick={() => setPaymentMethod('efectivo')}
-                                        >
-                                            <input type="radio" name="pago" value="efectivo" className="hidden" />
-                                            Efectivo (5% de descuento)
-                                        </label>
-
-                                        <label 
-                                            className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
-                                                ${paymentMethod === 'transferencia' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
-                                            onClick={() => setPaymentMethod('transferencia')}
-                                        >
-                                            <input type="radio" name="pago" value="transferencia" className="hidden" />
-                                            Transferencia
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div className="mt-4 font-bold">
-                                    <p>Envío: <span className="text-blue-500">$3000</span></p>
-                                    <p>Total Productos: <span className="text-blue-500">${total.toFixed(2)}</span></p>
-                                    <p>Total a Pagar: <span className="text-green-700">${totalToPay.toFixed(2)}</span></p>
-                                </div>
-
-                                <button 
-                                    type="button" 
-                                    onClick={handleConfirmPurchase}
-                                    className="w-full mt-3 bg-blue-500 text-white py-2 rounded-lg"
-                                >
-                                    Confirmar Compra
-                                </button>
-                            </form>
+                            <label
+                            className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                ${paymentMethod === 'transferencia' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                            onClick={() => setPaymentMethod('transferencia')}
+                            >
+                            Transferencia
+                            </label>
                         </div>
+                        </div>
+
+                        <div className="mt-4 font-bold">
+                        <p>Envío: <span className="text-blue-500">$3000</span></p>
+                        <p>Total Productos: <span className="text-blue-500">${total.toFixed(2)}</span></p>
+                        <p>Total a Pagar: <span className="text-green-700">${totalToPay.toFixed(2)}</span></p>
+                        </div>
+
+                        <button
+                        type="button"
+                        onClick={handleConfirmPurchase}
+                        className="w-full mt-3 bg-blue-500 text-white py-2 rounded-lg"
+                        >
+                        Confirmar Compra
+                        </button>
+                    </form>
                     </div>
+                </div>
                 )}
             </header>
         </>
