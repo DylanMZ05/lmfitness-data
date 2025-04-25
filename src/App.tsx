@@ -11,6 +11,7 @@ import { productData } from "./data/products";
 import FeaturedSlider from "./components/FeaturedSlider";
 import { CartProvider } from "./context/CartContext";
 import ParallaxSlider from "./components/Slider";
+import WspButton from "./components/WspButton";
 import { FaTag, FaBolt, FaGift } from "react-icons/fa";
 
 // 🛒 Slider de Ofertas
@@ -66,6 +67,7 @@ function App() {
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/producto/:id" element={<ProductoDetalle />} />
         </Routes>
+        <WspButton />
         <Footer />
       </Router>
     </CartProvider>
