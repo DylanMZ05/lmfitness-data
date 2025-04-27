@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import useActiveSection from './useActiveSection';
 import { useCart } from '../../context/useCart';
@@ -70,6 +70,9 @@ const Header: React.FC = () => {
             setMenuOpen(false);
         }
     }, [isScrollingUp, menuOpen]);
+
+    const [showProductsMobile, setShowProductsMobile] = useState(false);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     return (
         <>
@@ -179,45 +182,52 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Menú móvil */}
-                <div className={`lg:hidden fixed z-20 top-0 left-0 w-full h-90 bg-black text-white flex flex-col items-center justify-end space-y-8 pb-10 transform ${menuOpen ? 'translate-y-0' : '-translate-y-full'} transition-transform duration-500`}>
-  {sectionIds.map((id) => (
-    <div key={id} className="flex flex-col items-center w-full">
-      {id === 'productos' ? (
-        <>
-          <button
-            onClick={() => setMenuOpen((prev) => !prev)}
-            className={`text-2xl cursor-pointer ${activeSection === id ? 'text-red-500 underline' : ''}`}
-          >
-            Productos ▼
-          </button>
+                <div className={`lg:hidden fixed z-40 top-0 left-0 w-full h-screen bg-black text-white flex flex-col items-center pt-20 transition-transform duration-500 ${menuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
 
-          {/* Dropdown Mobile */}
-          {menuOpen && (
-            <div className="flex flex-col items-center w-full mt-2">
-              {productData.map((category) => (
-                <Link
-                  key={category.slug}
-                  to={`/catalogo#${category.slug}`}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-lg py-1 hover:text-red-500"
-                >
-                  {category.name}
-                </Link>
-              ))}
-            </div>
-          )}
-        </>
-      ) : (
-        <button
-          onClick={() => handleClick(id)}
-          className={`text-2xl cursor-pointer ${activeSection === id ? 'text-red-500 underline' : ''}`}
-        >
-          {id.charAt(0).toUpperCase() + id.slice(1)}
-        </button>
-      )}
-    </div>
-  ))}
-</div>
+                <div ref={scrollRef} className="flex flex-col items-center w-full overflow-y-auto max-h-[calc(100vh-100px)] mt-10 pb-10">
+                    {sectionIds.map((id) => (
+                    <div key={id} className="flex flex-col items-center w-full">
+                        {id === 'productos' ? (
+                            <>
+                                <button
+                                    onClick={() => setShowProductsMobile(prev => !prev)}
+                                    className={`text-2xl cursor-pointer mb-4 ${activeSection === id ? 'text-red-500 underline' : ''}`}
+                                >
+                                    Productos {showProductsMobile ? '▲' : '▼'}
+                                </button>
+
+                                <div
+                                    className={`flex flex-col px-4 w-[45%] bg-neutral-950 rounded-xl overflow-hidden transition-all duration-500 ease-in-out ${
+                                    showProductsMobile ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
+                                    }`}
+                                    style={{ transitionProperty: 'max-height, opacity' }}
+                                >
+                                    {productData.map((category) => (
+                                    <Link
+                                        key={category.slug}
+                                        to={`/catalogo#${category.slug}`}
+                                        onClick={() => { setMenuOpen(false); setShowProductsMobile(false); }}
+                                        className="text-lg flex items-center gap-2 py-2 hover:text-red-500"
+                                    >
+                                        <span className="text-red-500">•</span>
+                                        <span>{category.name}</span>
+                                    </Link>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                        <button
+                            onClick={() => handleClick(id)}
+                            className={`text-2xl cursor-pointer mb-4 ${activeSection === id ? 'text-red-500 underline' : ''}`}
+                        >
+                            {id.charAt(0).toUpperCase() + id.slice(1)}
+                        </button>
+                        )}
+                    </div>
+                    ))}
+                </div>
+
+                </div>
 
                 {/* Carrito */}
                 {cartOpen && (
