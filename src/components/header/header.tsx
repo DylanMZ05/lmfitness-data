@@ -9,6 +9,7 @@ import { productData } from "../../data/products";
 
 const Header: React.FC = () => {
     const { isScrolled, isScrollingUp } = useScroll(50);
+    const [isHoveringProducts, setIsHoveringProducts] = useState(false);
     const sectionIds = ['inicio', 'productos', 'about', 'contacto'];
     const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -67,9 +68,10 @@ const Header: React.FC = () => {
 
     useEffect(() => {
         if (!isScrollingUp && menuOpen) {
-            setMenuOpen(false);
+          setMenuOpen(false);
+          setShowProductsMobile(false); // <<< También cerramos el desplegable
         }
-    }, [isScrollingUp, menuOpen]);
+      }, [isScrollingUp, menuOpen]);
 
     const [showProductsMobile, setShowProductsMobile] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -87,17 +89,24 @@ const Header: React.FC = () => {
                     transform: translateY(0);
                 }
             `}</style>
-            <header
-                className={`w-screen h-auto py-3 fixed z-50 transition-all duration-300
-                    ${isScrolled ? 'bg-black' : 'bg-gradient-to-b from-black to-transparent'}
-                    ${isScrollingUp ? 'translate-y-0' : '-translate-y-full'}
-                `}
-            >
+            <header className={`w-screen h-auto py-3 fixed z-50 transition-all duration-300
+                ${(isScrolled || isHoveringProducts) ? 'bg-black' : 'bg-gradient-to-b from-black to-transparent'}
+                ${isScrollingUp ? 'translate-y-0' : '-translate-y-full'}
+            `}>
                 <div className="flex justify-between items-center text-white p-4">
                     {/* Hamburguesa */}
                     <button
                         className="w-[70px] ml-2 text-white focus:outline-none z-50 lg:hidden cursor-pointer"
-                        onClick={() => setMenuOpen(!menuOpen)}
+                        onClick={() => {
+                            if (menuOpen) {
+                              // Si el menú está abierto y lo estamos cerrando
+                                setMenuOpen(false);
+                                setShowProductsMobile(false); // <<< ahora sí, cerramos el desplegable al cerrar el menú
+                                } else {
+                                // Si el menú estaba cerrado, simplemente lo abrimos
+                                setMenuOpen(true);
+                                }
+                            }}
                     >
                         <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`} />
                         <div className={`w-8 h-1 bg-white my-1.5 rounded transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
@@ -124,48 +133,65 @@ const Header: React.FC = () => {
                     {/* Menú Desktop */}
                     <div className="hidden lg:flex items-center">
                     <ul className="flex justify-between items-center w-150 mr-10 font-medium text-xl xl:mr-20">
-  {sectionIds.map((id) => (
-    <li key={id} className="relative group">
-      {id === 'productos' ? (
-        <>
-          <button
-            className={`font-medium hover:text-red-500 transition-all duration-100 ${
-              activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''
-            }`}
-          >
-            Productos
-          </button>
+                        {sectionIds.map((id) => (
+                            <li
+                            key={id}
+                            className="relative group"
+                            onMouseEnter={() => setIsHoveringProducts(true)}
+                            onMouseLeave={() => setIsHoveringProducts(false)}
+                            >
+                            {id === 'productos' ? (
+                                <>
+                        <button
+                        className="font-medium flex items-center gap-1 hover:text-red-500 transition-all duration-100 cursor-pointer"
+                        >
+                            {/* Texto 'Productos' */}
+                            <span className={`${
+                                activeSection === 'productos' ? 'underline underline-offset-5 decoration-2 scale-105 text-red-500' : ''
+                            }`}>
+                                Productos
+                            </span>
 
-          {/* Dropdown Desktop */}
-          <div className="absolute left-0 top-full mt-2 w-60 bg-white text-black rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-50">
-            <ul className="flex flex-col">
-              {productData.map((category) => (
-                <li key={category.slug}>
-                  <Link
-                    to={`/catalogo#${category.slug}`}
-                    onClick={scrollToTop}
-                    className="block px-4 py-2 hover:bg-gray-200"
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </>
-      ) : (
-        <button
-          onClick={() => handleClick(id)}
-          className={`font-medium hover:text-red-500 transition-all duration-100 ${
-            activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''
-          } focus:outline-none cursor-pointer`}
-        >
-          {id.charAt(0).toUpperCase() + id.slice(1)}
-        </button>
-      )}
-    </li>
-  ))}
-</ul>
+                            {/* Flechita separada, cambia color si está activo, pero sin subrayado */}
+                            <span className={`transition-transform duration-300 group-hover:rotate-180 text-2xl mt-1 ${
+                                activeSection === 'productos' ? 'text-red-500' : ''
+                            }`}>
+                                ▼
+                            </span>
+                        </button>
+
+                                {/* Dropdown Desktop */}
+                                <div className={`fixed left-0 top-[108px] w-screen bg-black text-white transition-all duration-300 z-40 py-10
+                                    ${isHoveringProducts ? 'opacity-100 visible' : 'opacity-0 invisible'}
+                                `}>
+                                    <div className="max-w-7xl px-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-left">
+                                    {productData.map((category) => (
+                                        <Link
+                                        key={category.slug}
+                                        to={`/catalogo#${category.slug}`}
+                                        onClick={scrollToTop}
+                                        className="flex items-center gap-2 hover:text-red-500 text-lg"
+                                        >
+                                        <span className="text-red-500">•</span>
+                                        <span>{category.name}</span>
+                                        </Link>
+                                    ))}
+                                    </div>
+                                </div>
+                                </>
+                            ) : (
+                                <button
+                                onClick={() => handleClick(id)}
+                                className={`font-medium hover:text-red-500 transition-all duration-100 ${
+                                    activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''
+                                } focus:outline-none cursor-pointer`}
+                                >
+                                {id.charAt(0).toUpperCase() + id.slice(1)}
+                                </button>
+                            )}
+                            </li>
+                        ))}
+                    </ul>
 
                         {/* <button>
                             <Search size={26} />
@@ -188,33 +214,39 @@ const Header: React.FC = () => {
                     {sectionIds.map((id) => (
                     <div key={id} className="flex flex-col items-center w-full">
                         {id === 'productos' ? (
-                            <>
-                                <button
-                                    onClick={() => setShowProductsMobile(prev => !prev)}
-                                    className={`text-2xl cursor-pointer mb-4 ${activeSection === id ? 'text-red-500 underline' : ''}`}
-                                >
-                                    Productos {showProductsMobile ? '▲' : '▼'}
-                                </button>
+                        <>
+                            <button
+                            onClick={() => setShowProductsMobile(prev => !prev)}
+                            className={`text-2xl cursor-pointer mb-4 ${activeSection === id ? 'text-red-500 underline' : ''}`}
+                            >
+                            Productos {showProductsMobile ? '▲' : '▼'}
+                            </button>
 
-                                <div
-                                    className={`flex flex-col px-4 w-[45%] bg-neutral-950 rounded-xl overflow-hidden transition-all duration-500 ease-in-out ${
-                                    showProductsMobile ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
-                                    }`}
-                                    style={{ transitionProperty: 'max-height, opacity' }}
+                            <div
+                            className={`w-[45%] bg-neutral-800 rounded-xl overflow-hidden transition-all duration-500 ease-in-out ${
+                                showProductsMobile ? 'max-h-[800px] opacity-100 mb-4' : 'max-h-0 opacity-0 mb-0'
+                            }`}
+                            style={{ transitionProperty: 'max-height, opacity' }}
+                            >
+                            {/* Este div interno solo tiene padding */}
+                            <div className="flex flex-col px-4 py-3">
+                                {productData.map((category) => (
+                                <Link
+                                    key={category.slug}
+                                    to={`/catalogo#${category.slug}`}
+                                    onClick={() => {
+                                    setMenuOpen(false);
+                                    setShowProductsMobile(false); // <<< cerramos también el dropdown al hacer click
+                                    }}
+                                    className="text-lg flex items-center gap-2 py-2 hover:text-red-500"
                                 >
-                                    {productData.map((category) => (
-                                    <Link
-                                        key={category.slug}
-                                        to={`/catalogo#${category.slug}`}
-                                        onClick={() => { setMenuOpen(false); setShowProductsMobile(false); }}
-                                        className="text-lg flex items-center gap-2 py-2 hover:text-red-500"
-                                    >
-                                        <span className="text-red-500">•</span>
-                                        <span>{category.name}</span>
-                                    </Link>
-                                    ))}
-                                </div>
-                            </>
+                                    <span className="text-red-500">•</span>
+                                    <span>{category.name}</span>
+                                </Link>
+                                ))}
+                            </div>
+                            </div>
+                        </>
                         ) : (
                         <button
                             onClick={() => handleClick(id)}
