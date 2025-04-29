@@ -219,7 +219,7 @@ const Header: React.FC = () => {
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product, index) => (
                             <Link
-                                to={`/catalogo/${product.slug}#${product.id}`}
+                                to={`/producto/${product.id}`}
                                 key={index}
                                 className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
                                 onClick={() => setShowSearch(false)}
@@ -278,7 +278,7 @@ const Header: React.FC = () => {
                                 filteredProducts.map((product) => (
                                     <Link
                                     key={product.id}
-                                    to={`/catalogo#${product.slug}`}
+                                    to={`/producto${product.id}`}
                                     onClick={() => {
                                         setSearchQuery('');
                                     }}
@@ -335,7 +335,7 @@ const Header: React.FC = () => {
                                     {productData.map((category) => (
                                         <Link
                                         key={category.slug}
-                                        to={`/catalogo#${category.slug}`}
+                                        to={`/producto${category.id}`}
                                         onClick={scrollToTop}
                                         className="flex items-center gap-2 hover:text-red-500 text-lg"
                                         >
@@ -374,7 +374,7 @@ const Header: React.FC = () => {
                                 filteredProducts.map((product) => (
                                     <Link
                                     key={product.id}
-                                    to={`/catalogo#${product.slug}`}
+                                    to={`/producto${product.id}`}
                                     onClick={() => {
                                         setSearchQuery('');
                                         setShowSearch(false);
@@ -422,7 +422,7 @@ const Header: React.FC = () => {
                                 {productData.map((category) => (
                                 <Link
                                     key={category.slug}
-                                    to={`/catalogo#${category.slug}`}
+                                    to={`/producto${category.id}`}
                                     onClick={() => {
                                     setMenuOpen(false);
                                     setShowProductsMobile(false); // <<< cerramos también el dropdown al hacer click
@@ -613,7 +613,7 @@ const Header: React.FC = () => {
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((product, index) => (
                     <Link
-                        to={`/catalogo/${product.slug}#${product.id}`}
+                        to={`/producto/${product.id}`}
                         key={index}
                         className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
                         onClick={() => {
