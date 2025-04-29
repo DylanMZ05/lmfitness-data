@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Search } from 'lucide-react';
 import useActiveSection from './useActiveSection';
 import { useCart } from '../../context/useCart';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import useScroll from './useScroll';
 import { productData } from "../../data/products";
 
 const Header: React.FC = () => {
+    const searchRef = useRef<HTMLDivElement>(null);
     const { isScrolled, isScrollingUp } = useScroll(50);
     const [isHoveringProducts, setIsHoveringProducts] = useState(false);
     const sectionIds = ['inicio', 'productos', 'about', 'contacto'];
@@ -21,6 +22,38 @@ const Header: React.FC = () => {
     const [location, setLocation] = useState('');
     const [street, setStreet] = useState('');
     const [betweenStreets, setBetweenStreets] = useState('');
+    const [showMobileSearch, setShowMobileSearch] = useState(false);
+    const mobileSearchRef = useRef<HTMLDivElement>(null);
+
+    const [showSearch, setShowSearch] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setShowSearch(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // Flatten de todos los productos en un solo array
+    const allProducts = productData.flatMap(category =>
+        category.products.map(product => ({
+        ...product,
+        slug: category.slug, // Así sabemos a qué categoría pertenece
+        }))
+    );
+    
+    // Filtrado de productos por nombre
+    const filteredProducts = allProducts.filter(product =>
+        product.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const scrollToTop = useScrollToTop();
     const navigate = useNavigate();
@@ -67,11 +100,35 @@ const Header: React.FC = () => {
     };
 
     useEffect(() => {
-        if (!isScrollingUp && menuOpen) {
-          setMenuOpen(false);
-          setShowProductsMobile(false); // <<< También cerramos el desplegable
+        const handleClickOutside = (event: MouseEvent) => {
+        if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+            setShowSearch(false);
         }
-      }, [isScrollingUp, menuOpen]);
+        if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target as Node)) {
+            setShowMobileSearch(false);
+        }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isScrollingUp) {
+            if (menuOpen) {
+            setMenuOpen(false);
+            setShowProductsMobile(false);
+            }
+            if (showSearch) {
+            setShowSearch(false);
+            }
+            if (showMobileSearch) {
+            setShowMobileSearch(false);
+            }
+        }
+    }, [isScrollingUp, menuOpen, showSearch, showMobileSearch]);
 
     const [showProductsMobile, setShowProductsMobile] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -118,47 +175,157 @@ const Header: React.FC = () => {
                         <img src="assets/logo.jpeg" alt="Logo" className="h-13 img-shadow" />
                     </Link>
 
-                    {/* Carrito móvil */}
-                    <div className="right-24 text-white z-50 mr-2 flex w-[70px] justify-between lg:hidden">
-                        <button onClick={() => setCartOpen(!cartOpen)} className="relative cursor-pointer">
-                            <ShoppingCart size={26} />
-                            {cart.length > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
-                                    {cart.reduce((acc, item) => acc + item.quantity, 0)}
-                                </span>
-                            )}
-                        </button>
+                    {/* Carrito + Buscador móvil */}
+                    <div className="right-24 text-white z-50 mr-2 flex w-[70px] justify-between items-center lg:hidden">
+                    
+                    {/* Lupa Mobile */}
+                    <button onClick={() => setShowMobileSearch(prev => !prev)} className="relative cursor-pointer">
+                        <Search size={26} />
+                    </button>
+
+                    {/* Carrito Mobile */}
+                    <button onClick={() => setCartOpen(!cartOpen)} className="relative cursor-pointer ml-4">
+                        <ShoppingCart size={26} />
+                        {cart.length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+                            {cart.reduce((acc, item) => acc + item.quantity, 0)}
+                        </span>
+                        )}
+                    </button>
                     </div>
 
                     {/* Menú Desktop */}
                     <div className="hidden lg:flex items-center">
-                    <ul className="flex justify-between items-center w-150 mr-10 font-medium text-xl xl:mr-20">
-                        {sectionIds.map((id) => (
-                            <li
-                            key={id}
-                            className="relative group"
-                            onMouseEnter={() => setIsHoveringProducts(true)}
-                            onMouseLeave={() => setIsHoveringProducts(false)}
-                            >
-                            {id === 'productos' ? (
-                                <>
-                        <button
-                        className="font-medium flex items-center gap-1 hover:text-red-500 transition-all duration-100 cursor-pointer"
-                        >
-                            {/* Texto 'Productos' */}
-                            <span className={`${
-                                activeSection === 'productos' ? 'underline underline-offset-5 decoration-2 scale-105 text-red-500' : ''
-                            }`}>
-                                Productos
-                            </span>
+                    {/* Buscador Desktop */}
+                    <div ref={searchRef} className="relative hidden lg:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10">
+                    <div className="flex items-center justify-center w-6 h-6 mx-2">
+                        <Search size={22} className="text-white" />
+                    </div>
 
-                            {/* Flechita separada, cambia color si está activo, pero sin subrayado */}
-                            <span className={`transition-transform duration-300 group-hover:rotate-180 text-2xl mt-1 ${
-                                activeSection === 'productos' ? 'text-red-500' : ''
-                            }`}>
-                                ▼
-                            </span>
-                        </button>
+                    <input
+                        type="text"
+                        placeholder="Buscar tu producto"
+                        className="bg-white text-black rounded-full w-full h-8 px-3 outline-none border-none"
+                        value={searchQuery}
+                        onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setShowSearch(true);
+                        }}
+                        onFocus={() => setShowSearch(true)}
+                    />
+
+                    {showSearch && (
+                        <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg max-h-64 overflow-y-auto z-40 text-black">
+                        {filteredProducts.length > 0 ? (
+                            filteredProducts.map((product, index) => (
+                            <Link
+                                to={`/catalogo/${product.slug}#${product.id}`}
+                                key={index}
+                                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
+                                onClick={() => setShowSearch(false)}
+                            >
+                                <img
+                                src={product.images[0]}
+                                alt={product.title}
+                                className="w-12 h-12 object-cover rounded-md"
+                                />
+                                <div className="flex flex-col">
+                                <span className="font-medium">{product.title}</span>
+                                <span className="text-sm text-gray-600">{product.price}</span>
+                                </div>
+                            </Link>
+                            ))
+                        ) : (
+                            <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
+                        )}
+                        </div>
+                    )}
+                    </div>
+
+                        {/* Lupa y carrito Mobile */}
+<div className="flex items-center lg:hidden">
+  <button onClick={() => setShowMobileSearch(!showMobileSearch)} className="relative cursor-pointer">
+    <Search size={26} />
+  </button>
+
+  <button onClick={() => setCartOpen(!cartOpen)} className="relative cursor-pointer ml-4">
+    <ShoppingCart size={26} />
+    {cart.length > 0 && (
+      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+        {cart.reduce((acc, item) => acc + item.quantity, 0)}
+      </span>
+    )}
+  </button>
+</div>
+
+                        {/* Buscador Mobile desplegado */}
+                        {showSearch && (
+                        <div className="lg:hidden w-full px-4 mt-2">
+                            <div className="flex items-center bg-white rounded-full px-3 py-2 shadow">
+                            <Search size={18} className="text-gray-500 mr-2" />
+                            <input
+                                type="text"
+                                placeholder="Busca tu producto..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                autoFocus
+                                className="flex-1 bg-transparent outline-none text-black"
+                            />
+                            </div>
+                            {searchQuery && (
+                            <div className="absolute mt-2 w-80 bg-white rounded-md shadow-lg text-black max-h-80 overflow-y-auto z-50">
+                                {filteredProducts.length > 0 ? (
+                                filteredProducts.map((product) => (
+                                    <Link
+                                    key={product.id}
+                                    to={`/catalogo#${product.slug}`}
+                                    onClick={() => {
+                                        setSearchQuery('');
+                                    }}
+                                    className="flex items-center p-2 hover:bg-gray-100"
+                                    >
+                                    <img src={product.images[0]} alt={product.title} className="w-12 h-12 object-cover rounded mr-3" />
+                                    <div className="flex flex-col">
+                                        <span className="font-medium">{product.title}</span>
+                                        <span className="text-sm text-gray-600">{product.price}</span>
+                                    </div>
+                                    </Link>
+                                ))
+                                ) : (
+                                <div className="p-2 text-gray-500">No se encontraron productos.</div>
+                                )}
+                            </div>
+                            )}
+                        </div>
+                        )}
+
+                        <ul className="flex justify-between items-center w-150 mr-10 font-medium text-xl xl:mr-20">
+                            {sectionIds.map((id) => (
+                                <li
+                                key={id}
+                                className="relative group"
+                                onMouseEnter={() => setIsHoveringProducts(true)}
+                                onMouseLeave={() => setIsHoveringProducts(false)}
+                                >
+                                {id === 'productos' ? (
+                                    <>
+                            <button
+                            className="font-medium flex items-center gap-1 hover:text-red-500 transition-all duration-100 cursor-pointer"
+                            >
+                                {/* Texto 'Productos' */}
+                                <span className={`${
+                                    activeSection === 'productos' ? 'underline underline-offset-5 decoration-2 scale-105 text-red-500' : ''
+                                }`}>
+                                    Productos
+                                </span>
+
+                                {/* Flechita separada, cambia color si está activo, pero sin subrayado */}
+                                <span className={`transition-transform duration-300 group-hover:rotate-180 text-2xl mt-1 ${
+                                    activeSection === 'productos' ? 'text-red-500' : ''
+                                }`}>
+                                    ▼
+                                </span>
+                            </button>
 
                                 {/* Dropdown Desktop */}
                                 <div className={`fixed left-0 top-[108px] w-screen bg-black text-white transition-all duration-300 z-40 py-10
@@ -179,23 +346,20 @@ const Header: React.FC = () => {
                                     </div>
                                 </div>
                                 </>
-                            ) : (
-                                <button
-                                onClick={() => handleClick(id)}
-                                className={`font-medium hover:text-red-500 transition-all duration-100 ${
-                                    activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''
-                                } focus:outline-none cursor-pointer`}
-                                >
-                                {id.charAt(0).toUpperCase() + id.slice(1)}
-                                </button>
-                            )}
-                            </li>
-                        ))}
-                    </ul>
-
-                        {/* <button>
-                            <Search size={26} />
-                        </button> */}
+                                ) : (
+                                    <button
+                                    onClick={() => handleClick(id)}
+                                    className={`font-medium hover:text-red-500 transition-all duration-100 ${
+                                        activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''
+                                    } focus:outline-none cursor-pointer`}
+                                    >
+                                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                                    </button>
+                                )}
+                                </li>
+                            ))}
+                        </ul>
+                        
                         <button onClick={() => setCartOpen(!cartOpen)} className="ml-7 mr-3 relative text-white cursor-pointer">
                             <ShoppingCart size={24} />
                             {cart.length > 0 && (
@@ -204,8 +368,33 @@ const Header: React.FC = () => {
                                 </span>
                             )}
                         </button>
+                        {(showSearch || searchQuery) && (
+                            <div className="absolute mt-2 top-16 w-80 bg-white rounded-md shadow-lg text-black max-h-80 overflow-y-auto z-50">
+                                {filteredProducts.length > 0 ? (
+                                filteredProducts.map((product) => (
+                                    <Link
+                                    key={product.id}
+                                    to={`/catalogo#${product.slug}`}
+                                    onClick={() => {
+                                        setSearchQuery('');
+                                        setShowSearch(false);
+                                    }}
+                                    className="flex items-center p-2 hover:bg-gray-100"
+                                    >
+                                    <img src={product.images[0]} alt={product.title} className="w-10 h-10 object-cover rounded mr-3" />
+                                    <div className="flex flex-col">
+                                        <span className="font-medium">{product.title}</span>
+                                        <span className="text-sm text-gray-600">{product.price}</span>
+                                    </div>
+                                    </Link>
+                                ))
+                                ) : (
+                                <div className="p-2 text-gray-500">No se encontraron productos.</div>
+                                )}
+                            </div>
+                            )}
+                        </div>
                     </div>
-                </div>
 
                 {/* Menú móvil */}
                 <div className={`lg:hidden fixed z-40 top-0 left-0 w-full h-screen bg-black text-white flex flex-col items-center pt-20 transition-transform duration-500 ${menuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
@@ -400,8 +589,55 @@ const Header: React.FC = () => {
                     </form>
                     </div>
                 </div>
+
+                
+
+                
                 )}
             </header>
+            {showMobileSearch && (
+            <div 
+            ref={mobileSearchRef}
+            className="fixed top-23 left-1/2 transform -translate-x-1/2 w-11/12 bg-white rounded-lg shadow-lg p-4 z-100 lg:hidden">
+                {/* Input Mobile */}
+                <input
+                type="text"
+                placeholder="Buscar tu producto"
+                className="w-full bg-gray-100 text-black rounded-full px-4 py-2 outline-none mb-4"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                />
+
+                {/* Listado productos Mobile */}
+                <div className="max-h-64 overflow-y-auto text-black">
+                {filteredProducts.length > 0 ? (
+                    filteredProducts.map((product, index) => (
+                    <Link
+                        to={`/catalogo/${product.slug}#${product.id}`}
+                        key={index}
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
+                        onClick={() => {
+                        setShowMobileSearch(false);
+                        setSearchQuery('');
+                        }}
+                    >
+                        <img
+                        src={product.images[0]}
+                        alt={product.title}
+                        className="w-12 h-12 object-cover rounded-md"
+                        />
+                        <div className="flex flex-col">
+                        <span className="font-medium">{product.title}</span>
+                        <span className="text-sm text-gray-600">{product.price}</span>
+                        </div>
+                    </Link>
+                    ))
+                ) : (
+                    <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
+                )}
+                </div>
+            </div>
+            )}
         </>
     );
 };
