@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { productData } from "../data/products";
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-neutral-950 text-white w-full">
       <section className="flex justify-center items-center px-4 py-10">
-        <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-10 justify-items-center text-center md:text-left">
+        <div className="w-full max-w-8xl grid grid-cols-1 md:grid-cols-3 gap-15 justify-items-center text-center md:text-left">
           {/* Logo */}
           <div className="flex flex-col items-center md:items-start">
             <img
@@ -17,13 +18,21 @@ const Footer: React.FC = () => {
             <p className="text-2xl font-bold tracking-wider">LMFITNESS</p>
           </div>
 
-          {/* Categorías */}
+          {/* Categorías dinámicas en 2 columnas (mobile) y 3 columnas (desktop) */}
           <div>
-            <h3 className="text-xl font-semibold mb-4">Categorías</h3>
-            <ul className="flex flex-col gap-2 text-sm">
-              <li><Link to="/catalogo" className="hover:underline">Proteínas</Link></li>
-              <li><Link to="/catalogo" className="hover:underline">Pre entrenos</Link></li>
-              <li><Link to="/catalogo" className="hover:underline">Creatinas</Link></li>
+            <h3 className="text-xl font-semibold mb-4 md:min-w-78 md:text-center">Categorías</h3>
+            <ul className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-2 text-sm text-start">
+              {productData.map((category) => (
+                <li key={category.slug} className="flex items-start gap-2">
+                  <span className="text-red-500 mt-[2px]">•</span>
+                  <Link
+                    to={`/catalogo#${category.slug}`}
+                    className="hover:underline hover:text-red-500 transition-colors leading-snug"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -335,7 +335,7 @@ const Header: React.FC = () => {
                                     {productData.map((category) => (
                                         <Link
                                         key={category.slug}
-                                        to={`/producto${category.slug}`}
+                                        to={`/catalogo#${category.slug}`}
                                         onClick={scrollToTop}
                                         className="flex items-center gap-2 hover:text-red-500 text-lg"
                                         >
@@ -422,7 +422,7 @@ const Header: React.FC = () => {
                                 {productData.map((category) => (
                                 <Link
                                     key={category.slug}
-                                    to={`/producto${category.slug}`}
+                                    to={`/catalogo#${category.slug}`}
                                     onClick={() => {
                                     setMenuOpen(false);
                                     setShowProductsMobile(false); // <<< cerramos también el dropdown al hacer click
