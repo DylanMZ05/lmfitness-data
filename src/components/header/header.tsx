@@ -42,19 +42,6 @@ const Header: React.FC = () => {
         };
     }, []);
 
-    // Flatten de todos los productos en un solo array
-    const allProducts = productData.flatMap(category =>
-        category.products.map(product => ({
-        ...product,
-        slug: category.slug, // Así sabemos a qué categoría pertenece
-        }))
-    );
-    
-    // Filtrado de productos por nombre
-    const filteredProducts = allProducts.filter(product =>
-        product.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
     const scrollToTop = useScrollToTop();
     const navigate = useNavigate();
 
@@ -153,7 +140,7 @@ const Header: React.FC = () => {
                 <div className="flex justify-between items-center text-white p-4">
                     {/* Hamburguesa */}
                     <button
-                        className="w-[70px] ml-2 text-white focus:outline-none z-50 lg:hidden cursor-pointer"
+                        className="w-[70px] ml-2 text-white focus:outline-none z-70 lg:hidden cursor-pointer"
                         onClick={() => {
                             if (menuOpen) {
                               // Si el menú está abierto y lo estamos cerrando
@@ -196,67 +183,99 @@ const Header: React.FC = () => {
 
                     {/* Menú Desktop */}
                     <div className="hidden lg:flex items-center">
-                    {/* Buscador Desktop */}
-                    <div ref={searchRef} className="relative hidden lg:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10">
-                    <div className="flex items-center justify-center w-6 h-6 mx-2">
-                        <Search size={22} className="text-white" />
-                    </div>
+                        {/* Buscador Desktop */}
+                        <div ref={searchRef} className="relative hidden lg:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10">
+                            <div className="flex items-center justify-center w-6 h-6 mx-2">
+                                <Search size={22} className="text-white" />
+                            </div>
 
-                    <input
-                        type="text"
-                        placeholder="Buscar tu producto"
-                        className="bg-white text-black rounded-full w-full h-8 px-3 outline-none border-none"
-                        value={searchQuery}
-                        onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        setShowSearch(true);
-                        }}
-                        onFocus={() => setShowSearch(true)}
-                    />
+                            <input
+                                type="text"
+                                placeholder="Buscar tu producto"
+                                className="bg-white text-black rounded-full w-full h-8 px-3 outline-none border-none"
+                                value={searchQuery}
+                                onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setShowSearch(true);
+                                }}
+                                onFocus={() => setShowSearch(true)}
+                            />
 
-                    {showSearch && (
-                        <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg max-h-64 overflow-y-auto z-40 text-black">
-                        {filteredProducts.length > 0 ? (
-                            filteredProducts.map((product, index) => (
-                            <Link
-                                to={`/producto/${product.id}`}
-                                key={index}
-                                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
-                                onClick={() => setShowSearch(false)}
-                            >
-                                <img
-                                src={product.images[0]}
-                                alt={product.title}
-                                className="w-12 h-12 object-cover rounded-md"
-                                />
-                                <div className="flex flex-col">
-                                <span className="font-medium">{product.title}</span>
-                                <span className="text-sm text-gray-600">{product.price}</span>
+                            {showSearch && (
+                                <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg max-h-64 overflow-y-auto z-40 text-black">
+                                    {/* Resultados del buscador Desktop, agrupados por categoría */}
+                                    {productData.some(category =>
+                                    category.products.some(product =>
+                                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
+                                    )
+                                    ) ? (
+                                    // Recorremos todas las categorías
+                                    productData.map((category) => {
+                                        // Filtramos los productos dentro de cada categoría según la búsqueda
+                                        const matchingProducts = category.products.filter(product =>
+                                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
+                                        );
+
+                                        if (matchingProducts.length === 0) return null; // Si no hay coincidencias en esa categoría, la salteamos
+
+                                        return (
+                                        <div key={category.slug} className="px-4 py-2">
+                                            {/* Nombre de la categoría */}
+                                            <h3 className="text-sm font-bold text-gray-800 uppercase mb-2 border-b border-gray-300 pb-1">
+                                            {category.name}
+                                            </h3>
+
+                                            {/* Productos coincidentes dentro de esa categoría */}
+                                            {matchingProducts.map((product) => (
+                                            <Link
+                                                key={product.id}
+                                                to={`/producto/${product.id}`}
+                                                onClick={() => {
+                                                setShowSearch(false);
+                                                setShowMobileSearch(false);
+                                                setSearchQuery('');
+                                                }}
+                                                className="flex items-center gap-3 px-2 py-2 hover:bg-gray-100 rounded-md"
+                                            >
+                                                <img
+                                                src={product.images[0]}
+                                                alt={product.title}
+                                                className="w-10 h-10 object-cover rounded"
+                                                />
+                                                <div className="flex flex-col">
+                                                <span className="font-medium text-sm">{product.title}</span>
+                                                <span className="text-xs text-gray-600">{product.price}</span>
+                                                </div>
+                                            </Link>
+                                            ))}
+                                        </div>
+                                        );
+                                    })
+                                    ) : (
+                                    // Si no se encuentra ningún producto ni categoría
+                                    <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
+                                    )}
                                 </div>
-                            </Link>
-                            ))
-                        ) : (
-                            <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
-                        )}
+                            )}
                         </div>
-                    )}
-                    </div>
 
                         {/* Lupa y carrito Mobile */}
-<div className="flex items-center lg:hidden">
-  <button onClick={() => setShowMobileSearch(!showMobileSearch)} className="relative cursor-pointer">
-    <Search size={26} />
-  </button>
+                        <div className="flex items-center lg:hidden">
+                        <button onClick={() => setShowMobileSearch(!showMobileSearch)} className="relative cursor-pointer">
+                            <Search size={26} />
+                        </button>
 
-  <button onClick={() => setCartOpen(!cartOpen)} className="relative cursor-pointer ml-4">
-    <ShoppingCart size={26} />
-    {cart.length > 0 && (
-      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
-        {cart.reduce((acc, item) => acc + item.quantity, 0)}
-      </span>
-    )}
-  </button>
-</div>
+                        <button onClick={() => setCartOpen(!cartOpen)} className="relative cursor-pointer ml-4">
+                            <ShoppingCart size={26} />
+                            {cart.length > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+                                {cart.reduce((acc, item) => acc + item.quantity, 0)}
+                            </span>
+                            )}
+                        </button>
+                        </div>
 
                         {/* Buscador Mobile desplegado */}
                         {showSearch && (
@@ -272,28 +291,50 @@ const Header: React.FC = () => {
                                 className="flex-1 bg-transparent outline-none text-black"
                             />
                             </div>
+
                             {searchQuery && (
                             <div className="absolute mt-2 w-80 bg-white rounded-md shadow-lg text-black max-h-80 overflow-y-auto z-50">
-                                {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <Link
-                                    key={product.id}
-                                    to={`/producto${product.id}`}
-                                    onClick={() => {
-                                        setSearchQuery('');
-                                    }}
-                                    className="flex items-center p-2 hover:bg-gray-100"
-                                    >
-                                    <img src={product.images[0]} alt={product.title} className="w-12 h-12 object-cover rounded mr-3" />
-                                    <div className="flex flex-col">
-                                        <span className="font-medium">{product.title}</span>
-                                        <span className="text-sm text-gray-600">{product.price}</span>
-                                    </div>
-                                    </Link>
-                                ))
-                                ) : (
-                                <div className="p-2 text-gray-500">No se encontraron productos.</div>
-                                )}
+                                {productData
+                                    .map((category) => {
+                                    const matchingProducts = category.products.filter((product) =>
+                                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
+                                    );
+
+                                    if (matchingProducts.length === 0) return null;
+
+                                    return (
+                                        <div key={category.slug} className="px-4 py-2">
+                                        <h3 className="text-sm font-bold text-gray-800 uppercase mb-2 border-b border-gray-300 pb-1">
+                                            {category.name}
+                                        </h3>
+                                        {matchingProducts.map((product) => (
+                                            <Link
+                                            key={product.id}
+                                            to={`/producto/${product.id}`}
+                                            onClick={() => {
+                                                setSearchQuery('');
+                                                setShowSearch(false);
+                                                setShowMobileSearch(false);
+                                            }}
+                                            className="flex items-center gap-3 px-2 py-2 hover:bg-gray-100 rounded-md"
+                                            >
+                                            <img
+                                                src={product.images[0]}
+                                                alt={product.title}
+                                                className="w-10 h-10 object-cover rounded"
+                                            />
+                                            <div className="flex flex-col">
+                                                <span className="font-medium text-sm">{product.title}</span>
+                                                <span className="text-xs text-gray-600">{product.price}</span>
+                                            </div>
+                                            </Link>
+                                        ))}
+                                        </div>
+                                    );
+                                    })
+                                    .filter(Boolean) // Para evitar nulls
+                                }
                             </div>
                             )}
                         </div>
@@ -368,134 +409,115 @@ const Header: React.FC = () => {
                                 </span>
                             )}
                         </button>
-                        {(showSearch || searchQuery) && (
-                            <div className="absolute mt-2 top-16 w-80 bg-white rounded-md shadow-lg text-black max-h-80 overflow-y-auto z-50">
-                                {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <Link
-                                    key={product.id}
-                                    to={`/producto${product.id}`}
-                                    onClick={() => {
-                                        setSearchQuery('');
-                                        setShowSearch(false);
-                                    }}
-                                    className="flex items-center p-2 hover:bg-gray-100"
-                                    >
-                                    <img src={product.images[0]} alt={product.title} className="w-10 h-10 object-cover rounded mr-3" />
-                                    <div className="flex flex-col">
-                                        <span className="font-medium">{product.title}</span>
-                                        <span className="text-sm text-gray-600">{product.price}</span>
-                                    </div>
-                                    </Link>
-                                ))
-                                ) : (
-                                <div className="p-2 text-gray-500">No se encontraron productos.</div>
-                                )}
-                            </div>
-                            )}
-                        </div>
+
                     </div>
+                </div>
 
                 {/* Menú móvil */}
-                <div className={`lg:hidden fixed z-40 top-0 left-0 w-full h-screen bg-black text-white flex flex-col items-center pt-20 transition-transform duration-500 ${menuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
-
-                <div ref={scrollRef} className="flex flex-col items-center w-full overflow-y-auto max-h-[calc(100vh-100px)] mt-10 pb-10">
-                    {sectionIds.map((id) => (
-                    <div key={id} className="flex flex-col items-center w-full">
-                        {id === 'productos' ? (
-                        <>
-                            <button
-                            onClick={() => setShowProductsMobile(prev => !prev)}
-                            className={`text-2xl cursor-pointer mb-4 ${activeSection === id ? 'text-red-500 underline' : ''}`}
-                            >
-                            Productos {showProductsMobile ? '▲' : '▼'}
-                            </button>
-
-                            <div
-                            className={`w-[45%] bg-neutral-800 rounded-xl overflow-hidden transition-all duration-500 ease-in-out ${
-                                showProductsMobile ? 'max-h-[800px] opacity-100 mb-4' : 'max-h-0 opacity-0 mb-0'
-                            }`}
-                            style={{ transitionProperty: 'max-height, opacity' }}
-                            >
-                            {/* Este div interno solo tiene padding */}
-                            <div className="flex flex-col px-4 py-3">
-                                {productData.map((category) => (
-                                <Link
-                                    key={category.slug}
-                                    to={`/catalogo#${category.slug}`}
-                                    onClick={() => {
-                                    setMenuOpen(false);
-                                    setShowProductsMobile(false); // <<< cerramos también el dropdown al hacer click
-                                    }}
-                                    className="text-lg flex items-center gap-2 py-2 hover:text-red-500"
+                <div className={`lg:hidden fixed z-60 top-0 left-0 h-screen w-[80%] bg-black text-white flex flex-col items-start pt-20 transition-transform duration-500 ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                    <div ref={scrollRef} className="flex flex-col items-start w-full overflow-y-auto max-h-[calc(100vh-100px)] mt-10 pb-10">
+                        {sectionIds.map((id) => (
+                        <div key={id} className="flex flex-col items-start w-full">
+                            {id === 'productos' ? (
+                            <>
+                                <button
+                                onClick={() => setShowProductsMobile(prev => !prev)}
+                                className={`text-2xl cursor-pointer mb-4 pl-7 ${activeSection === id ? 'text-red-500 underline' : ''}`}
                                 >
-                                    <span className="text-red-500">•</span>
-                                    <span>{category.name}</span>
-                                </Link>
-                                ))}
-                            </div>
-                            </div>
-                        </>
-                        ) : (
-                        <button
-                            onClick={() => handleClick(id)}
-                            className={`text-2xl cursor-pointer mb-4 ${activeSection === id ? 'text-red-500 underline' : ''}`}
-                        >
-                            {id.charAt(0).toUpperCase() + id.slice(1)}
-                        </button>
-                        )}
+                                Productos {showProductsMobile ? '▲' : '▼'}
+                                </button>
+
+                                <div
+                                className={`w-full bg-gray-800 overflow-hidden transition-all duration-500 ease-in-out ${
+                                    showProductsMobile ? 'max-h-[800px] opacity-100 mb-4' : 'max-h-0 opacity-0 mb-0'
+                                }`}
+                                style={{ transitionProperty: 'max-height, opacity' }}
+                                >
+                                {/* Este div interno solo tiene padding */}
+                                <div className="flex flex-col px-4 py-3">
+                                    {productData.map((category) => (
+                                    <Link
+                                        key={category.slug}
+                                        to={`/catalogo#${category.slug}`}
+                                        onClick={() => {
+                                        setMenuOpen(false);
+                                        setShowProductsMobile(false); // <<< cerramos también el dropdown al hacer click
+                                        }}
+                                        className="text-lg flex items-center gap-2 py-2 hover:text-red-500"
+                                    >
+                                        <span>•</span>
+                                        <span>{category.name}</span>
+                                    </Link>
+                                    ))}
+                                </div>
+                                </div>
+                            </>
+                            ) : (
+                            <button
+                                onClick={() => handleClick(id)}
+                                className={`text-2xl cursor-pointer mb-4 pl-7 ${activeSection === id ? 'text-red-500 underline' : ''}`}
+                            >
+                                {id.charAt(0).toUpperCase() + id.slice(1)}
+                            </button>
+                            )}
+                        </div>
+                        ))}
                     </div>
-                    ))}
                 </div>
 
-                </div>
+                {menuOpen && (
+                <div
+                    className="fixed inset-0 h-screen bg-black/70 z-50 lg:hidden"
+                    onClick={() => setMenuOpen(false)}
+                />
+                )}
 
                 {/* Carrito */}
                 {cartOpen && (
-                    <div className="fixed top-0 right-0 w-80 h-screen bg-white shadow-lg p-4 text-black z-60 overflow-y-auto">
-                        <button
-                            onClick={() => setCartOpen(false)}
-                            className="absolute top-4 right-4 text-black text-2xl font-bold cursor-pointer"
-                        >
-                            ✖
-                        </button>
+                <div className="fixed top-0 right-0 w-80 h-screen bg-white shadow-lg p-4 text-black z-60 overflow-y-auto">
+                    <button
+                        onClick={() => setCartOpen(false)}
+                        className="absolute top-4 right-4 text-black text-2xl font-bold cursor-pointer"
+                    >
+                        ✖
+                    </button>
 
-                        <h2 className="text-xl font-bold">Carrito</h2>
-                        {cart.length === 0 ? (
-                            <p className="text-gray-500">El carrito está vacío.</p>
-                        ) : (
-                            <div>
-                                {cart.map((item) => (
-                                    <div key={item.product.id} className="flex justify-between items-center border-b py-2">
-                                        <div className='w-[300px]'>
-                                            <h3 className="text-sm font-semibold">{item.product.title}</h3>
-                                            <p className="text-sm">
-                                                {item.quantity} x ${item.product.price}
-                                            </p>
-                                        </div>
-                                        <button onClick={() => removeFromCart(item.product.id)} className="text-red-500 cursor-pointer">
-                                            ❌
-                                        </button>
+                    <h2 className="text-xl font-bold">Carrito</h2>
+                    {cart.length === 0 ? (
+                        <p className="text-gray-500">El carrito está vacío.</p>
+                    ) : (
+                        <div>
+                            {cart.map((item) => (
+                                <div key={item.product.id} className="flex justify-between items-center border-b py-2">
+                                    <div className='w-[300px]'>
+                                        <h3 className="text-sm font-semibold">{item.product.title}</h3>
+                                        <p className="text-sm">
+                                            {item.quantity} x ${item.product.price}
+                                        </p>
                                     </div>
-                                ))}
-
-                                <div className="flex justify-between items-center font-bold mt-4">
-                                    <span>Total:</span>
-                                    <span>${total.toFixed(2)}</span>
+                                    <button onClick={() => removeFromCart(item.product.id)} className="text-red-500 cursor-pointer">
+                                        ❌
+                                    </button>
                                 </div>
+                            ))}
 
-                                <button onClick={clearCart} className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg cursor-pointer">
-                                    Vaciar carrito
-                                </button>
-                                <button 
-                                    onClick={() => setShowCheckout(true)} 
-                                    className="w-full mt-2 bg-green-500 text-white py-2 rounded-lg cursor-pointer"
-                                >
-                                    Comprar
-                                </button>
+                            <div className="flex justify-between items-center font-bold mt-4">
+                                <span>Total:</span>
+                                <span>${total.toFixed(2)}</span>
                             </div>
-                        )}
-                    </div>
+
+                            <button onClick={clearCart} className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg cursor-pointer">
+                                Vaciar carrito
+                            </button>
+                            <button 
+                                onClick={() => setShowCheckout(true)} 
+                                className="w-full mt-2 bg-green-500 text-white py-2 rounded-lg cursor-pointer"
+                            >
+                                Comprar
+                            </button>
+                        </div>
+                    )}
+                </div>
                 )}
 
                 {/* Checkout */}
@@ -610,28 +632,49 @@ const Header: React.FC = () => {
 
                 {/* Listado productos Mobile */}
                 <div className="max-h-64 overflow-y-auto text-black">
-                {filteredProducts.length > 0 ? (
-                    filteredProducts.map((product, index) => (
-                    <Link
-                        to={`/producto/${product.id}`}
-                        key={index}
-                        className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
-                        onClick={() => {
-                        setShowMobileSearch(false);
-                        setSearchQuery('');
-                        }}
-                    >
-                        <img
-                        src={product.images[0]}
-                        alt={product.title}
-                        className="w-12 h-12 object-cover rounded-md"
-                        />
-                        <div className="flex flex-col">
-                        <span className="font-medium">{product.title}</span>
-                        <span className="text-sm text-gray-600">{product.price}</span>
+                {productData.some(category =>
+                    category.products.some(product =>
+                    product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    category.name.toLowerCase().includes(searchQuery.toLowerCase())
+                    )
+                ) ? (
+                    productData.map((category) => {
+                    const matchingProducts = category.products.filter(product =>
+                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+
+                    if (matchingProducts.length === 0) return null;
+
+                    return (
+                        <div key={category.slug} className="px-4 py-2">
+                        <h3 className="text-sm font-bold text-gray-700 uppercase mb-2 border-b border-gray-300 pb-1">
+                            {category.name}
+                        </h3>
+                        {matchingProducts.map((product) => (
+                            <Link
+                            key={product.id}
+                            to={`/producto/${product.id}`}
+                            className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
+                            onClick={() => {
+                                setShowMobileSearch(false);
+                                setSearchQuery('');
+                            }}
+                            >
+                            <img
+                                src={product.images[0]}
+                                alt={product.title}
+                                className="w-12 h-12 object-cover rounded-md"
+                            />
+                            <div className="flex flex-col">
+                                <span className="font-medium">{product.title}</span>
+                                <span className="text-sm text-gray-600">{product.price}</span>
+                            </div>
+                            </Link>
+                        ))}
                         </div>
-                    </Link>
-                    ))
+                    );
+                    })
                 ) : (
                     <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
                 )}
