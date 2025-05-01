@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { SiTiktok } from "react-icons/si"; // <-- TikTok icon
 import { productData } from "../data/products";
 
 const Footer: React.FC = () => {
@@ -18,7 +19,7 @@ const Footer: React.FC = () => {
             <p className="text-2xl font-bold tracking-wider">LMFITNESS</p>
           </div>
 
-          {/* Categorías dinámicas en 2 columnas (mobile) y 3 columnas (desktop) */}
+          {/* Categorías dinámicas */}
           <div>
             <h3 className="text-xl font-semibold mb-4 md:min-w-78 md:text-center">Categorías</h3>
             <ul className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-2 text-sm text-start">
@@ -56,17 +57,23 @@ const Footer: React.FC = () => {
               >
                 <FaInstagram className="text-[#E1306C] hover:text-[#e0779a] text-3xl" />
               </a>
+              <a
+                href="https://www.tiktok.com/@lm.fitness_1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:scale-110 transition-transform"
+              >
+                <SiTiktok className="text-white hover:text-gray-300 text-3xl" />
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Copyright */}
       <div className="text-center text-xs py-4 border-t border-white/10">
         © {new Date().getFullYear()} LMFITNESS. Todos los derechos reservados.
       </div>
     </footer>
-
   );
 };
 
