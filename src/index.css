@@ -23,3 +23,11 @@ html {
 .font-rubik {
   font-family: 'Rubik Dirt', sans-serif;
 }
+
+.productos-section {
+  background-image: url('/assets/images/fondo-catalogo.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-top: 2rem; /* equivalente a pt-8 */
+}

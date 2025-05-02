@@ -45,7 +45,7 @@ const Catalogo: React.FC = () => {
     <>
       <FullSlider slides={slides} />
       <ShippingMarquee />
-      <div id="productos" className="pt-8 bg-[url(assets/images/fondo-catalogo.webp)] bg-cover bg-center bg-no-repeat">
+      <div id="productos" className="pt-8 productos-section">
         <div className="w-full flex flex-col justify-center items-center mb-4">
           <h2 className="w-full mx-auto text-center text-4xl font-bold text-white">NUESTRO CÁTALOGO</h2>
         </div>
