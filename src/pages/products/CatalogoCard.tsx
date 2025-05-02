@@ -9,7 +9,7 @@ import { productData, Category, Product } from "../../data/products";
 
 const CatalogoCard: React.FC = () => {
   const { addToCart } = useCart();
-  const [openCategories, setOpenCategories] = useState<{ [slug: string]: boolean }>({});
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [showPopup, setShowPopup] = useState<boolean>(false);
@@ -18,7 +18,29 @@ const CatalogoCard: React.FC = () => {
   const location = useLocation();
 
   const toggleCategory = (slug: string) => {
-    setOpenCategories((prev) => ({ ...prev, [slug]: !prev[slug] }));
+    const isSame = openCategory === slug;
+  
+    if (isSame) {
+      setOpenCategory(null);
+      return;
+    }
+  
+    // 1. Cerrar la anterior primero (si existe)
+    setOpenCategory(null);
+  
+    // 2. Esperar a que el DOM se reajuste, luego abrir la nueva y scrollear
+    setTimeout(() => {
+      setOpenCategory(slug);
+  
+      setTimeout(() => {
+        const el = document.getElementById(slug);
+        if (el) {
+          const yOffset = -120; // Ajustá este número si necesitás más o menos margen superior
+          const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }, 300); // Esperamos a que la nueva categoría se expanda
+    }, 200); // Esperamos a que se cierre la anterior
   };
 
   const openPopup = (product: Product) => {
@@ -42,7 +64,7 @@ const CatalogoCard: React.FC = () => {
   useEffect(() => {
     const hash = location.hash.replace("#", "");
     if (hash) {
-      setOpenCategories((prev) => ({ ...prev, [hash]: true }));
+      setOpenCategory(hash);
       const el = document.getElementById(hash);
       if (el) {
         setTimeout(() => {
@@ -57,7 +79,7 @@ const CatalogoCard: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
       {productData.map((category: Category) => {
-        const isOpen = openCategories[category.slug ?? ""];
+        const isOpen = openCategory === category.slug;
 
         return (
           <div key={category.slug} id={category.slug} className="mb-4 shadow-lg">
