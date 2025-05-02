@@ -17,7 +17,7 @@ const ShippingMarquee: React.FC = () => {
   );
 
   return (
-    <div className="overflow-hidden w-full bg-neutral-200 py-3">
+    <div className="overflow-hidden w-full bg-neutral-200 py-3 border border-black/30">
       <div className="relative flex w-max animate-marquee">
         {items}
         {items /* Duplicado para loop perfecto */}

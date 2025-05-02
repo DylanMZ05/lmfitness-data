@@ -84,7 +84,7 @@ const CatalogoCard: React.FC = () => {
         return (
           <div key={category.slug} id={category.slug} className="mb-4 shadow-lg">
         <div
-        className={`flex justify-between items-center p-4 bg-white cursor-pointer z-50 ${
+        className={`flex justify-between items-center p-4 bg-white cursor-pointer z-50 border border-black/20 ${
           isOpen ? "rounded-t-lg" : "rounded-lg"
         }`}
               onClick={() => toggleCategory(category.slug ?? "")}
