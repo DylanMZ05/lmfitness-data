@@ -8,7 +8,7 @@ const slides = [
   {
     id: 1,
     bgMobile: "assets/images/SLIDER/CATALOGO/01.webp",
-    bgDesktop: "assets/images/SLIDER/CATALOGO/01-desktop.webp",
+    bgDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
     button: {
       text: "VER COMBO",
       link: "#productos",
@@ -19,7 +19,7 @@ const slides = [
   {
     id: 2,
     bgMobile: "assets/images/SLIDER/CATALOGO/02.webp",
-    bgDesktop: "assets/images/SLIDER/CATALOGO/02-desktop.webp",
+    bgDesktop: "assets/images/SLIDER/CATALOGO/02-desktop-1.webp",
     button: {
       text: "VER COMBO",
       link: "#productos",
@@ -30,7 +30,7 @@ const slides = [
   {
     id: 3,
     bgMobile: "assets/images/SLIDER/CATALOGO/03.webp",
-    bgDesktop: "assets/images/SLIDER/CATALOGO/03-desktop.webp",
+    bgDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
     button: {
       text: "VER COMBO",
       link: "#productos",
