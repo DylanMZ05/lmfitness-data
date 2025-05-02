@@ -500,7 +500,7 @@ export const productData: Category[] = [
     ],
   },
   {
-    name: "BEBIDAS ISOTÓNICAS - ELECTROLITOS",
+    name: "HIDRATACIÓN Y RECUPERACIÓN",
     slug: "bebidas-isotonicas-electrolitos",
     image: "assets/images/BEBIDAS-ISOTONICAS-ELECTROLITOS/1674561753884646192.webp",
     products: [
@@ -532,13 +532,6 @@ export const productData: Category[] = [
         description: "60 comp. para rehidratación avanzada.",
         price: "$9.000",
       },
-    ],
-  },
-  {
-    name: "GEL ENERGÉTICO",
-    slug: "gel-energetico",
-    image: "assets/images/GELES-ENERGETICOS/MERVICK-ENERGY-GEL-1200x900.webp",
-    products: [
       {
         id: 61,
         images: ["assets/images/GELES-ENERGETICOS/MERVICK-ENERGY-GEL-1200x900.webp"],
