@@ -13,7 +13,7 @@ const slides = [
       text: "VER COMBO",
       link: "#productos",
       positionMobile: "top-[90%] left-1/2 -translate-x-1/2",
-      positionDesktop: "top-[88%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
     },
   },
   {
@@ -24,7 +24,7 @@ const slides = [
       text: "VER COMBO",
       link: "#productos",
       positionMobile: "top-[90%] left-1/2 -translate-x-1/2",
-      positionDesktop: "top-[88%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
     },
   },
   {
@@ -35,7 +35,7 @@ const slides = [
       text: "VER COMBO",
       link: "#productos",
       positionMobile: "top-[90%] left-1/2 -translate-x-1/2",
-      positionDesktop: "top-[88%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
     },
   },
 ];
