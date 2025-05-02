@@ -64,7 +64,7 @@ const FullSlider: React.FC<FullSliderProps> = ({ slides }) => {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden max-w-screen h-[100vh]">
+  <div className="relative w-full overflow-hidden max-w-screen">
       <div className="relative w-full h-full">
         <div
           className="flex transition-transform duration-700 ease-in-out h-full"
@@ -82,7 +82,7 @@ const FullSlider: React.FC<FullSliderProps> = ({ slides }) => {
                   <img
                     src={slide.bgMobile}
                     alt=""
-                    className="w-full h-full object-cover block"
+                    className="w-full h-auto object-contain block"
                   />
                 </picture>
 

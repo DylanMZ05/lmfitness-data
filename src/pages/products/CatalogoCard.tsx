@@ -61,8 +61,10 @@ const CatalogoCard: React.FC = () => {
 
         return (
           <div key={category.slug} id={category.slug} className="mb-4 shadow-lg">
-            <div
-              className="flex justify-between items-center p-4 rounded-lg bg-gray-200 cursor-pointer"
+        <div
+        className={`flex justify-between items-center p-4 bg-white cursor-pointer z-50 ${
+          isOpen ? "rounded-t-lg" : "rounded-lg"
+        }`}
               onClick={() => toggleCategory(category.slug ?? "")}
             >
               <div className="flex items-center gap-2">
@@ -88,18 +90,18 @@ const CatalogoCard: React.FC = () => {
                   : { height: 0, opacity: 0 }
               }
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="overflow-hidden"
+              className="overflow-hidden bg-gray-100 rounded-b-lg"
             >
-              <div className="grid grid-cols-2 mx-1 mt-2 mb-1 sm:grid-cols-3 md:grid-cols-4 gap-1 md:gap-2 sm:mx-2 rounded-b-lg">
+              <div className="grid grid-cols-2 px-1 pt-2 pb-1 sm:grid-cols-3 md:grid-cols-4 gap-1 md:gap-2 sm:px-2 bg-white rounded-b-lg">
                 {category.products.map((product: Product) => (
                   <motion.div
                     key={product.id}
                     initial={{ opacity: 0, y: -10 }}
                     animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
                     transition={{ duration: 0.3, delay: 0.1 }}
-                    className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-black/10"
+                    className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-black/30"
                   >
-                    <div className="h-32 w-full overflow-hidden flex justify-center items-center bg-gray-100">
+                    <div className="h-32 w-full overflow-hidden flex justify-center items-center bg-neutral-200">
                       <img
                         src={product.images[0]}
                         alt={product.title}
