@@ -5,7 +5,7 @@ const AboutUs: React.FC = () => {
     return (
       <>
         <ShippingMarquee />
-        <section id="about" className="flex justify-center items-center flex-wrap bg-neutral-900 lg:bg-white">
+        <section id="sobre-nosotros" className="flex justify-center items-center flex-wrap bg-neutral-900 lg:bg-white">
           <div className="flex flex-col w-screen max-w-[500px] items-center gap-2 bg-neutral-900 px-7 py-[50px] md:text-start md:max-w-max lg:flex-row md:items-stretch md:rounded-2xl md:mx-5 md:mb-5 lg:max-w-[1300px] lg:justify-around">
 
             {/* Texto */}

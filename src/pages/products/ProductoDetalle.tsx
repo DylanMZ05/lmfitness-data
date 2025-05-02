@@ -99,9 +99,11 @@ const ProductoDetalle: React.FC = () => {
           </div>
 
           {/* Info producto */}
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/2 px-5">
             <h1 className="text-2xl font-bold mb-2">{foundProduct.title}</h1>
-            <p className="text-gray-600 mb-2">{foundProduct.description}</p>
+            <p className="text-gray-600 mb-2">
+              {foundProduct.longDescription || foundProduct.description}
+            </p>
             <p className="text-xl font-semibold mb-4">{foundProduct.price}</p>
 
             {/* Cantidad */}

@@ -6,7 +6,7 @@ import { productData } from "../data/products";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-neutral-950 text-white w-full">
+    <footer id="contacto" className="bg-neutral-950 text-white w-full">
       <section className="flex justify-center items-center px-4 py-10">
         <div className="w-full max-w-8xl grid grid-cols-1 md:grid-cols-3 gap-15 justify-items-center text-center md:text-left">
           {/* Logo */}

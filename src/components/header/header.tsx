@@ -11,7 +11,7 @@ const Header: React.FC = () => {
     const searchRef = useRef<HTMLDivElement>(null);
     const { isScrolled, isScrollingUp } = useScroll(50);
     const [isHoveringProducts, setIsHoveringProducts] = useState(false);
-    const sectionIds = ['inicio', 'productos', 'about', 'contacto'];
+    const sectionIds = ['inicio', 'productos', 'sobre-nosotros', 'contacto'];
     const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
     const [menuOpen, setMenuOpen] = useState(false);
     const [cartOpen, setCartOpen] = useState(false);
@@ -27,6 +27,13 @@ const Header: React.FC = () => {
 
     const [showSearch, setShowSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+
+    const sectionLabels: { [key: string]: string } = {
+        'inicio': 'Inicio',
+        'productos': 'Productos',
+        'sobre-nosotros': 'Sobre nosotros',
+        'contacto': 'Contacto',
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -53,16 +60,20 @@ const Header: React.FC = () => {
 
     const handleClick = (id: string) => {
         setActiveSectionManually(id);
+        
         if (id === 'productos') {
             navigate('/catalogo');
+        } else if (window.location.pathname !== '/') {
+            // Si no estás en el home, redirigí con hash
+            window.location.href = `/#${id}`;
         } else {
+            // Si estás en el home, hacé scroll suave
             const target = document.getElementById(id);
             if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                window.location.href = `/#${id}`;
+            target.scrollIntoView({ behavior: 'smooth' });
             }
         }
+        
         setMenuOpen(false);
     };
 
@@ -394,7 +405,7 @@ const Header: React.FC = () => {
                                         activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''
                                     } focus:outline-none cursor-pointer`}
                                     >
-                                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                                    {sectionLabels[id] || id}
                                     </button>
                                 )}
                                 </li>
