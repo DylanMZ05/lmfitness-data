@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import useScrollToTop from '../../hooks/useScrollToTop';
 import useScroll from './useScroll';
 import { productData } from "../../data/products";
+import { AnimatePresence, motion } from "framer-motion";
+
 
 const Header: React.FC = () => {
     const searchRef = useRef<HTMLDivElement>(null);
@@ -24,6 +26,8 @@ const Header: React.FC = () => {
     const [betweenStreets, setBetweenStreets] = useState('');
     const [showMobileSearch, setShowMobileSearch] = useState(false);
     const mobileSearchRef = useRef<HTMLDivElement>(null);
+
+    const [forceShowHeader, setForceShowHeader] = useState(false);
 
     const [showSearch, setShowSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -128,6 +132,22 @@ const Header: React.FC = () => {
         }
     }, [isScrollingUp, menuOpen, showSearch, showMobileSearch]);
 
+    useEffect(() => {
+        const handleProductoAgregado = () => {
+            window.scrollTo({ top: window.scrollY - 1 }); // fuerza un pequeño cambio de scroll
+            setForceShowHeader(true);
+            setTimeout(() => {
+                setForceShowHeader(false);
+            }, 2000); // mostrar el header durante 2 segundos
+        };
+    
+        window.addEventListener('producto-agregado', handleProductoAgregado);
+    
+        return () => {
+            window.removeEventListener('producto-agregado', handleProductoAgregado);
+        };
+    }, []);
+
     const [showProductsMobile, setShowProductsMobile] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -146,7 +166,7 @@ const Header: React.FC = () => {
             `}</style>
             <header className={`w-screen h-auto py-3 fixed z-50 transition-all duration-300
                 ${(isScrolled || isHoveringProducts) ? 'bg-black' : 'bg-gradient-to-b from-black to-transparent'}
-                ${isScrollingUp ? 'translate-y-0' : '-translate-y-full'}
+                ${isScrollingUp || forceShowHeader ? 'translate-y-0' : '-translate-y-full'}
             `}>
                 <div className="flex justify-between items-center text-white p-4">
                     {/* Hamburguesa */}
@@ -174,7 +194,7 @@ const Header: React.FC = () => {
                     </Link>
 
                     {/* Carrito + Buscador móvil */}
-                    <div className="right-24 text-white z-50 mr-2 flex w-[70px] justify-between items-center lg:hidden">
+                    <div className="right-24 text-white z-50 mr-4 flex w-[70px] justify-between items-center lg:hidden">
                     
                     {/* Lupa Mobile */}
                     <button onClick={() => setShowMobileSearch(prev => !prev)} className="relative cursor-pointer">
@@ -351,7 +371,7 @@ const Header: React.FC = () => {
                         </div>
                         )}
 
-                        <ul className="flex justify-between items-center w-150 mr-10 font-medium text-xl xl:mr-20">
+                        <ul className="flex justify-between items-center w-150 mr-10 font-medium text-xl xl:mr-8">
                             {sectionIds.map((id) => (
                                 <li
                                 key={id}
@@ -412,7 +432,7 @@ const Header: React.FC = () => {
                             ))}
                         </ul>
                         
-                        <button onClick={() => setCartOpen(!cartOpen)} className="ml-7 mr-3 relative text-white cursor-pointer">
+                        <button onClick={() => setCartOpen(!cartOpen)} className="mr-10 relative text-white cursor-pointer">
                             <ShoppingCart size={24} />
                             {cart.length > 0 && (
                                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
@@ -484,52 +504,76 @@ const Header: React.FC = () => {
                 )}
 
                 {/* Carrito */}
-                {cartOpen && (
-                <div className="fixed top-0 right-0 w-80 h-screen bg-white shadow-lg p-4 text-black z-60 overflow-y-auto">
-                    <button
-                        onClick={() => setCartOpen(false)}
-                        className="absolute top-4 right-4 text-black text-2xl font-bold cursor-pointer"
-                    >
-                        ✖
-                    </button>
+                <AnimatePresence>
+                    {cartOpen && (
+                        <>
+                        {/* Fondo oscuro animado */}
+                        <motion.div
+                            key="overlay"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.7 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="fixed inset-0 h-screen bg-black z-50"
+                            onClick={() => setCartOpen(false)}
+                        />
 
-                    <h2 className="text-xl font-bold">Carrito</h2>
-                    {cart.length === 0 ? (
-                        <p className="text-gray-500">El carrito está vacío.</p>
-                    ) : (
-                        <div>
-                            {cart.map((item) => (
+                        {/* Carrito deslizante animado */}
+                        <motion.div
+                            key="cart"
+                            initial={{ x: '100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '100%' }}
+                            transition={{ type: 'tween', duration: 0.3 }}
+                            className="fixed top-0 right-0 w-80 h-screen bg-white shadow-lg p-4 text-black z-60 overflow-y-auto"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                            onClick={() => setCartOpen(false)}
+                            className="absolute top-4 right-4 text-black text-2xl font-bold cursor-pointer"
+                            >
+                            ✖
+                            </button>
+
+                            <h2 className="text-xl font-bold">Carrito</h2>
+                            {cart.length === 0 ? (
+                            <p className="text-gray-500">El carrito está vacío.</p>
+                            ) : (
+                            <div>
+                                {cart.map((item) => (
                                 <div key={item.product.id} className="flex justify-between items-center border-b py-2">
                                     <div className='w-[300px]'>
-                                        <h3 className="text-sm font-semibold">{item.product.title}</h3>
-                                        <p className="text-sm">
-                                            {item.quantity} x ${item.product.price}
-                                        </p>
+                                    <h3 className="text-sm font-semibold">{item.product.title}</h3>
+                                    <p className="text-sm">
+                                        {item.quantity} x ${item.product.price}
+                                    </p>
                                     </div>
                                     <button onClick={() => removeFromCart(item.product.id)} className="text-red-500 cursor-pointer">
-                                        ❌
+                                    ❌
                                     </button>
                                 </div>
-                            ))}
+                                ))}
 
-                            <div className="flex justify-between items-center font-bold mt-4">
+                                <div className="flex justify-between items-center font-bold mt-4">
                                 <span>Total:</span>
                                 <span>${total.toFixed(2)}</span>
-                            </div>
+                                </div>
 
-                            <button onClick={clearCart} className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg cursor-pointer">
+                                <button onClick={clearCart} className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg cursor-pointer">
                                 Vaciar carrito
-                            </button>
-                            <button 
-                                onClick={() => setShowCheckout(true)} 
+                                </button>
+                                <button
+                                onClick={() => setShowCheckout(true)}
                                 className="w-full mt-2 bg-green-500 text-white py-2 rounded-lg cursor-pointer"
-                            >
+                                >
                                 Comprar
-                            </button>
-                        </div>
+                                </button>
+                            </div>
+                            )}
+                        </motion.div>
+                        </>
                     )}
-                </div>
-                )}
+                </AnimatePresence>
 
                 {/* Checkout */}
                 {showCheckout && (

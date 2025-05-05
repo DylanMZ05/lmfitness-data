@@ -7,23 +7,27 @@ import AboutUs from "../pages/home/AboutUs";
 import ParallaxSlider from "../components/Slider";
 import FeaturedSlider from "../components/FeaturedSlider";
 import { productData } from "../data/products";
-import { FaTag, FaBolt, FaGift } from "react-icons/fa";
 
 const offerSlides = [
   {
-    imageUrl: "/assets/images/oferta1.jpg",
-    text: "🔥 30% OFF en productos seleccionados",
-    icon: <FaTag size={40} color="white" />,
+    imageDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/01-mobile.webp",
+    link: "/producto/69",
   },
   {
-    imageUrl: "/assets/images/oferta2.jpg",
-    text: "⚡ Envío gratis por 48hs",
-    icon: <FaBolt size={40} color="white" />,
+    imageDesktop: "assets/images/SLIDER/CATALOGO/02-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/02-mobile.webp",
+    link: "/producto/70",
   },
   {
-    imageUrl: "/assets/images/oferta3.jpg",
-    text: "🎁 Llevá 3 y pagá 2 en toda la tienda",
-    icon: <FaGift size={40} color="white" />,
+    imageDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/03-mobile.webp",
+    link: "/producto/71",
+  },
+  {
+    imageDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/04-mobile.webp",
+    link: "/producto/72",
   },
 ];
 
@@ -49,8 +53,8 @@ const HomeWrapper = () => {
       <Main />
       <HowBuy />
       <section className="my-10 px-4">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          Ofertas Especiales
+        <h2 className="text-4xl font-bold text-center mb-6 text-black">
+          OFERTAS ESPECIALES
         </h2>
         <ParallaxSlider slides={offerSlides} width="w-full" />
       </section>

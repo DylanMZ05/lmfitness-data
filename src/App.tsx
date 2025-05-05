@@ -10,16 +10,16 @@ import HomeWrapper from "./components/HomeWrapper";
 function App() {
   return (
     <CartProvider>
-      <Router basename="/lmfitness">
-        <Header />
-        <Routes>
-        <Route path="/" element={<HomeWrapper />} />
-          <Route path="/catalogo" element={<Catalogo />} />
-          <Route path="/producto/:id" element={<ProductoDetalle />} />
-        </Routes>
-        <WspButton />
-        <Footer />
-      </Router>
+        <Router basename="/lmfitness">
+          <Header />
+          <Routes>
+            <Route path="/" element={<HomeWrapper />} />
+            <Route path="/catalogo" element={<Catalogo />} />
+            <Route path="/producto/:id" element={<ProductoDetalle />} />
+          </Routes>
+          <WspButton />
+          <Footer />
+        </Router>
     </CartProvider>
   );
 }

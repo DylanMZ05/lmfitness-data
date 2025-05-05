@@ -7,6 +7,7 @@ import { useCart } from "../../context/useCart";
 import useScrollToTop from "../../hooks/useScrollToTop";
 import { productData, Category, Product } from "../../data/products";
 
+
 const CatalogoCard: React.FC = () => {
   const { addToCart } = useCart();
   const [openCategory, setOpenCategory] = useState<string | null>(null);
@@ -58,6 +59,7 @@ const CatalogoCard: React.FC = () => {
       setSelectedProduct(null);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 2500);
+      window.dispatchEvent(new CustomEvent('producto-agregado')); // 👈 Nuevo evento
     }
   };
 
