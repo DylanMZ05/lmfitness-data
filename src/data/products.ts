@@ -758,4 +758,39 @@ export const productData: Category[] = [
       },
     ],
   },
+  {
+    name: "COMBOS EXCLUSIVOS",
+    slug: "combos-exclusivos",
+    image: "assets/images/COMBOS/combo-1.webp",
+    products: [
+      {
+        id: 69,
+        images: ["assets/images/COMBOS/combo-1.webp"],
+        title: "COMBO STAR NUTRITION",
+        description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - STAR NUTRITION",
+        price: "$16.000",
+      },
+      {
+        id: 70,
+        images: ["assets/images/COMBOS/combo-2.webp"],
+        title: "COMBO GOLD NUTRITION",
+        description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - GOLD NUTRITION",
+        price: "$6.000",
+      },
+      {
+        id: 71,
+        images: ["assets/images/COMBOS/combo-3.webp"],
+        title: "COMBO GENTECH",
+        description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - GENTECH",
+        price: "$6.000",
+      },
+      {
+        id: 72,
+        images: ["assets/images/COMBOS/combo-4.webp"],
+        title: "COMBO ONEFIT",
+        description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - ONEFIT",
+        price: "$6.000",
+      },
+    ],
+  },
 ];

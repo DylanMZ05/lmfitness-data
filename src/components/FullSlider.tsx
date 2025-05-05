@@ -104,7 +104,7 @@ const FullSlider: React.FC<FullSliderProps> = ({ slides }) => {
                         <div className="flex justify-center">
                           <Link
                             to={slide.button.link}
-                            className="bg-amber-50 text-black font-semibold py-2 px-4 rounded-full text-md shadow-lg whitespace-nowrap min-w-[140px] text-center cursor-pointer hover:scale-102 transition-all md:text-lg"
+                            className="bg-amber-50 text-black border border-black/40 font-semibold py-2 px-4 rounded-full text-md shadow-lg whitespace-nowrap min-w-[140px] text-center cursor-pointer hover:scale-102 transition-all md:text-lg"
                           >
                             {slide.button.text}
                           </Link>
@@ -123,13 +123,13 @@ const FullSlider: React.FC<FullSliderProps> = ({ slides }) => {
           onClick={handlePrev}
           className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
         >
-          <ChevronLeft className="text-white/20" size={30} />
+          <ChevronLeft className="text-black/80" size={30} />
         </button>
         <button
           onClick={handleNext}
           className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
         >
-          <ChevronRight className="text-white/20" size={30} />
+          <ChevronRight className="text-black/80" size={30} />
         </button>
       </div>
     </div>

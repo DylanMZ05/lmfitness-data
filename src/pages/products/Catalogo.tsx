@@ -11,8 +11,8 @@ const slides = [
     bgDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
     button: {
       text: "VER COMBO",
-      link: "#productos",
-      positionMobile: "top-[90%] left-1/2 -translate-x-1/2",
+      link: "/producto/69",
+      positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
       positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
     },
   },
@@ -22,8 +22,8 @@ const slides = [
     bgDesktop: "assets/images/SLIDER/CATALOGO/02-desktop-1.webp",
     button: {
       text: "VER COMBO",
-      link: "#productos",
-      positionMobile: "top-[90%] left-1/2 -translate-x-1/2",
+      link: "/producto/70",
+      positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
       positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
     },
   },
@@ -33,8 +33,19 @@ const slides = [
     bgDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
     button: {
       text: "VER COMBO",
-      link: "#productos",
-      positionMobile: "top-[90%] left-1/2 -translate-x-1/2",
+      link: "/producto/71",
+      positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
+    },
+  },
+  {
+    id: 4,
+    bgMobile: "assets/images/SLIDER/CATALOGO/04.webp",
+    bgDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
+    button: {
+      text: "VER COMBO",
+      link: "/producto/72",
+      positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
       positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
     },
   },

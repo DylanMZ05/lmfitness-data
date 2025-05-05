@@ -143,13 +143,13 @@ const Main: React.FC = () => {
             onClick={handlePrev}
             className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
             >
-            <ChevronLeft className="text-white/20" size={30} />
+            <ChevronLeft className="text-white/80" size={30} />
           </button>
           <button
             onClick={handleNext}
             className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
             >
-            <ChevronRight className="text-white/20" size={30} />
+            <ChevronRight className="text-white/80" size={30} />
           </button>
         </div>
       </div>
