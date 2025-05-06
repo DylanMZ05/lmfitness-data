@@ -613,7 +613,7 @@ const Header: React.FC = () => {
                     >
                         <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-[90vw] max-w-md max-h-[90vh] overflow-y-auto rounded-xl shadow-xl p-6 relative"
+                        className="bg-white w-[90vw] max-w-md h-[80%] max-h-183 overflow-y-auto rounded-xl shadow-xl p-6 relative"
                         >
                         <button
                             onClick={() => setShowCheckout(false)}
