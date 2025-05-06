@@ -19,9 +19,12 @@ const Header: React.FC = () => {
     const [cartOpen, setCartOpen] = useState(false);
     const { cart, removeFromCart, clearCart } = useCart();
     const [showCheckout, setShowCheckout] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'transferencia'>('transferencia');
+    const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'transferencia' | 'debito' | 'credito'>('transferencia');
     const [fullName, setFullName] = useState('');
     const [location, setLocation] = useState('');
+    const [locality, setLocality] = useState('');
+    const [otherCity, setOtherCity] = useState('');
+    const [postalCode, setPostalCode] = useState('');
     const [street, setStreet] = useState('');
     const [betweenStreets, setBetweenStreets] = useState('');
     const [showMobileSearch, setShowMobileSearch] = useState(false);
@@ -31,6 +34,14 @@ const Header: React.FC = () => {
 
     const [showSearch, setShowSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+
+    const envio = location === "Otro"
+    ? 8000
+    : ["Nueva Atlantis", "Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)
+    ? 1500
+    : location === "Partido de La Costa" && locality !== ""
+    ? 4000
+    : 0;
 
     const sectionLabels: { [key: string]: string } = {
         'inicio': 'Inicio',
@@ -81,8 +92,13 @@ const Header: React.FC = () => {
         setMenuOpen(false);
     };
 
-    const discount = paymentMethod === 'efectivo' ? 0.05 : 0;
-    const totalToPay = (total + 3000) * (1 - discount);
+    const totalToPay =
+        (total + envio) *
+        (paymentMethod === "efectivo"
+            ? 0.95
+            : paymentMethod === "credito"
+            ? 1.10
+            : 1);
 
     const handleConfirmPurchase = () => {
         const productList = cart.map(item => `- ${item.product.title} (${item.quantity}x)`).join("\n");
@@ -90,11 +106,13 @@ const Header: React.FC = () => {
         const message = `Hola! Me gustaría realizar una compra.%0A%0A`
             + `*Productos elegidos*: %0A${productList}%0A%0A`
             + `*Nombre completo*: ${fullName}%0A`
-            + `*Localidad*: ${location}%0A`
+            + `*Localidad*: ${location === "Partido de La Costa" ? locality : otherCity}%0A`
+            + `*Código Postal*: ${location === "Otro" ? postalCode : "N/A"}%0A`
             + `*Calle*: ${street}%0A`
             + `*Entre calles*: ${betweenStreets || 'N/A'}%0A%0A`
             + `*Método de pago*: ${paymentMethod}%0A`
-            + `*Precio total*: $${totalToPay.toFixed(2)}`;
+            + `*Envío*: $${envio}%0A`
+            + `*Total a pagar*: $${totalToPay.toFixed(2)}`;
 
         const phoneNumber = "+5492257531656";
         const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
@@ -577,99 +595,164 @@ const Header: React.FC = () => {
 
                 {/* Checkout */}
                 {showCheckout && (
-                <div
-                    className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center w-screen h-screen"
-                    onClick={() => setShowCheckout(false)}
-                >
                     <div
-                    onClick={(e) => e.stopPropagation()}
-                    className="bg-white w-full max-w-md rounded-xl shadow-xl p-6 relative max-h-[90vh] overflow-y-auto"
-                    >
-                    <button
+                        className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center w-screen h-screen"
                         onClick={() => setShowCheckout(false)}
-                        className="absolute top-3 right-4 text-2xl text-black font-bold"
                     >
-                        ✖
-                    </button>
-
-                    <h2 className="text-xl font-bold mb-4 text-center">Finalizar Compra</h2>
-
-                    <h2 className="text-xl font-bold mb-4 text-center">Finalizar Compra</h2>
-
-                    <form className="space-y-3">
-                        <input
-                        type="text"
-                        placeholder="Nombre Completo"
-                        className="w-full border p-2 px-4 rounded-full"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        required
-                        />
-                        <input
-                        type="text"
-                        placeholder="Localidad"
-                        className="w-full border p-2 px-4 rounded-full"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        required
-                        />
-                        <input
-                        type="text"
-                        placeholder="Calle"
-                        className="w-full border p-2 px-4 rounded-full"
-                        value={street}
-                        onChange={(e) => setStreet(e.target.value)}
-                        required
-                        />
-                        <input
-                        type="text"
-                        placeholder="Entre calles"
-                        className="w-full border p-2 px-4 rounded-full"
-                        value={betweenStreets}
-                        onChange={(e) => setBetweenStreets(e.target.value)}
-                        />
-
-                        <div className="mt-3">
-                        <label className="block font-semibold">Método de Pago:</label>
-                        <div className="flex flex-col items-center space-y-2">
-                            <label
-                            className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
-                                ${paymentMethod === 'efectivo' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
-                            onClick={() => setPaymentMethod('efectivo')}
-                            >
-                            Efectivo (5% de descuento)
-                            </label>
-
-                            <label
-                            className={`flex items-center w-[250px] px-4 py-2 rounded-full cursor-pointer transition-colors 
-                                ${paymentMethod === 'transferencia' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
-                            onClick={() => setPaymentMethod('transferencia')}
-                            >
-                            Transferencia
-                            </label>
-                        </div>
-                        </div>
-
-                        <div className="mt-4 font-bold">
-                        <p>Envío: <span className="text-blue-500">$3000</span></p>
-                        <p>Total Productos: <span className="text-blue-500">${total.toFixed(2)}</span></p>
-                        <p>Total a Pagar: <span className="text-green-700">${totalToPay.toFixed(2)}</span></p>
-                        </div>
-
-                        <button
-                        type="button"
-                        onClick={handleConfirmPurchase}
-                        className="w-full mt-3 bg-blue-500 text-white py-2 rounded-lg"
+                        <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="bg-white w-full max-w-md rounded-xl shadow-xl p-6 relative max-h-[90vh] overflow-y-auto"
                         >
-                        Confirmar Compra
+                        <button
+                            onClick={() => setShowCheckout(false)}
+                            className="absolute top-3 right-4 text-2xl text-black font-bold"
+                        >
+                            ✖
                         </button>
-                    </form>
+
+                        <h2 className="text-xl font-bold mb-4 text-center">Finalizar Compra</h2>
+
+                            <form className="space-y-3">
+                                {/* Nombre completo */}
+                                <input
+                                    type="text"
+                                    placeholder="Nombre Completo"
+                                    className="w-full border p-2 px-4 rounded-full"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    required
+                                />
+
+                                {/* Zona */}
+                                <select
+                                    value={location}
+                                    onChange={(e) => {
+                                    setLocation(e.target.value);
+                                    setLocality('');
+                                    setOtherCity('');
+                                    setPostalCode('');
+                                    }}
+                                    className="w-full border p-2 px-4 rounded-full mb-3"
+                                >
+                                    <option value="">Seleccioná tu zona</option>
+                                    <option value="Partido de La Costa">Partido de La Costa</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+
+                                {/* Localidad o ciudad */}
+                                {location === "Partido de La Costa" && (
+                                    <select
+                                    value={locality}
+                                    onChange={(e) => setLocality(e.target.value)}
+                                    className="w-full border p-2 px-4 rounded-full mb-3"
+                                    >
+                                    <option value="">Seleccioná tu localidad</option>
+                                    <option value="Nueva Atlantis">Nueva Atlantis</option>
+                                    <option value="Mar de Ajó">Mar de Ajó</option>
+                                    <option value="San Bernardo">San Bernardo</option>
+                                    <option value="Costa Azul">Costa Azul</option>
+                                    <option value="La Lucila">La Lucila</option>
+                                    <option value="Aguas Verdes">Aguas Verdes</option>
+                                    <option value="Costa del Este">Costa del Este</option>
+                                    <option value="Mar del Tuyú">Mar del Tuyú</option>
+                                    <option value="Santa Teresita">Santa Teresita</option>
+                                    <option value="Las Toninas">Las Toninas</option>
+                                    <option value="San Clemente">San Clemente</option>
+                                    </select>
+                                )}
+
+                                {location === "Otro" && (
+                                    <>
+                                    <input
+                                        type="text"
+                                        placeholder="Ciudad"
+                                        className="w-full border p-2 px-4 rounded-full mb-3"
+                                        value={otherCity}
+                                        onChange={(e) => setOtherCity(e.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Código Postal"
+                                        className="w-full border p-2 px-4 rounded-full mb-3"
+                                        value={postalCode}
+                                        onChange={(e) => setPostalCode(e.target.value)}
+                                    />
+                                    </>
+                                )}
+
+                                {/* Dirección */}
+                                <input
+                                    type="text"
+                                    placeholder="Calle"
+                                    className="w-full border p-2 px-4 rounded-full"
+                                    value={street}
+                                    onChange={(e) => setStreet(e.target.value)}
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Entre calles"
+                                    className="w-full border p-2 px-4 rounded-full"
+                                    value={betweenStreets}
+                                    onChange={(e) => setBetweenStreets(e.target.value)}
+                                />
+
+                                {/* Método de pago */}
+                                <div className="mt-3">
+                                    <label className="block font-semibold">Método de Pago:</label>
+                                    <div className="flex flex-col items-center space-y-2">
+                                    <label
+                                        className={`text-center w-100 px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        ${paymentMethod === 'efectivo' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                                        onClick={() => setPaymentMethod('efectivo')}
+                                    >
+                                        Efectivo <br /> <span className='text-white/70'>(5% de descuento, retirando por San Bernardo)</span>
+                                    </label>
+
+                                    <label
+                                        className={`w-100 text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        ${paymentMethod === 'transferencia' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                                        onClick={() => setPaymentMethod('transferencia')}
+                                    >
+                                        Transferencia (sin recargo)
+                                    </label>
+
+                                    <label
+                                        className={`w-100 text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        ${paymentMethod === 'debito' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                                        onClick={() => setPaymentMethod('debito')}
+                                    >
+                                        Tarjeta de Débito (sin recargo)
+                                    </label>
+
+                                    <label
+                                        className={`w-100 text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        ${paymentMethod === 'credito' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
+                                        onClick={() => setPaymentMethod('credito')}
+                                    >
+                                        Crédito en 1 pago (+10%)
+                                    </label>
+                                    </div>
+                                </div>
+
+                                {/* Totales */}
+                                <div className="mt-4 font-bold">
+                                    <p>Envío: <span className="text-blue-500">${envio}</span></p>
+                                    <p>Total Productos: <span className="text-blue-500">${total.toFixed(2)}</span></p>
+                                    <p>Total a Pagar: <span className="text-green-700">${totalToPay.toFixed(2)}</span></p>
+                                </div>
+
+                                {/* Confirmar */}
+                                <button
+                                    type="button"
+                                    onClick={handleConfirmPurchase}
+                                    className="w-full mt-3 bg-blue-500 text-white py-2 rounded-lg"
+                                >
+                                    Confirmar Compra
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-
-                
-
-                
                 )}
             </header>
             {showMobileSearch && (
