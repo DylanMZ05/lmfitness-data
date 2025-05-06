@@ -64,6 +64,18 @@ const Header: React.FC = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (showCheckout) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [showCheckout]);
+
     const scrollToTop = useScrollToTop();
     const navigate = useNavigate();
 
@@ -601,7 +613,7 @@ const Header: React.FC = () => {
                     >
                         <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-full max-w-md rounded-xl shadow-xl p-6 relative max-h-[90vh] overflow-y-auto"
+                        className="bg-white w-[90vw] max-w-md rounded-xl shadow-xl p-6 relative overflow-y-auto"
                         >
                         <button
                             onClick={() => setShowCheckout(false)}
@@ -702,15 +714,15 @@ const Header: React.FC = () => {
                                     <label className="block font-semibold">Método de Pago:</label>
                                     <div className="flex flex-col items-center space-y-2">
                                     <label
-                                        className={`text-center w-100 px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        className={`text-center w-full px-4 py-2 rounded-full cursor-pointer transition-colors 
                                         ${paymentMethod === 'efectivo' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
                                         onClick={() => setPaymentMethod('efectivo')}
                                     >
-                                        Efectivo <br /> <span className='text-white/70'>(5% de descuento, retirando por San Bernardo)</span>
+                                        Efectivo <br /> <span className='text-black/70'>(5% de descuento, retirando por San Bernardo)</span>
                                     </label>
 
                                     <label
-                                        className={`w-100 text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        className={`w-full text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
                                         ${paymentMethod === 'transferencia' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
                                         onClick={() => setPaymentMethod('transferencia')}
                                     >
@@ -718,7 +730,7 @@ const Header: React.FC = () => {
                                     </label>
 
                                     <label
-                                        className={`w-100 text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        className={`w-full text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
                                         ${paymentMethod === 'debito' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
                                         onClick={() => setPaymentMethod('debito')}
                                     >
@@ -726,7 +738,7 @@ const Header: React.FC = () => {
                                     </label>
 
                                     <label
-                                        className={`w-100 text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
+                                        className={`w-full text-center px-4 py-2 rounded-full cursor-pointer transition-colors 
                                         ${paymentMethod === 'credito' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
                                         onClick={() => setPaymentMethod('credito')}
                                     >
