@@ -37,10 +37,12 @@ const Header: React.FC = () => {
 
     const envio = location === "Otro"
     ? 8000
-    : ["Nueva Atlantis", "Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)
+    : ["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)
+    ? 1000
+    : ["Nueva Atlantis"].includes(locality)
     ? 1500
     : location === "Partido de La Costa" && locality !== ""
-    ? 4000
+    ? 3500
     : 0;
 
     const sectionLabels: { [key: string]: string } = {
@@ -107,7 +109,7 @@ const Header: React.FC = () => {
     const totalToPay =
         (total + envio) *
         (paymentMethod === "efectivo"
-            ? 0.95
+            ? 1
             : paymentMethod === "credito"
             ? 1.10
             : 1);
@@ -544,7 +546,7 @@ const Header: React.FC = () => {
                             animate={{ opacity: 0.7 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="fixed inset-0 h-screen bg-black z-50"
+                            className="fixed inset-0 h-screen bg-black z-150"
                             onClick={() => setCartOpen(false)}
                         />
 
@@ -555,12 +557,12 @@ const Header: React.FC = () => {
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'tween', duration: 0.3 }}
-                            className="fixed top-0 right-0 w-80 h-screen bg-white shadow-lg p-4 text-black z-60 overflow-y-auto"
+                            className="fixed top-0 right-0 w-85 max-w-screen h-screen bg-white shadow-lg p-4 px-7 text-black z-160 overflow-y-auto"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
                             onClick={() => setCartOpen(false)}
-                            className="absolute top-4 right-4 text-black text-2xl font-bold cursor-pointer"
+                            className="absolute top-4 right-8 text-black text-2xl font-bold cursor-pointer"
                             >
                             ✖
                             </button>
@@ -718,7 +720,7 @@ const Header: React.FC = () => {
                                         ${paymentMethod === 'efectivo' ? 'bg-blue-500 text-white' : 'bg-blue-100 text-black'}`}
                                         onClick={() => setPaymentMethod('efectivo')}
                                     >
-                                        Efectivo <br /> <span className='text-black/70'>(5% de descuento, retirando por San Bernardo)</span>
+                                        Efectivo (sin recargo)
                                     </label>
 
                                     <label
@@ -744,6 +746,7 @@ const Header: React.FC = () => {
                                     >
                                         Crédito en 1 pago (+10%)
                                     </label>
+                                    <p className='text-black/70 text-center text-[16px]'>5% de descuento en efectivo retirando por el local</p>
                                     </div>
                                 </div>
 
