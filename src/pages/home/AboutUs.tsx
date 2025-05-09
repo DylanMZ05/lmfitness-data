@@ -6,7 +6,7 @@ const AboutUs: React.FC = () => {
       <>
         <ShippingMarquee />
         <section id="sobre-nosotros" className="flex justify-center items-center flex-wrap bg-neutral-900 lg:bg-white">
-          <div className="flex flex-col w-screen max-w-[500px] items-center gap-2 bg-neutral-900 px-7 py-[50px] md:text-start md:max-w-max lg:flex-row md:items-stretch md:rounded-2xl md:mx-5 md:mb-5 lg:max-w-[1300px] lg:justify-around">
+          <div className="flex flex-col w-screen max-w-[500px] items-center gap-2 bg-neutral-900 px-7 py-[50px] md:text-start md:max-w-max lg:flex-row md:items-stretch md:rounded-2xl md:mx-5 md:mb-5 lg:mt-5 lg:max-w-[1300px] lg:justify-around">
 
             {/* Texto */}
             <div className="px-3 max-w-[500px] mb-5 lg:mr-5 lg:mt-6 lg:flex-1">

@@ -16,6 +16,12 @@ export interface Category {
   products: Product[];
 }
 
+export function parseFormattedText(text: string) {
+  const boldConverted = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  const lineBreaks = boldConverted.replace(/\/\/\s*/g, '<br>');
+  return lineBreaks;
+}
+
 export const productData: Category[] = [
   {
     name: "COMBOS EXCLUSIVOS",
@@ -66,7 +72,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – STAR NUTRITION PLATINUM DOYPACK",
       description: "Proteína avanzada.",
-      longDescription: "Esta proteína avanzada ofrece una fórmula completa con alto contenido de aminoácidos esenciales, ideal para quienes buscan aumentar su masa muscular y mejorar la recuperación post-entreno.",
+      longDescription: "**Proteína concentrada** de suero (WPC). // Presentación: Doypack resellable. Rinde: aprox. 30 servicios. Contenido: 24 g de proteína por scoop. Bajo en carbohidratos y grasas. Ideal para ganancia muscular y recuperación post-entreno.",
       price: "$30.000",
       featuredId: 6,
     },
