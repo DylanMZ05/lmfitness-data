@@ -457,6 +457,7 @@ export const productData: Category[] = [
         title: "PRE-ENTRENO - WAR ENA SPORT",
         description: "400GR de energía explosiva.",
         price: "$27.000",
+        longDescription: "**Cantidad:** 400g // **Porción:** 20g // **Servicios:** 20 // **Cafeína:** 200mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
         id: 41,
@@ -467,6 +468,7 @@ export const productData: Category[] = [
         title: "PRE-ENTRENO - TNT DYNAMITE STAR NUTRITION",
         description: "240GR de potencia previa al entrenamiento.",
         price: "$21.100",
+        longDescription: "**Cantidad:** 240g // **Porción:** 8g // **Servicios:** 30 // **Cafeína:** 150mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
         id: 42,
@@ -477,6 +479,7 @@ export const productData: Category[] = [
         title: "PRE-ENTRENO - PUMP V8 STAR NUTRITION",
         description: "285GR de foco y resistencia.",
         price: "$28.100",
+        longDescription: "**Cantidad:** 285g // **Porción:** 9.5g // **Servicios:** 30 // **Cafeína:** 200mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
         id: 43,
@@ -485,8 +488,9 @@ export const productData: Category[] = [
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/PRE-ENTRENOS/INFO-PRE-WORK-GOLD-NUTRITION.webp"
         ],
         title: "PRE-ENTRENO - GOLD NUTRITION",
-        description: "280GR para máximo rendimiento.",
+        description: "300gr para máximo rendimiento.",
         price: "$18.500",
+        longDescription: "**Cantidad:** 300g // **Porción:** 14g (2 cucharadas) // **Servicios:** 20 // **Cafeína:** 176mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
         id: 44,
@@ -497,6 +501,7 @@ export const productData: Category[] = [
         title: "PRE-ENTRENO - KILLER 5.0 GENERATION FIT",
         description: "300GR de explosividad en cada scoop.",
         price: "$17.700",
+        longDescription: "**Cantidad:** 300g // **Porción:** 12g // **Servicios:** 25 // **Cafeína:** 180mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
         id: 45,
@@ -507,6 +512,7 @@ export const productData: Category[] = [
         title: "OXIDO NITRICO - ENA SPORT",
         description: "150GR para vasodilatación intensa.",
         price: "$15.500",
+        longDescription: "**Cantidad:** 210g // **Porción:** 7g - **Servicios:** 30 // // **Modo de uso:** Disolver 1 medida (7g) en 200cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // - Mejora la circulación y el flujo sanguíneo. // - Mayor congestión muscular (\"pump\"). // - Aumenta el rendimiento físico y la resistencia. // - Reduce la fatiga durante el entrenamiento. // - Favorece una recuperación más rápida.",
       },
       {
         id: 46,
@@ -517,6 +523,7 @@ export const productData: Category[] = [
         title: "OXIDO NITRICO - GOLD NUTRITION",
         description: "195GR de óxido nítrico premium.",
         price: "$18.500",
+        longDescription: "**Cantidad:** 195g // **Porción:** 7.8g - **Servicios:** 25 // // **Modo de uso:** Disolver 1 medida (7.8g) en 200cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // - Mejora la circulación y el flujo sanguíneo. // - Mayor congestión muscular (\"pump\"). // - Aumenta el rendimiento físico y la resistencia. // - Reduce la fatiga durante el entrenamiento. // - Favorece una recuperación más rápida.",
       },
       {
         id: 33,
@@ -527,6 +534,7 @@ export const productData: Category[] = [
         title: "L-ARGININA - STAR NUTRITION 150 GRS",
         description: "150GR para vasodilatación y energía.",
         price: "$14.700",
+        longDescription: "**Cantidad:** 150g // **Porción:** 3.8g - **Servicios:** 39 // // **Modo de uso:** Mezclar 1 porción con 200 ml de agua. // **Días de Entrenamiento:** 1 servicio, 1 hora antes de entrenar. // **Días de Descanso:** 1 servicio, 1 hora antes del desayuno. // // **Beneficios:** // - Mejora la circulación sanguínea y la oxigenación muscular. // - Facilita el transporte de nutrientes y elimina desechos metabólicos. // - Acelera la recuperación y estimula el crecimiento muscular.",
       },
       {
         id: 34,
@@ -537,6 +545,7 @@ export const productData: Category[] = [
         title: "BETA ALANINA - STAR NUTRITION 300 GRS",
         description: "300GR de beta alanina para resistencia.",
         price: "$23.500",
+        longDescription: "**Cantidad:** 300g // **Porción:** 2g (media cuchara de té) - **Servicios:** 150 // // **Modo de uso:** Se pueden utilizar de 2 a 5g diarios, previo al entrenamiento. // // **Beneficios:** // - Mejora el rendimiento y la resistencia en entrenamientos de alta intensidad. // - Ayuda a reducir la fatiga muscular. // - Aumenta la capacidad de realizar repeticiones adicionales. // - Mejora el rendimiento en ejercicios que requieren explosividad y fuerza.",
       },
       {
         id: 54,
@@ -547,6 +556,7 @@ export const productData: Category[] = [
         title: "CAFEÍNA - 2000 STAR NUTRITION",
         description: "30 comp. de energía concentrada.",
         price: "$7.000",
+        longDescription: "**Cantidad:** 30 cápsulas // **Porción:** 1 cápsula - **Servicios:** 30 // // **Modo de uso:** Tomar 1 cápsula 15 a 30 minutos previo al entrenamiento. No consumir más de 2 cápsulas diarias. // // **Beneficios:** // - Aumenta la energía y el enfoque mental. // - Mejora el rendimiento físico en ejercicios de alta intensidad. // - Estimula el sistema nervioso central. // - Promueve mayor quema de grasa al aumentar el metabolismo. // - Mejora la concentración y la alerta mental durante el ejercicio.",
       },
     ],
   },

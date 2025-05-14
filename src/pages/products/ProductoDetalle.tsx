@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useCart } from "../../context/useCart";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
-import { productData, Product, Category } from "../../data/products";
+import { productData, Product, Category, parseFormattedText } from "../../data/products";
 
 import FeaturedSlider from "../../components/FeaturedSlider";
 
@@ -101,9 +101,12 @@ const ProductoDetalle: React.FC = () => {
           {/* Info producto */}
           <div className="w-full md:w-1/2 px-5">
             <h1 className="text-2xl font-bold mb-2">{foundProduct.title}</h1>
-            <p className="text-gray-600 mb-2">
-              {foundProduct.longDescription || foundProduct.description}
-            </p>
+            <div
+              className="text-gray-600 mb-2 text-sm"
+              dangerouslySetInnerHTML={{
+                __html: parseFormattedText(foundProduct.longDescription || foundProduct.description),
+              }}
+            />
             {foundProduct.offerPrice ? (
               <div className="mb-4">
                 <p className="text-sm text-gray-500 line-through">{foundProduct.price}</p>
