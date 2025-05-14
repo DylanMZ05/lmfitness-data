@@ -136,7 +136,14 @@ const CatalogoCard: React.FC = () => {
                     <div className="p-3 flex flex-col flex-1 justify-between">
                       <div className="flex-1">
                         <h3 className="text-sm font-semibold mb-1">{product.title}</h3>
-                        <p className="text-base font-bold mb-2">{product.price}</p>
+                        {product.offerPrice ? (
+                          <div className="mb-2">
+                            <p className="text-sm text-gray-500 line-through">{product.price}</p>
+                            <p className="text-base font-bold text-red-600">{product.offerPrice}</p>
+                          </div>
+                        ) : (
+                          <p className="text-base font-bold mb-2">{product.price}</p>
+                        )}
                       </div>
 
                       <div className="flex justify-between mt-2 items-center">
@@ -171,7 +178,14 @@ const CatalogoCard: React.FC = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-bold">{selectedProduct.title}</h2>
             <p className="text-gray-600">{selectedProduct.description}</p>
-            <p className="text-lg font-bold">{selectedProduct.price}</p>
+            {selectedProduct.offerPrice ? (
+              <div className="mb-2">
+                <p className="text-sm text-gray-500 line-through">{selectedProduct.price}</p>
+                <p className="text-lg font-bold text-red-600">{selectedProduct.offerPrice}</p>
+              </div>
+            ) : (
+              <p className="text-lg font-bold">{selectedProduct.price}</p>
+            )}
 
             <div className="flex items-center justify-center my-4">
               <button className="px-4 py-2 bg-gray-200 rounded-l-lg" onClick={() => adjustQuantity(-1)}>-</button>

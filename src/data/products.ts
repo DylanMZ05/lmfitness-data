@@ -5,8 +5,9 @@ export interface Product {
   title: string;
   description: string;
   price: string;
+  offerPrice?: string;
   featuredId?: number;
-  longDescription?: string; // ✅ nuevo campo opcional
+  longDescription?: string;
 }
 
 export interface Category {
@@ -34,6 +35,7 @@ export const productData: Category[] = [
         title: "COMBO STAR NUTRITION",
         description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - STAR NUTRITION",
         price: "$16.000",
+        offerPrice: "$12.000",
         featuredId: 1,
       },
       {

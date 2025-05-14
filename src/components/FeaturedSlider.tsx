@@ -108,7 +108,14 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
                       {product.title}
                     </h3>
                     <p className="text-xs text-gray-600">{product.description}</p>
-                    <p className="text-lg font-bold mt-2">{product.price}</p>
+                    {product.offerPrice ? (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-500 line-through">{product.price}</p>
+                        <p className="text-lg font-bold text-red-600">{product.offerPrice}</p>
+                      </div>
+                    ) : (
+                      <p className="text-lg font-bold mt-2">{product.price}</p>
+                    )}
                   </div>
                   <Link
                     to={`/producto/${product.id}`}

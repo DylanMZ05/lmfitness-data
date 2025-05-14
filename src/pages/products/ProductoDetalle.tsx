@@ -104,7 +104,14 @@ const ProductoDetalle: React.FC = () => {
             <p className="text-gray-600 mb-2">
               {foundProduct.longDescription || foundProduct.description}
             </p>
-            <p className="text-xl font-semibold mb-4">{foundProduct.price}</p>
+            {foundProduct.offerPrice ? (
+              <div className="mb-4">
+                <p className="text-sm text-gray-500 line-through">{foundProduct.price}</p>
+                <p className="text-xl font-semibold text-red-600">{foundProduct.offerPrice}</p>
+              </div>
+            ) : (
+              <p className="text-xl font-semibold mb-4">{foundProduct.price}</p>
+            )}
 
             {/* Cantidad */}
             <div className="flex items-center mb-4">
