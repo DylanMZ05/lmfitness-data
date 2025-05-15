@@ -293,6 +293,7 @@ export const productData: Category[] = [
         title: "CREATINA - MICRONIZADA ONEFIT NEUTRA",
         description: "200GR de creatina sin sabor.",
         price: "$18.000",
+        longDescription: "**Cantidad:** 200g // **Sabor:** Sin sabor // **Porciones:** 40 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 24,
@@ -303,6 +304,7 @@ export const productData: Category[] = [
         title: "CREATINA - GENTECH NEUTRA",
         description: "250GR de creatina neutra.",
         price: "$24.400",
+        longDescription: "**Cantidad:** 250g // **Sabor:** Sin sabor // **Porciones:** 50 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 25,
@@ -313,6 +315,7 @@ export const productData: Category[] = [
         title: "CREATINA - GENTECH NEUTRA",
         description: "500GR de creatina neutra.",
         price: "$33.400",
+        longDescription: "**Cantidad:** 500g // **Sabor:** Sin sabor // **Porciones:** 100 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 26,
@@ -323,6 +326,7 @@ export const productData: Category[] = [
         title: "CREATINA - MICRONIZADA STAR NUTRITION POTE (300gr)",
         description: "300GR de creatina monohidratada.",
         price: "$33.200",
+        longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 27,
@@ -333,6 +337,7 @@ export const productData: Category[] = [
         title: "CREATINA - MICRONIZADA STAR NUTRITION DOYPACK (300gr)",
         description: "300GR en empaque doypack.",
         price: "$30.800",
+        longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 28,
@@ -343,6 +348,7 @@ export const productData: Category[] = [
         title: "CREATINA - MICRONIZADA STAR NUTRITION POTE (500gr)",
         description: "500GR de creatina monohidratada.",
         price: "$47.200",
+        longDescription: "**Cantidad:** 500g // **Sabor:** Sin sabor // **Porciones:** 100 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 29,
@@ -353,6 +359,7 @@ export const productData: Category[] = [
         title: "CREATINA - MICRONIZADA STAR NUTRITION POTE (1gk)",
         description: "1KG de creatina monohidratada.",
         price: "$85.500",
+        longDescription: "**Cantidad:** 1000g (1kg) // **Sabor:** Sin sabor // **Porciones:** 200 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 30,
@@ -363,6 +370,7 @@ export const productData: Category[] = [
         title: "CREATINA - MICRONIZADA ENA SPORT",
         description: "300GR micronizada para mejor absorción.",
         price: "$34.800",
+        longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
         id: 31,
@@ -373,6 +381,7 @@ export const productData: Category[] = [
         title: "CREATINA - MICRONIZADA GOLD NUTRITION",
         description: "300GR de creatina de alta pureza.",
         price: "$26.500",
+        longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
     ],
   },
