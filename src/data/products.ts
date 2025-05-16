@@ -243,9 +243,10 @@ export const productData: Category[] = [
           "assets/images/GANADORES-DE-PESO/UltraMass_kilo_vainilla_1024x.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/GANADORES-DE-PESO/INFO-ULTRA-MASS-ENA.webp"
         ],
-        title: "GANADORES DE PESO - ULTRA MASS ENA SPORT",
+        title: "GANADORES DE PESO - ULTRA MASS ENA SPORT 1.5KG",
         description: "Gana masa muscular rápidamente.",
         price: "$27.700",
+        longDescription: "**Información nutricional (por 100 g – aprox. 3 scoops):** // • Valor energético: 402 kcal // • Proteínas: 25 g // • Carbohidratos: 70 g // // **Ingredientes principales:** // • Proteína concentrada de suero (Whey Protein Concentrate) // • Proteína de caseína // • Maltodextrina (fuente de carbohidratos) // • Azúcares simples // • Vitaminas y minerales (según fórmula específica) // // **Modo de uso:** // Mezclar 1 a 2 porciones (aprox. 100 a 150 g) en 300 a 400 ml de agua, leche o bebida vegetal. // Tomar 1 o 2 veces al día, preferentemente: // – Después del entrenamiento // – Entre comidas para aumentar la ingesta calórica // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
       {
         id: 19,
@@ -253,9 +254,10 @@ export const productData: Category[] = [
           "assets/images/GANADORES-DE-PESO/D_NQ_NP_885422-MLA49910744162_052022-O.webp"
           // No se encontró imagen nutricional para este
         ],
-        title: "GANADORES DE PESO - MUTANT MASS STAR NUTRITION",
+        title: "GANADORES DE PESO - MUTANT MASS STAR NUTRITION 1.5KG",
         description: "Fórmula potente para volumen.",
         price: "$28.200",
+        longDescription: "**Información nutricional por 90 g (2 scoops):** // • Valor energético: 382 kcal // • Proteínas: 23 g // • Carbohidratos: 59 g // // **Ingredientes principales:** // • Proteínas: suero de leche (whey), caseína // • Carbohidratos: maltodextrina, dextrosa, almidón de maíz // • Aminoácidos añadidos: creatina, glutamina, BCAA, taurina // • Vitaminas y minerales: complejo multivitamínico // // **Modo de uso:** // Mezclar 90 g (aproximadamente 2 medidas) en 500 ml de agua o leche. // Consumir 1 a 2 veces por día, preferentemente después del entrenamiento y/o entre comidas. // Ajustar según los requerimientos calóricos individuales. // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
       {
         id: 20,
@@ -263,9 +265,10 @@ export const productData: Category[] = [
           "assets/images/GANADORES-DE-PESO/nitrogain-15-kg__1.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/GANADORES-DE-PESO/INFO-NITROGAIN-XTRENGHT.webp"
         ],
-        title: "GANADORES DE PESO - NITROGAIN XTRENGHT",
+        title: "GANADORES DE PESO - NITROGAIN XTRENGHT 1.5KG",
         description: "Aumenta peso y fuerza.",
         price: "$27.500",
+        longDescription: "**Información nutricional por 100 g:** // • Valor energético: 394 kcal // • Proteínas: 22 g // • Carbohidratos: 72 g // // **Ingredientes principales:** // • Proteínas: concentrado de suero de leche (whey), caseína // • Carbohidratos: maltodextrina, dextrosa // • Aminoácidos añadidos: creatina, glutamina, BCAA // • Vitaminas y minerales: complejo multivitamínico // // **Modo de uso:** // Mezclar 100 g (aproximadamente 2 medidas) en 500-600 ml de agua o leche. // Consumir 1 a 2 veces por día, preferentemente después del entrenamiento y/o entre comidas. // Ajustar según los requerimientos calóricos individuales. // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
       {
         id: 21,
@@ -276,6 +279,7 @@ export const productData: Category[] = [
         title: "GANADORES DE PESO - MAXI GAIN GENTECH",
         description: "Ganador de peso económico y efectivo.",
         price: "$20.000",
+        longDescription: "**Información nutricional por 100 g:** // • Valor energético: 394 kcal // • Proteínas: 20 g // • Carbohidratos: 73 g // // **Ingredientes principales:** // • Proteínas: concentrado de suero de leche (whey) // • Carbohidratos: maltodextrina, dextrosa // // **Modo de uso:** // Mezclar 100 g (aproximadamente 2 medidas) en 500-600 ml de agua o leche. // Consumir 1 a 2 veces por día, preferentemente después del entrenamiento y/o entre comidas. // Ajustar según los requerimientos calóricos individuales. // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
     ],
   },
@@ -583,15 +587,28 @@ export const productData: Category[] = [
         title: "QUEMADOR - XTRENGHT CUTTER",
         description: "120 comp. para definición corporal.",
         price: "$15.000",
+        longDescription: "**Cantidad:** 120 comprimidos // **Porción:** 2 cápsulas // **Servicios:** 60 // **Dosis máxima diaria:** hasta 4 comprimidos. // // **Modo de uso:** Tomar 2 cápsulas al día, preferentemente 1 hora antes del almuerzo o del entrenamiento. Mantenerse bien hidratado durante el día. // // **Ingredientes:** Cafeína anhidra, té verde, L-carnitina, pimienta negra, cayena, vitaminas B6 y B12, cromo. // // **Beneficios principales:** // • Acelera el metabolismo y favorece la quema de grasa. // • Aumenta la energía y el foco mental. // • Ayuda a usar la grasa como fuente de energía. // • Reduce el apetito y los antojos. // • Mejora el rendimiento en entrenamientos intensos.",
       },
       {
         id: 48,
         images: [
-          "assets/images/QUEMADORES/RippedX.webp",
+          "assets/images/QUEMADORES/RippedX.webp"
         ],
         title: "QUEMADOR - RIPPED X ENA SPORT",
         description: "60 comp. quemadores termogénicos.",
         price: "$12.000",
+        longDescription: "**Cantidad:** 60 cápsulas // **Porción:** 2 cápsulas // **Servicios:** 30 // // **Modo de uso:** Tomar 2 cápsulas diarias con abundante agua. Para entrenamientos más explosivos, consumir 2 cápsulas 30 minutos antes del entrenamiento. Recomendación: mantenerse bien hidratado. // // **Ingredientes:** Pimiento, pimienta negra, té verde, vitamina B3. // // **Beneficios principales:** // • Acelera el metabolismo y favorece la quema de grasa. // • Aumenta la energía y el foco mental. // • Reduce el apetito. // • Mejora el rendimiento deportivo.",
+      },
+      {
+        id: 74,
+        images: [
+          "assets/images/QUEMADORES/L-CarnitineLiquid-Limon_2a4aff28-5569-43a7-b543-300af41b073b.webp",
+          "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/QUEMADORES/INFO-L-CARNITINA-STAR.webp"
+        ],
+        title: "L-CARNITINA - STAR NUTRITION",
+        description: "500ML para apoyo en quema de grasa y recuperación.",
+        price: "$16.000",
+        longDescription: "**Cantidad:** 500 ml // **Porción:** 15 ml (1 cucharada y 1/2 sopera) // **Servicios:** 33 // // **Modo de uso recomendado:** Tomar 15 ml al día, preferentemente antes del entrenamiento o junto con alguna comida. No superar la dosis indicada. // // **Beneficios principales:** // • Favorece la quema de grasa al usarla como fuente de energía. // • Mejora el rendimiento físico y la resistencia. // • Ayuda a reducir la fatiga durante entrenamientos intensos. // • Contribuye a una mejor recuperación post-entrenamiento. // • Apoya el metabolismo energético.",
       },
     ],
   },
@@ -717,6 +734,17 @@ export const productData: Category[] = [
         description: "Sabores: Frutilla, Chocolate, Coco, Banana, Dulce de leche. Consultar disponibilidad.",
         price: "$20.000",
       },
+      {
+        id: 75,
+        images: [
+          "assets/images/BARRAS-PROTEICAS/StarterProtein.webp",
+          "assets/images/BARRAS-PROTEICAS/StarterProtein-info.webp",
+        ],
+        title: "CAFÉ PROTEICO - STARTER PROTEIN ENA",
+        description: "400GR de proteína funcional con té verde y guaraná.",
+        price: "$16.000",
+        longDescription: "**Cantidad:** 400 g // **Porción:** 16 g (1 scoop) // **Servicios:** 25 // // **Descripción:** Starter Protein de Ena es una proteína en polvo ideal para apoyar la recuperación muscular y el desarrollo de masa magra. Además, se puede preparar como un café proteico al combinarlo con té verde y guaraná, lo que ayuda a aumentar la energía y potenciar el rendimiento durante el día. // // **Beneficios:** // • Favorece la recuperación y reparación muscular. // • Promueve el aumento de masa muscular magra. // • Aporta energía natural gracias al té verde y guaraná. // • Fácil digestión y rápida absorción. // • Contiene aminoácidos esenciales para el rendimiento deportivo. // // **Modo de uso:** // Shot proteico: 1 porción (16 g) en 100 ml. // Batido proteico: 2 porciones (32 g) en 200 ml. // Se puede utilizar con leche o agua, tanto caliente como fría.",
+      },
     ],
   },
   {
@@ -733,6 +761,7 @@ export const productData: Category[] = [
         title: "ISOTONICA - HYDRO PLUS STAR NUTRITION",
         description: "700GR para hidratación y rendimiento.",
         price: "$15.500",
+        longDescription: "**Cantidad:** 700g // **Porción:** 35g // **Servicios por envase:** 20 // // **Modo de uso:** Disolver 1 porción (35g) en 500 ml de agua. Consumir antes, durante o después del entrenamiento para mantener una hidratación óptima y reponer electrolitos. También puede tomarse en cualquier momento del día para mejorar el rendimiento físico en condiciones de alta exigencia o calor. // // **Ingredientes:** Carbohidratos, vitamina E, vitamina C, calcio, sodio, potasio, magnesio, BCAA. // // **Beneficios principales:** // • Reponen electrolitos perdidos durante el ejercicio. // • Mejoran la hidratación y el rendimiento físico. // • Aportan energía rápida gracias a sus carbohidratos simples. // • Reducen el cansancio y previenen calambres. // • Ideal para entrenamientos intensos o días de calor.",
       },
       {
         id: 58,
@@ -743,6 +772,7 @@ export const productData: Category[] = [
         title: "ISOTONICA - HYDROMAX SPORT DRINK NUTREMAX",
         description: "1520GR de bebida isotónica.",
         price: "$19.500",
+        longDescription: "**Cantidad:** 1520g // **Porción:** 33g (4 scoops) // **Servicios por envase:** 46 // // **Modo de uso:** Disolver 1 porción (33g) en 500 ml de agua. Consumir antes, durante o después del entrenamiento para mantener una hidratación óptima y reponer electrolitos. También puede tomarse en cualquier momento del día para mejorar el rendimiento físico en condiciones de alta exigencia o calor. // // **Ingredientes:** Carbohidratos, sodio, potasio, vitamina E, vitamina C. // // **Beneficios principales:** // • Reponen electrolitos perdidos durante el ejercicio. // • Mejoran la hidratación y el rendimiento físico. // • Aportan energía rápida gracias a sus carbohidratos simples. // • Reducen el cansancio y previenen calambres. // • Ideal para entrenamientos intensos o días de calor.",
       },
       {
         id: 59,
@@ -753,6 +783,7 @@ export const productData: Category[] = [
         title: "ISOTONICA - HYDROMAX SPORT DRINK DISPLAY",
         description: "Caja de 20 unidades.",
         price: "$11.900",
+        longDescription: "**Cantidad:** 20 sobres de 33g // **Porción:** 33g (1 sobre) // **Servicios por caja:** 20 // // **Modo de uso:** Disolver 1 porción (1 sobre – 33g) en 500 ml de agua. Consumir antes, durante o después del entrenamiento para mantener una hidratación óptima y reponer electrolitos. También puede tomarse en cualquier momento del día para mejorar el rendimiento físico en condiciones de alta exigencia o calor. // // **Ingredientes:** Carbohidratos, sodio, potasio, vitamina E, vitamina C. // // **Beneficios principales:** // • Reponen electrolitos perdidos durante el ejercicio. // • Mejoran la hidratación y el rendimiento físico. // • Aportan energía rápida gracias a sus carbohidratos simples. // • Reducen el cansancio y previenen calambres. // • Ideal para entrenamientos intensos o días de calor.",
       },
       {
         id: 60,
@@ -763,6 +794,7 @@ export const productData: Category[] = [
         title: "CÁPSULAS ELECTROLITOS - PRO SALTS NUTREMAX",
         description: "60 comp. para rehidratación avanzada.",
         price: "$9.000",
+        longDescription: "**Cantidad:** 60 cápsulas // // **Modo de uso:** Tomar 1 cápsula cada 60 minutos durante la actividad física. // // **Ingredientes:** Sodio, potasio, magnesio, cloruros, calcio, vitamina D. // // **Beneficios principales:** // • Reponen rápidamente los electrolitos perdidos por sudoración. // • Ayudan a prevenir calambres musculares. // • Mantienen el equilibrio hídrico y la hidratación corporal. // • Mejoran el rendimiento físico y la recuperación. // • Sin azúcares ni calorías adicionales. // // **Recomendado para:** Deportes de alto rendimiento y actividades de larga duración.",
       },
       {
         id: 61,
@@ -773,6 +805,7 @@ export const productData: Category[] = [
         title: "GEL ENERGÉTICO - MERVICK",
         description: "Caja con 12 unidades de gel energético.",
         price: "$16.200",
+        longDescription: "**Cantidad:** 12 sobres por caja // **Porción:** 40 g (1 sobre) // **Servicios:** 12 // // **Información nutricional (por porción):** // • Valor energético: 116 kcal // • Carbohidratos: 27 g // • Aporta minerales como sodio, potasio y magnesio // • Contiene taurina y cafeína para más energía // // **Beneficios:** // • Energía rápida, ideal para actividades de larga duración. // • Contiene cafeína y taurina que aumentan el metabolismo y reducen la fatiga. // • Efecto estimulante para mantener un rendimiento alto. // // **Preparación y consumo:** // Diluir 40 g de gel en 400 ml de agua. // Consumir 1 a 2 geles cada 60 minutos según requerimientos, entrenamiento y carrera."
       },
     ],
   },
