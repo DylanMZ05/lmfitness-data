@@ -626,6 +626,17 @@ export const productData: Category[] = [
         title: "OMEGA 3 - NATUFARMA",
         description: "30 comp. de ácidos grasos esenciales.",
         price: "$9.000",
+        longDescription: "**Cantidad:** 30 comprimidos // **Porción:** 1 comprimido // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 o 2 comprimidos diarios acompañando una comida para mejorar su absorción (puede ser con el desayuno o almuerzo). // // **Beneficios principales:** // • Mejora la salud cardiovascular reduciendo colesterol y triglicéridos. // • Favorece la función cerebral, memoria y concentración. // • Posee propiedades antiinflamatorias que ayudan en la recuperación. // • Contribuye a la salud ocular y previene problemas de visión. // • Apoya la salud mental, ayudando a reducir ansiedad y depresión. // • Mejora la hidratación y elasticidad de la piel, y fortalece el cabello."
+      },
+      {
+        id: 76,
+        images: [
+          "assets/images/OMEGA-3-ZMA-CAFEINA/OMEGA-3-GEONAT.webp",
+        ],
+        title: "OMEGA 3 - GEONAT",
+        description: "30 comp. para salud cardiovascular y mental.",
+        price: "$9.500",
+        longDescription: "**Cantidad:** 30 comprimidos // **Porción:** 1 comprimido // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 o 2 comprimidos diarios acompañando una comida para mejorar su absorción (puede ser con el desayuno o almuerzo). // // **Beneficios principales:** // • Mejora la salud cardiovascular reduciendo colesterol y triglicéridos. // • Favorece la función cerebral, memoria y concentración. // • Posee propiedades antiinflamatorias que ayudan en la recuperación. // • Contribuye a la salud ocular y previene problemas de visión. // • Apoya la salud mental, ayudando a reducir ansiedad y depresión. // • Mejora la hidratación y elasticidad de la piel, y fortalece el cabello."
       },
       {
         id: 55,
@@ -636,6 +647,7 @@ export const productData: Category[] = [
         title: "ZMA - GOLD NUTRITION",
         description: "60 comp. con zinc, magnesio y B6.",
         price: "$12.000",
+        longDescription: "**Cantidad:** 60 comprimidos // **Porción:** 2 cápsulas // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 2 cápsulas diarias en un vaso de agua, 30 minutos antes de irte a dormir. // // **Beneficios principales:** // • Mejora la recuperación y crecimiento muscular. // • Aumenta la fuerza y el rendimiento físico. // • Promueve un sueño profundo y reparador. // • Refuerza el sistema inmunológico. // • Regula los niveles hormonales, especialmente testosterona. // • Reduce fatiga y estrés."
       },
       {
         id: 49,
@@ -646,6 +658,7 @@ export const productData: Category[] = [
         title: "MULTIVITAMINICO - GENTECH",
         description: "60 comp. con vitaminas y minerales.",
         price: "$6.000",
+        longDescription: "**Cantidad:** 60 comprimidos // **Porción:** 2 comprimidos // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 2 comprimidos diarios en un vaso de agua, preferentemente por la mañana. // // **Beneficios principales:** // • Completa la dieta con vitaminas y minerales esenciales. // • Fortalece el sistema inmunológico. // • Aumenta la energía y reduce la fatiga. // • Mejora la concentración y función cerebral. // • Promueve la salud de piel, cabello y uñas. // • Apoya el sistema nervioso."
       },
       {
         id: 50,
@@ -656,6 +669,7 @@ export const productData: Category[] = [
         title: "COLÁGENO - ENA SPORT",
         description: "407GR para articulaciones y piel.",
         price: "$27.000",
+        longDescription: "**Cantidad:** 407 g // **Porción:** 13,54 g (1 scoop colmado) // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (1 scoop colmado) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, magnesio, cúrcuma y ácido hialurónico. // // **Beneficios principales:** // • Fortalece articulaciones, tendones y ligamentos. // • Mejora la salud de la piel, uñas y cabello. // • Favorece la recuperación muscular y previene lesiones. // • Aporta colágeno hidrolizado de fácil absorción. // • Ideal para quienes entrenan con regularidad o tienen desgaste físico."
       },
       {
         id: 51,
@@ -663,9 +677,10 @@ export const productData: Category[] = [
           "assets/images/MULTIVITAMINICO-Y-COLAGENO/Diapositiva1-11-600x600.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/MULTIVITAMINICO-COLAGENOS/INFO-COLAGENO-GOLD-POLVO.webp"
         ],
-        title: "COLÁGENO - GOLD NUTRITION",
+        title: "COLÁGENO - GOLD NUTRITION + Q10",
         description: "200GR con ácido hialurónico y coenzima Q10.",
         price: "$20.000",
+        longDescription: "**Cantidad:** 200 g // **Porción:** 10 g (2 scoops) // **Servicios por envase:** 20 // // **Modo de uso:** Tomar 1 porción (2 scoops) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, ácido hialurónico y coenzima Q10. // // **Beneficios principales:** // • Mejora la elasticidad y reduce arrugas en la piel. // • Favorece la regeneración de articulaciones y tejidos. // • Aporta antioxidantes que protegen las células. // • Aumenta la energía y reduce fatiga. // • Promueve la salud cardiovascular."
       },
       {
         id: 52,
@@ -673,9 +688,10 @@ export const productData: Category[] = [
           "assets/images/MULTIVITAMINICO-Y-COLAGENO/colageno-e06a78b3de04faf9a217196048077347-640-0.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/MULTIVITAMINICO-COLAGENOS/INFO-COLAGENO-+-TE-BLANCO-GOLD.webp"
         ],
-        title: "COLÁGENO - GOLD NUTRITION",
+        title: "COLÁGENO - GOLD NUTRITION + TÉ BLANCO",
         description: "200GR con ácido hialurónico + té blanco.",
         price: "$20.000",
+        longDescription: "**Cantidad:** 200 g // **Porción:** 10 g (2 scoops) // **Servicios por envase:** 20 // // **Modo de uso:** Tomar 1 porción (2 scoops) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, ácido hialurónico y té blanco. // // **Beneficios principales:** // • Mejora la firmeza, elasticidad y salud de la piel, ayudando a reducir arrugas. // • Propiedades antioxidantes que protegen las células y combaten el envejecimiento. // • Favorece la regeneración de articulaciones, huesos y tejidos musculares. // • Apoya la salud cardiovascular y reduce la inflamación. // • Contribuye a una piel más joven, saludable y radiante. // • Estimula el metabolismo y ayuda en el control del peso."
       },
       {
         id: 62,
@@ -686,6 +702,7 @@ export const productData: Category[] = [
         title: "CITRATO DE MAGNESIO - BAD MONKEY",
         description: "500GR para apoyo muscular y nervioso.",
         price: "$18.500",
+        longDescription: "**Cantidad:** 500 g // **Porción:** 2.5 g (1/2 cucharadita de té) // **Servicios por envase:** 200 // // **Modo de uso:** Tomar 1 porción diaria disuelta en un vaso de agua, en cualquier momento del día o preferentemente 30 minutos antes de dormir. // // **Beneficios principales:** // • Previene calambres y mejora la función muscular. // • Favorece la recuperación post-entreno. // • Reduce el estrés y mejora el sueño. // • Aporta energía y mejora el rendimiento. // • Fortalece huesos y articulaciones. // • Mejora el tránsito intestinal."
       },
       {
         id: 63,
@@ -696,6 +713,7 @@ export const productData: Category[] = [
         title: "CITRATO DE POTASIO - BAD MONKEY",
         description: "500GR para equilibrio electrolítico.",
         price: "$20.300",
+        longDescription: "**Cantidad:** 500 g // **Porción:** 2.5 g (1/2 cucharadita de té) // **Servicios por envase:** 200 // // **Modo de uso:** Tomar 1 porción disuelta en un vaso de agua al día, en cualquier momento. // // **Beneficios principales:** // • Regula el equilibrio electrolítico. // • Apoya la función muscular y nerviosa. // • Contribuye a la salud cardiovascular. // • Favorece la función renal. // • Mejora el equilibrio ácido-base."
       },
       {
         id: 64,
@@ -706,6 +724,7 @@ export const productData: Category[] = [
         title: "CITRATO MAGNESIO - ONEFIT",
         description: "150GR de magnesio en polvo.",
         price: "$7.500",
+        longDescription: "**Cantidad:** 150 g // **Porción:** 2.5 g (1/2 cucharadita de té) // **Servicios por envase:** 60 // // **Modo de uso:** Tomar 1 porción diaria disuelta en un vaso de agua, en cualquier momento del día o preferentemente 30 minutos antes de dormir. // // **Beneficios principales:** // • Previene calambres y mejora la función muscular. // • Favorece la recuperación post-entreno. // • Reduce el estrés y mejora el sueño. // • Aporta energía y mejora el rendimiento. // • Fortalece huesos y articulaciones. // • Mejora el tránsito intestinal."
       },
       {
         id: 65,
@@ -716,11 +735,12 @@ export const productData: Category[] = [
         title: "CITRATO POTASIO - ONEFIT",
         description: "150GR de potasio en polvo.",
         price: "$7.500",
+        longDescription: "**Cantidad:** 150 g // **Porción:** 5 g // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción disuelta en un vaso de agua al día, en cualquier momento. // // **Beneficios principales:** // • Regula el equilibrio electrolítico. // • Apoya la función muscular y nerviosa. // • Contribuye a la salud cardiovascular. // • Favorece la función renal. // • Mejora el equilibrio ácido-base."
       },
     ],
   },
   {
-    name: "BARRAS PROTEÍCAS",
+    name: "BARRAS PROTEÍCAS - CAFÉS ENERGETICOS",
     slug: "barras-proteicas",
     image: "assets/images/BARRAS-PROTEICAS/barras.webp",
     products: [
@@ -733,6 +753,7 @@ export const productData: Category[] = [
         title: "BARRA PROTEÍCA - IRON BAR GENTECH (CANT. 20)",
         description: "Sabores: Frutilla, Chocolate, Coco, Banana, Dulce de leche. Consultar disponibilidad.",
         price: "$20.000",
+        longDescription: "**Cantidad:** 20 unidades por caja // **Porción:** 46 g (1 barra) // **Proteína:** 15 g // **Kcal:** 180 // **Carbohidratos:** 18 g // **Fibra:** 2 g // // Snack proteico para sumar proteínas en tu día a día, súper ricos y saludables."
       },
       {
         id: 75,
