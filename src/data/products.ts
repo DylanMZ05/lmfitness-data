@@ -400,9 +400,10 @@ export const productData: Category[] = [
           "assets/images/GLUTAMINA/GLUTA.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/GLUTAMINA/INFO-GLUTAMINA-STAR-300GR-POTE.webp"
         ],
-        title: "GLUTAMINA - STAR NUTRITION",
+        title: "L-GLUTAMINA - STAR NUTRITION - 300g",
         description: "300GR para recuperación muscular.",
         price: "$26.900",
+        longDescription: "**Cantidad:** 300 gr // **Porción:** 5 gramos (1 cucharadita) // **Servicios:** 60 porciones aprox. // // **Modo de uso:** Tomar 5 gramos después del entrenamiento o antes de dormir, mezclado con agua o bebida de tu preferencia. // // **Beneficios principales:** // • Acelera la recuperación muscular // • Refuerza el sistema inmunológico // • Contribuye a la salud intestinal // • Fácil absorción y mezcla"
       },
       {
         id: 35,
@@ -413,6 +414,7 @@ export const productData: Category[] = [
         title: "AMINO - 4500 ENA SPORT",
         description: "150 comp. para recuperación muscular.",
         price: "$22.900",
+        longDescription: "**Cantidad:** 150 comprimidos // **Porción mínima:** 6 comprimidos // **Porción máxima:** 10 comprimidos // **Servicios:** 25 a 15 por envase (según dosis) // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, L-Lisina, L-Metionina, L-Fenilalanina, L-Treonina, L-Arginina, Glicina, L-Prolina, L-Ácido glutámico. // // **Uso recomendado:** Consumir entre 6 y 10 comprimidos por día, distribuidos en 2 tomas: antes del entrenamiento (3 a 5 comprimidos) y después del entrenamiento (3 a 5 comprimidos). En días de descanso: tomar con el desayuno o entre comidas. // // **Beneficios:** // • Favorece la recuperación muscular. // • Previene la pérdida de masa muscular (catabolismo). // • Aporta aminoácidos esenciales de forma práctica. // • Mejora el rendimiento y la resistencia física. // • Ideal para entrenamientos intensos y dietas exigentes."
       },
       {
         id: 36,
@@ -423,6 +425,7 @@ export const productData: Category[] = [
         title: "AMINO - 9000 GENTECH",
         description: "160 comp. de aminoácidos esenciales.",
         price: "$15.000",
+        longDescription: "**Cantidad:** 160 comprimidos // **Porción mínima:** 4 comprimidos // **Porción máxima:** 9 comprimidos // **Servicios:** 40 a 18 por envase (según dosis) // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, L-Lisina, L-Metionina, L-Fenilalanina, L-Treonina, L-Histidina, L-Arginina, L-Ácido aspártico, L-Ácido glutámico, Glicina, L-Prolina, L-Serina, L-Tirosina, L-Alanina. // // **Uso recomendado:** Consumir entre 4 y 9 comprimidos por día. // – Dosis mínima (4 comprimidos): dividir en 2 tomas, antes y después del entrenamiento. // – Dosis máxima (9 comprimidos): dividir en 3 tomas de 3 comprimidos: una antes del entrenamiento, una después y otra entre comidas o al desayuno. En días de descanso: mantener las tomas repartidas durante el día (desayuno, almuerzo, merienda). // // **Beneficios:** // • Favorece la recuperación muscular. // • Previene la pérdida de masa muscular (catabolismo). // • Aporta aminoácidos esenciales de forma práctica. // • Mejora el rendimiento y la resistencia física. // • Ideal para entrenamientos intensos y dietas exigentes."
       },
       {
         id: 37,
@@ -433,6 +436,7 @@ export const productData: Category[] = [
         title: "AMINO - 6400 NUTREMAX",
         description: "200 comp. de alta potencia.",
         price: "$19.600",
+        longDescription: "**Cantidad:** 200 comprimidos // **Porción:** 8 comprimidos // **Servicios:** 25 por envase // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, L-Lisina, L-Metionina, L-Fenilalanina, L-Treonina, L-Arginina, L-Histidina, L-Alanina, Glicina, L-Prolina, L-Serina, L-Ácido aspártico, L-Ácido glutámico. // // **Uso recomendado:** Consumir 8 comprimidos por día, divididos en 2 tomas: // – 4 comprimidos antes del entrenamiento // – 4 comprimidos después del entrenamiento // En días de descanso: puede tomarse 4 con el desayuno y 4 con la merienda. // // **Beneficios:** // • Favorece la recuperación muscular. // • Previene la pérdida de masa muscular (catabolismo). // • Aporta aminoácidos esenciales de forma práctica. // • Mejora el rendimiento y la resistencia física. // • Ideal para entrenamientos intensos y dietas exigentes."
       },
       {
         id: 38,
@@ -441,8 +445,9 @@ export const productData: Category[] = [
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/AMINOACIDOS-BCAA/INFO-BCAA-2000-STAR.webp"
         ],
         title: "BCAA - 2000 STAR NUTRITION",
-        description: "120 comp. de BCAA 2:1:1.",
+        description: "120 comp. de BCAA 8:1:1.",
         price: "$15.000",
+        longDescription: "**Cantidad:** 120 cápsulas // **Porción:** 4 cápsulas // **Servicios:** 30 // **Ratio:** 8:1:1 // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina // // **Modo de uso:** Dividir 4 cápsulas diarias en 2 tomas: // – 2 cápsulas antes del entrenamiento // – 2 cápsulas después del entrenamiento // // **Beneficios:** // • Estimulan la síntesis de proteínas musculares. // • Aceleran la recuperación post-entreno. // • Ayudan a reducir el catabolismo muscular. // • Mejoran el rendimiento y la resistencia. // • Disminuyen la fatiga durante el ejercicio. // // **Información adicional:** // El ratio 8:1:1 indica la proporción de leucina frente a isoleucina y valina. Esto significa que por cada 8 porciones de leucina, hay 1 de isoleucina y 1 de valina. La leucina es clave porque activa la síntesis proteica muscular, siendo el aminoácido más importante para el crecimiento y recuperación muscular."
       },
       {
         id: 39,
@@ -453,6 +458,7 @@ export const productData: Category[] = [
         title: "BCAA - RELOAD ENA SPORT",
         description: "220GR de BCAA en polvo.",
         price: "$19.200",
+        longDescription: "**Cantidad:** 200 g // **Porción:** 11 g (2 scoops) // **Servicios:** 20 // **Ratio:** 2:1:1 // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, Magnesio, Potasio, Sodio, Cloruro, Carbohidratos // // **Modo de uso:** Tomar 2 porciones diarias disueltas en agua, distribuidas en alguna de las siguientes formas: // – 1 porción antes y 1 porción durante el entrenamiento // – 1 porción durante y 1 porción después del entrenamiento // – 1 porción durante y 1 porción después del entrenamiento // // **Beneficios:** // • Estimulan la síntesis de proteínas musculares. // • Aceleran la recuperación post-entreno. // • Ayudan a reducir el catabolismo muscular. // • Mejoran el rendimiento y la resistencia. // • Disminuyen la fatiga durante el ejercicio. // // **Información adicional:** // El ratio 2:1:1 indica la proporción de leucina frente a isoleucina y valina. Esto significa que por cada 2 porciones de leucina, hay 1 de isoleucina y 1 de valina. La leucina es clave porque activa la síntesis proteica muscular, siendo el aminoácido más importante para el crecimiento y recuperación muscular."
       },
     ],
   },
