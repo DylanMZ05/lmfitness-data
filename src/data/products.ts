@@ -7,6 +7,7 @@ export interface Product {
   price: string;
   offerPrice?: string;
   featuredId?: number;
+  exclusiveId?: number;
   longDescription?: string;
 }
 
@@ -44,6 +45,7 @@ export const productData: Category[] = [
         title: "COMBO GOLD NUTRITION",
         description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - GOLD NUTRITION",
         price: "$6.000",
+        exclusiveId: 1,
       },
       {
         id: 71,
@@ -51,6 +53,7 @@ export const productData: Category[] = [
         title: "COMBO XLL GENTECH - DURA 3 MESES",
         description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - GENTECH",
         price: "$6.000",
+        exclusiveId: 2,
       },
       {
         id: 72,
@@ -58,6 +61,7 @@ export const productData: Category[] = [
         title: "COMBO ONEFIT",
         description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - ONEFIT",
         price: "$6.000",
+        exclusiveId: 3,
       },
     ],
   },
@@ -74,9 +78,9 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – STAR NUTRITION PLATINUM DOYPACK",
       description: "Proteína avanzada.",
-      longDescription: "**Proteína concentrada** de suero (WPC). // Presentación: Doypack resellable. Rinde: aprox. 30 servicios. Contenido: 24 g de proteína por scoop. Bajo en carbohidratos y grasas. Ideal para ganancia muscular y recuperación post-entreno.",
       price: "$30.000",
       featuredId: 6,
+      longDescription: "Blend de proteína ultra concentrada, aislado de suero lácteo e hidrolizado de alta calidad. Ideal para ganar masa muscular, mejorar la recuperación y sumar proteína completa de forma práctica. Buena disolución, rico sabor y fácil digestión. // // **Cantidad:** 908 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 25 g // • Carbohidratos: 2.6 g // • Grasas: 1.8 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 2,
@@ -85,9 +89,10 @@ export const productData: Category[] = [
         "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/PROTEINAS/INFO-PROTE-STAR-PLATINUM-WHEY-ISOLATE.webp"
       ],
       title: "PROTEINA – STAR NUTRITION WHEY ISOLATE",
-      description: "Proteína de alta calidad.",
+      description: "Proteína aislada de altísima pureza.",
       price: "$57.000",
       featuredId: 2,
+      longDescription: "Proteína de suero lácteo 100% aislada de altísima pureza, deslactosada y sin azúcar. Sin dudas una de las mejores proteínas en polvo si hablamos de calidad y pureza, ideal para aquellas personas exigentes. Ideal para etapas de definición y para dietas bajas en calorías. // // **Cantidad:** 908 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 27 g // • Carbohidratos: ~1 g // • Grasas: ~1 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de altísima calidad y pureza. // 4. Ideal para definición y dietas bajas en calorías. // 5. Fácil disolución y digestión."
     },
     {
       id: 3,
@@ -99,6 +104,7 @@ export const productData: Category[] = [
       description: "Ideal para recuperación.",
       price: "$36.300",
       featuredId: 3,
+      longDescription: "Proteína de suero lácteo concentrada y aislada de alta calidad, diseñada para favorecer el desarrollo muscular, acelerar la recuperación y aportar un perfil completo de aminoácidos. Ideal para sumar proteína de forma rápida y eficiente a tu dieta diaria. // // **Cantidad:** 930 g // **Porción:** 31 g // **Servicios:** 30 // // **Información nutricional por porción (31 g):** // • Proteína: 25 g // • Carbohidratos: 1.9 g // • Grasas: 2.3 g // // **Modo de uso:** Mezclar 1 medida (31 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 4,
@@ -110,6 +116,7 @@ export const productData: Category[] = [
       description: "Rendimiento y pureza.",
       price: "$29.800",
       featuredId: 4,
+      longDescription: "Proteína concentrada de suero lácteo, ideal para acompañar entrenamientos, mejorar la recuperación y sumar proteína de forma práctica y efectiva en el día a día. // // **Cantidad:** 900 g // **Porción:** 36 g // **Servicios:** 25 // // **Información nutricional por porción (36 g):** // • Proteína: 20 g // • Carbohidratos: 12 g // • Grasas: 1.9 g // // **Modo de uso:** Mezclar 1 medida (36 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 5,
@@ -121,6 +128,7 @@ export const productData: Category[] = [
       description: "Alternativa vegetal saludable.",
       price: "$33.500",
       featuredId: 5,
+      longDescription: "Proteína de soja en polvo de alta calidad, con un perfil completo de aminoácidos esenciales. Es una excelente opción vegetal para quienes buscan aumentar su ingesta proteica, favorecer el desarrollo muscular y cuidar la salud. Ideal para dietas veganas y vegetarianas, además de ser libre de lactosa. // // **Cantidad:** 1 kg // **Porción:** 40 g // **Servicios:** 25 // // **Información nutricional por porción (40 g):** // • Proteína: 34 g // • Carbohidratos: 4 g // • Grasas: 0.5 g // // **Modo de uso:** Mezclar 1 medida (40 g) en 200-250 ml de agua. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Fuente vegana y libre de lactosa. // 2. Ayuda al desarrollo y mantenimiento de la masa muscular. // 3. Perfil completo de aminoácidos esenciales. // 4. Fácil digestión y rápida absorción. // 5. Ideal para complementar dietas veganas, vegetarianas o sin lactosa."
     },
     {
       id: 6,
@@ -132,6 +140,7 @@ export const productData: Category[] = [
       description: "Nutrición natural.",
       price: "$29.800",
       featuredId: 6,
+      longDescription: "Proteína vegetal aislada de alta calidad, elaborada a partir de fuentes naturales como guisante y arroz. Ideal para quienes buscan una opción vegana, libre de lactosa y con un perfil completo de aminoácidos. Perfecta para apoyar el desarrollo muscular y la recuperación, con fácil digestión y absorción. // // **Cantidad:** 907 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 30 g // • Carbohidratos: 1 g // • Grasas: 2.5 g // • Fibra: 1.5 g // • Vitamina B12 // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Fuente vegana y libre de lactosa. // 2. Ayuda al desarrollo y mantenimiento de la masa muscular. // 3. Perfil completo de aminoácidos esenciales. // 4. Fácil digestión y rápida absorción. // 5. Ideal para complementar dietas veganas, vegetarianas o sin lactosa."
     },
     {
       id: 7,
@@ -142,6 +151,8 @@ export const productData: Category[] = [
       title: "PROTEINA – WHEY ADVANCED XTRENGHT",
       description: "Para entrenamientos intensos.",
       price: "$39.000",
+      exclusiveId: 4,
+      longDescription: "Blend de proteína ultra concentrada e aislada con proceso de hidrolizado para mejorar su absorción. Diseñada para maximizar el crecimiento y la recuperación muscular. Con un perfil balanceado de aminoácidos, es ideal para quienes buscan potenciar su rendimiento y resultados en el entrenamiento. // // **Cantidad:** 907 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 24 g // • Carbohidratos: 2.0 g // • Grasas: 1.7 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 8,
@@ -152,6 +163,8 @@ export const productData: Category[] = [
       title: "PROTEINA – GOLD NUTRITION 100% WHEY",
       description: "Proteína pura y efectiva.",
       price: "$35.000",
+      exclusiveId: 5,
+      longDescription: "Blend de proteína ultra concentrada, aislado de suero lácteo e hidrolizado de alta calidad. Ideal para ganar masa muscular, mejorar la recuperación y sumar proteína completa de forma práctica. Buena disolución, rico sabor y fácil digestión. // // **Cantidad:** 908 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 28 g // • Carbohidratos: 4.8 g // • Grasas: 1.8 g // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 9,
@@ -162,6 +175,8 @@ export const productData: Category[] = [
       title: "PROTEINA – GOLD NUTRITION WHEY RIPPED (CON QUEMADOR)",
       description: "Con quemadores para definición.",
       price: "$37.800",
+      exclusiveId: 6,
+      longDescription: "Proteína en polvo con quemador de grasa, diseñada para acompañar tus objetivos de definición y control de peso. Con alto contenido proteico, ayuda a mantener la masa muscular mientras favorece la pérdida de grasa. Ideal para dietas bajas en calorías y entrenamiento intenso. Fácil disolución y absorción. // // **Cantidad:** 910 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 28 g // • Carbohidratos: 4.8 g // • Grasas: 1.5 g // // **Alto perfil de aminoácidos y quemadores como:** L-Carnitina, Garcinia Cambogia, Taurina, Cafeína. // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica. // 6. Ayuda a la pérdida de porcentaje de grasa corporal."
     },
     {
       id: 10,
@@ -172,6 +187,8 @@ export const productData: Category[] = [
       title: "PROTEINA – GOLD NUTRITION WHEY ISOLATE",
       description: "Aislado de proteína premium.",
       price: "$47.000",
+      exclusiveId: 7,
+      longDescription: "Proteína de suero lácteo 100% aislada de altísima pureza, deslactosada y sin azúcar. Sin dudas una de las mejores proteínas en polvo si hablamos de calidad y pureza, ideal para aquellas personas exigentes. Ideal para etapas de definición y para dietas bajas en calorías. // // **Cantidad:** 908 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 29 g // • Carbohidratos: 3.3 g // • Grasas: 0.8 g // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 11,
@@ -182,6 +199,7 @@ export const productData: Category[] = [
       title: "PROTEINA – CON CREATINA BEST WHEY XTRENGHT",
       description: "Fuerza y recuperación.",
       price: "$33.000",
+      longDescription: "Proteína en polvo con una fórmula balanceada que suma creatina y taurina para potenciar el crecimiento muscular y acelerar la recuperación. Ideal para deportistas que buscan un suplemento eficiente con rápida absorción y alto valor biológico. // // **Cantidad:** 907 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 24 g // • Carbohidratos: 4.8 g // • Grasas: 1.9 g // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 13,
@@ -192,6 +210,7 @@ export const productData: Category[] = [
       title: "PROTEINA – WHEY PROTEIN 7900 GENTECH",
       description: "Energía y rendimiento.",
       price: "$25.000",
+      longDescription: "Proteína concentrada de suero lácteo de alta calidad, diseñada para favorecer el desarrollo muscular y mejorar la recuperación. Ideal para quienes buscan una opción efectiva y confiable para aumentar su ingesta diaria de proteínas. Buena absorción y excelente perfil de aminoácidos esenciales. // // **Cantidad:** 1 kg // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 22 g // • Carbohidratos: 3.3 g // • Grasas: 2.9 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 14,
@@ -199,9 +218,10 @@ export const productData: Category[] = [
         "assets/images/PROTEINAS/Fit-Whey-Protein.webp",
         "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/PROTEINAS/INFO-PROTE-FITWHEY-GENERATION-ON-FIT.webp"
       ],
-      title: "PROTEINA – FITWHY GENERATION FIT",
+      title: "PROTEINA – FITWHEY GENERATION FIT",
       description: "Rendimiento diario.",
       price: "$24.000",
+      longDescription: "Blend de suero lácteo concentrado e isolado, con proceso de hidrolizado para mejorar su absorción. Ideal para favorecer el desarrollo muscular, mejorar la recuperación y sumar proteína completa de forma práctica y efectiva. // // **Cantidad:** 908 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 20 g // • Carbohidratos: 5 g // • Grasas: 2 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 15,
@@ -209,6 +229,7 @@ export const productData: Category[] = [
       title: "PROTEINA – CLASSIC WHEY ONEFIT",
       description: "Nutrición diaria accesible.",
       price: "$22.000",
+      longDescription: "Proteína concentrada de suero lácteo, ideal para favorecer el desarrollo muscular y mejorar la recuperación. Excelente opción para quienes buscan sumar proteínas completas a su dieta diaria de manera práctica y efectiva. // // **Cantidad:** 1 kg // **Porción:** 40 g // **Servicios:** 30 // // **Información nutricional por porción (40 g):** // • Proteína: 24 g // • Carbohidratos: 4.5 g // • Grasas: 3.8 g // // **Modo de uso:** Mezclar 1 medida (40 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
       id: 16,

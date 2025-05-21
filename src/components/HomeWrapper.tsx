@@ -65,6 +65,13 @@ const HomeWrapper = () => {
         bgColor="bg-white"
       />
       <hr className="text-black/20"/>
+      <FeaturedSlider
+        title="Productos Exclusivos"
+        categories={productData}
+        mode="exclusive"
+        bgColor="bg-white"
+      />
+      <hr className="text-black/20"/>
       <Products />
       <AboutUs />
     </>

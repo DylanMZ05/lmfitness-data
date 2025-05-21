@@ -2,20 +2,20 @@ import React, { useRef, useEffect, useState } from "react";
 import { Category } from "../data/products";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
 import useScrollToTop from "../hooks/useScrollToTop";
 
 interface Props {
   title: string;
   categories: Category[];
-  bgColor?: string; // ← nueva prop opcional
+  bgColor?: string;
+  mode?: "featured" | "exclusive";
 }
 
 const CARD_WIDTH = 250;
 const GAP = 16;
 const SIDE_PADDING = GAP / 2;
 
-const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neutral-200" }) => {
+const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neutral-200", mode = "featured" }) => {
   const scrollToTop = useScrollToTop();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -23,10 +23,17 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
   const [scrollAmount, setScrollAmount] = useState(CARD_WIDTH + GAP);
   const [totalCarouselWidth, setTotalCarouselWidth] = useState(266); // default for 1 card
 
-  const featuredProducts = categories
+  const filteredProducts = categories
     .flatMap((cat) => cat.products)
-    .filter((p) => p.featuredId !== undefined)
-    .sort((a, b) => (a.featuredId ?? 0) - (b.featuredId ?? 0));
+    .filter((p) => {
+      if (mode === "exclusive") return p.exclusiveId !== undefined;
+      return p.featuredId !== undefined;
+    })
+    .sort((a, b) => {
+      const idA = mode === "exclusive" ? a.exclusiveId ?? 0 : a.featuredId ?? 0;
+      const idB = mode === "exclusive" ? b.exclusiveId ?? 0 : b.featuredId ?? 0;
+      return idA - idB;
+    });
 
   const updateLayout = () => {
     const screenWidth = window.innerWidth;
@@ -92,9 +99,9 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
                 paddingRight: `${SIDE_PADDING}px`,
               }}
             >
-              {featuredProducts.map((product, i) => (
+              {filteredProducts.map((product, i) => (
                 <div
-                  key={product.featuredId}
+                  key={`${product.id}-${mode}`}
                   ref={i === 0 ? itemRef : null}
                   className="w-[250px] h-[400px] flex-shrink-0 bg-white border border-black/10 shadow-md rounded-lg p-4 flex flex-col justify-between"
                 >
@@ -119,7 +126,7 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
                   </div>
                   <Link
                     to={`/producto/${product.id}`}
-                    onClick={scrollToTop}  
+                    onClick={scrollToTop}
                     className="mt-4 text-center bg-black text-white py-2 rounded-md text-sm"
                   >
                     Ver producto
