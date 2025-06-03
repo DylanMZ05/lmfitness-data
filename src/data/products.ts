@@ -45,13 +45,13 @@ export const productData: Category[] = [
         description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - GOLD NUTRITION",
         price: "$6.000",
       },
-      {
-        id: 71,
-        images: ["assets/images/COMBOS/combo-3.webp"],
-        title: "COMBO XLL GENTECH - DURA 3 MESES",
-        description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - GENTECH",
-        price: "$6.000",
-      },
+      // {
+      //   id: 71,
+      //   images: ["assets/images/COMBOS/combo-3.webp"],
+      //   title: "COMBO XLL GENTECH - DURA 3 MESES",
+      //   description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - GENTECH",
+      //   price: "$6.000",
+      // },
       {
         id: 72,
         images: ["assets/images/COMBOS/combo-4.webp"],
@@ -97,6 +97,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – ENA TRUE MADE",
       description: "Ideal para recuperación.",
+      featuredId: 4,
       price: "$36.300",
       longDescription: "Proteína de suero lácteo concentrada y aislada de alta calidad, diseñada para favorecer el desarrollo muscular, acelerar la recuperación y aportar un perfil completo de aminoácidos. Ideal para sumar proteína de forma rápida y eficiente a tu dieta diaria. // // **Cantidad:** 930 g // **Porción:** 31 g // **Servicios:** 30 // // **Información nutricional por porción (31 g):** // • Proteína: 25 g // • Carbohidratos: 1.9 g // • Grasas: 2.3 g // // **Modo de uso:** Mezclar 1 medida (31 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
@@ -329,7 +330,6 @@ export const productData: Category[] = [
         title: "CREATINA - GENTECH NEUTRA",
         description: "500GR de creatina neutra.",
         price: "$33.400",
-        featuredId: 4,
         longDescription: "**Cantidad:** 500g // **Sabor:** Sin sabor // **Porciones:** 100 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -761,6 +761,28 @@ export const productData: Category[] = [
         price: "$7.500",
         longDescription: "**Cantidad:** 150 g // **Porción:** 5 g // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción disuelta en un vaso de agua al día, en cualquier momento. // // **Beneficios principales:** // • Regula el equilibrio electrolítico. // • Apoya la función muscular y nerviosa. // • Contribuye a la salud cardiovascular. // • Favorece la función renal. // • Mejora el equilibrio ácido-base."
       },
+      {
+        id: 77,
+        images: [
+          "assets/images/SALUD-BIENESTAR/vitamina-c-star-nutrition.webp",
+          "assets/images/SALUD-BIENESTAR/info_vitamina-c-star-nutrition.webp"
+        ],
+        title: "VITAMINA C - STAR NUTRITION",
+        description: "60 comp. antioxidantes para defensa inmunológica.",
+        price: "$7.500",
+        longDescription: "**Cantidad:** 60 comprimidos // **Porción:** 2 comprimidos // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (2 comprimidos) por día, preferentemente con una comida. // // **Beneficios principales:** // • Refuerza el sistema inmunológico. // • Potente antioxidante. // • Favorece la recuperación muscular. // • Estimula la producción de colágeno. // • Mejora la absorción del hierro. // • Apoya la salud cardiovascular."
+      },
+      {
+        id: 78,
+        images: [
+          "assets/images/SALUD-BIENESTAR/collagensport.webp",
+          "assets/images/SALUD-BIENESTAR/info_collagensport.webp"
+        ],
+        title: "COLÁGENO SPORT - STAR NUTRITION",
+        description: "360GR para articulaciones, piel y recuperación.",
+        price: "$22.000",
+        longDescription: "**Cantidad:** 360 g // **Porción:** 12 g (2 scoops colmados) // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (2 scoops colmados) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, citrato de magnesio, cafeína. // // **Beneficios principales:** // • Fortalece articulaciones, tendones y ligamentos. // • Mejora la salud de la piel, uñas y cabello. // • Favorece la recuperación muscular y previene lesiones. // • Aporta colágeno hidrolizado de fácil absorción. // • Ideal para quienes entrenan con regularidad o tienen desgaste físico."
+      }
     ],
   },
   {
