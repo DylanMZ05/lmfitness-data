@@ -10,7 +10,7 @@ import HomeWrapper from "./components/HomeWrapper";
 function App() {
   return (
     <CartProvider>
-        <Router basename="/lmfitness">
+        <Router basename="/">
           <Header />
           <Routes>
             <Route path="/" element={<HomeWrapper />} />
