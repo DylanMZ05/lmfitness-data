@@ -663,7 +663,7 @@ export const productData: Category[] = [
         ],
         title: "OMEGA 3 - GEONAT",
         description: "30 comp. para salud cardiovascular y mental.",
-        price: "$9.500",
+        price: "$11.000",
         longDescription: "**Cantidad:** 30 comprimidos // **Porción:** 1 comprimido // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 o 2 comprimidos diarios acompañando una comida para mejorar su absorción (puede ser con el desayuno o almuerzo). // // **Beneficios principales:** // • Mejora la salud cardiovascular reduciendo colesterol y triglicéridos. // • Favorece la función cerebral, memoria y concentración. // • Posee propiedades antiinflamatorias que ayudan en la recuperación. // • Contribuye a la salud ocular y previene problemas de visión. // • Apoya la salud mental, ayudando a reducir ansiedad y depresión. // • Mejora la hidratación y elasticidad de la piel, y fortalece el cabello."
       },
       {
