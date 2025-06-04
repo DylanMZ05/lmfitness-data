@@ -35,15 +35,16 @@ export const productData: Category[] = [
         images: ["assets/images/COMBOS/combo-1.webp"],
         title: "COMBO STAR NUTRITION",
         description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - STAR NUTRITION",
-        price: "$16.000",
-        offerPrice: "$12.000",
+        price: "$66.300",
+        offerPrice: "$60.300",
       },
       {
         id: 70,
         images: ["assets/images/COMBOS/combo-2.webp"],
         title: "COMBO GOLD NUTRITION",
         description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - GOLD NUTRITION",
-        price: "$6.000",
+        price: "$43.000",
+        offerPrice: "$35.000",
       },
       // {
       //   id: 71,
@@ -57,7 +58,7 @@ export const productData: Category[] = [
         images: ["assets/images/COMBOS/combo-4.webp"],
         title: "COMBO ONEFIT",
         description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - ONEFIT",
-        price: "$6.000",
+        price: "$62.500",
       },
     ],
   },
@@ -74,8 +75,9 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – STAR NUTRITION PLATINUM DOYPACK",
       description: "Proteína avanzada.",
-      price: "$30.000",
+      price: "$34.500",
       featuredId: 5,
+      offerPrice: "$29.500",
       longDescription: "Blend de proteína ultra concentrada, aislado de suero lácteo e hidrolizado de alta calidad. Ideal para ganar masa muscular, mejorar la recuperación y sumar proteína completa de forma práctica. Buena disolución, rico sabor y fácil digestión. // // **Cantidad:** 908 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 25 g // • Carbohidratos: 2.6 g // • Grasas: 1.8 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -86,7 +88,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – STAR NUTRITION WHEY ISOLATE",
       description: "Proteína aislada de altísima pureza.",
-      price: "$57.000",
+      price: "$71.000",
       longDescription: "Proteína de suero lácteo 100% aislada de altísima pureza, deslactosada y sin azúcar. Sin dudas una de las mejores proteínas en polvo si hablamos de calidad y pureza, ideal para aquellas personas exigentes. Ideal para etapas de definición y para dietas bajas en calorías. // // **Cantidad:** 908 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 27 g // • Carbohidratos: ~1 g // • Grasas: ~1 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de altísima calidad y pureza. // 4. Ideal para definición y dietas bajas en calorías. // 5. Fácil disolución y digestión."
     },
     {
@@ -98,7 +100,8 @@ export const productData: Category[] = [
       title: "PROTEINA – ENA TRUE MADE",
       description: "Ideal para recuperación.",
       featuredId: 4,
-      price: "$36.300",
+      price: "$36.500",
+      offerPrice: "$31.000",
       longDescription: "Proteína de suero lácteo concentrada y aislada de alta calidad, diseñada para favorecer el desarrollo muscular, acelerar la recuperación y aportar un perfil completo de aminoácidos. Ideal para sumar proteína de forma rápida y eficiente a tu dieta diaria. // // **Cantidad:** 930 g // **Porción:** 31 g // **Servicios:** 30 // // **Información nutricional por porción (31 g):** // • Proteína: 25 g // • Carbohidratos: 1.9 g // • Grasas: 2.3 g // // **Modo de uso:** Mezclar 1 medida (31 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -109,7 +112,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – ENA 100% WHEY",
       description: "Rendimiento y pureza.",
-      price: "$29.800",
+      price: "$35.000",
       longDescription: "Proteína concentrada de suero lácteo, ideal para acompañar entrenamientos, mejorar la recuperación y sumar proteína de forma práctica y efectiva en el día a día. // // **Cantidad:** 900 g // **Porción:** 36 g // **Servicios:** 25 // // **Información nutricional por porción (36 g):** // • Proteína: 20 g // • Carbohidratos: 12 g // • Grasas: 1.9 g // // **Modo de uso:** Mezclar 1 medida (36 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -120,8 +123,9 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – VEGETAL \"SOY PROTEIN\" PULVER",
       description: "Alternativa vegetal saludable.",
-      price: "$33.500",
+      price: "$39.500",
       exclusiveId: 2,
+      offerPrice: "$33.500",
       longDescription: "Proteína de soja en polvo de alta calidad, con un perfil completo de aminoácidos esenciales. Es una excelente opción vegetal para quienes buscan aumentar su ingesta proteica, favorecer el desarrollo muscular y cuidar la salud. Ideal para dietas veganas y vegetarianas, además de ser libre de lactosa. // // **Cantidad:** 1 kg // **Porción:** 40 g // **Servicios:** 25 // // **Información nutricional por porción (40 g):** // • Proteína: 34 g // • Carbohidratos: 4 g // • Grasas: 0.5 g // // **Modo de uso:** Mezclar 1 medida (40 g) en 200-250 ml de agua. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Fuente vegana y libre de lactosa. // 2. Ayuda al desarrollo y mantenimiento de la masa muscular. // 3. Perfil completo de aminoácidos esenciales. // 4. Fácil digestión y rápida absorción. // 5. Ideal para complementar dietas veganas, vegetarianas o sin lactosa."
     },
     {
@@ -132,7 +136,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – VEGETAL GOLD NUTRITION",
       description: "Nutrición natural.",
-      price: "$29.800",
+      price: "$31.700",
       longDescription: "Proteína vegetal aislada de alta calidad, elaborada a partir de fuentes naturales como guisante y arroz. Ideal para quienes buscan una opción vegana, libre de lactosa y con un perfil completo de aminoácidos. Perfecta para apoyar el desarrollo muscular y la recuperación, con fácil digestión y absorción. // // **Cantidad:** 907 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 30 g // • Carbohidratos: 1 g // • Grasas: 2.5 g // • Fibra: 1.5 g // • Vitamina B12 // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Fuente vegana y libre de lactosa. // 2. Ayuda al desarrollo y mantenimiento de la masa muscular. // 3. Perfil completo de aminoácidos esenciales. // 4. Fácil digestión y rápida absorción. // 5. Ideal para complementar dietas veganas, vegetarianas o sin lactosa."
     },
     {
@@ -143,7 +147,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – WHEY ADVANCED XTRENGHT",
       description: "Para entrenamientos intensos.",
-      price: "$39.000",
+      price: "$41.500",
       longDescription: "Blend de proteína ultra concentrada e aislada con proceso de hidrolizado para mejorar su absorción. Diseñada para maximizar el crecimiento y la recuperación muscular. Con un perfil balanceado de aminoácidos, es ideal para quienes buscan potenciar su rendimiento y resultados en el entrenamiento. // // **Cantidad:** 907 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 24 g // • Carbohidratos: 2.0 g // • Grasas: 1.7 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -154,7 +158,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – GOLD NUTRITION 100% WHEY",
       description: "Proteína pura y efectiva.",
-      price: "$35.000",
+      price: "$38.300",
       longDescription: "Blend de proteína ultra concentrada, aislado de suero lácteo e hidrolizado de alta calidad. Ideal para ganar masa muscular, mejorar la recuperación y sumar proteína completa de forma práctica. Buena disolución, rico sabor y fácil digestión. // // **Cantidad:** 908 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 28 g // • Carbohidratos: 4.8 g // • Grasas: 1.8 g // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -165,7 +169,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – GOLD NUTRITION WHEY RIPPED (CON QUEMADOR)",
       description: "Con quemadores para definición.",
-      price: "$37.800",
+      price: "$41.300",
       longDescription: "Proteína en polvo con quemador de grasa, diseñada para acompañar tus objetivos de definición y control de peso. Con alto contenido proteico, ayuda a mantener la masa muscular mientras favorece la pérdida de grasa. Ideal para dietas bajas en calorías y entrenamiento intenso. Fácil disolución y absorción. // // **Cantidad:** 910 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 28 g // • Carbohidratos: 4.8 g // • Grasas: 1.5 g // // **Alto perfil de aminoácidos y quemadores como:** L-Carnitina, Garcinia Cambogia, Taurina, Cafeína. // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica. // 6. Ayuda a la pérdida de porcentaje de grasa corporal."
     },
     {
@@ -176,7 +180,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – GOLD NUTRITION WHEY ISOLATE",
       description: "Aislado de proteína premium.",
-      price: "$47.000",
+      price: "$58.300",
       longDescription: "Proteína de suero lácteo 100% aislada de altísima pureza, deslactosada y sin azúcar. Sin dudas una de las mejores proteínas en polvo si hablamos de calidad y pureza, ideal para aquellas personas exigentes. Ideal para etapas de definición y para dietas bajas en calorías. // // **Cantidad:** 908 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 29 g // • Carbohidratos: 3.3 g // • Grasas: 0.8 g // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -187,7 +191,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – CON CREATINA BEST WHEY XTRENGHT",
       description: "Fuerza y recuperación.",
-      price: "$33.000",
+      price: "$34.500",
       longDescription: "Proteína en polvo con una fórmula balanceada que suma creatina y taurina para potenciar el crecimiento muscular y acelerar la recuperación. Ideal para deportistas que buscan un suplemento eficiente con rápida absorción y alto valor biológico. // // **Cantidad:** 907 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 24 g // • Carbohidratos: 4.8 g // • Grasas: 1.9 g // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -198,7 +202,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – WHEY PROTEIN 7900 GENTECH",
       description: "Energía y rendimiento.",
-      price: "$25.000",
+      price: "$42.500",
       longDescription: "Proteína concentrada de suero lácteo de alta calidad, diseñada para favorecer el desarrollo muscular y mejorar la recuperación. Ideal para quienes buscan una opción efectiva y confiable para aumentar su ingesta diaria de proteínas. Buena absorción y excelente perfil de aminoácidos esenciales. // // **Cantidad:** 1 kg // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 22 g // • Carbohidratos: 3.3 g // • Grasas: 2.9 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -209,7 +213,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – FITWHEY GENERATION FIT",
       description: "Rendimiento diario.",
-      price: "$24.000",
+      price: "$28.500",
       longDescription: "Blend de suero lácteo concentrado e isolado, con proceso de hidrolizado para mejorar su absorción. Ideal para favorecer el desarrollo muscular, mejorar la recuperación y sumar proteína completa de forma práctica y efectiva. // // **Cantidad:** 908 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 20 g // • Carbohidratos: 5 g // • Grasas: 2 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -217,8 +221,9 @@ export const productData: Category[] = [
       images: ["assets/images/PROTEINAS/one-fit-tarro.webp"],
       title: "PROTEINA – CLASSIC WHEY ONEFIT",
       description: "Nutrición diaria accesible.",
-      price: "$22.000",
+      price: "$23.000",
       featuredId: 8,
+      offerPrice: "$19.500",
       longDescription: "Proteína concentrada de suero lácteo, ideal para favorecer el desarrollo muscular y mejorar la recuperación. Excelente opción para quienes buscan sumar proteínas completas a su dieta diaria de manera práctica y efectiva. // // **Cantidad:** 1 kg // **Porción:** 40 g // **Servicios:** 30 // // **Información nutricional por porción (40 g):** // • Proteína: 24 g // • Carbohidratos: 4.5 g // • Grasas: 3.8 g // // **Modo de uso:** Mezclar 1 medida (40 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -229,7 +234,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – GENTECH MONSTER WHEY",
       description: "Alto volumen para grandes resultados.",
-      price: "$58.000",
+      price: "$115.500",
     },
     {
       id: 17,
@@ -239,7 +244,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – STAR NUTRITION PLATINUM",
       description: "Presentación de 3KG para máximo rendimiento.",
-      price: "$99.500",
+      price: "$109.000",
     },
   ],
 },
@@ -256,7 +261,7 @@ export const productData: Category[] = [
         ],
         title: "GANADORES DE PESO - ULTRA MASS ENA SPORT 1.5KG",
         description: "Gana masa muscular rápidamente.",
-        price: "$27.700",
+        price: "$33.000",
         longDescription: "**Información nutricional (por 100 g – aprox. 3 scoops):** // • Valor energético: 402 kcal // • Proteínas: 25 g // • Carbohidratos: 70 g // // **Ingredientes principales:** // • Proteína concentrada de suero (Whey Protein Concentrate) // • Proteína de caseína // • Maltodextrina (fuente de carbohidratos) // • Azúcares simples // • Vitaminas y minerales (según fórmula específica) // // **Modo de uso:** // Mezclar 1 a 2 porciones (aprox. 100 a 150 g) en 300 a 400 ml de agua, leche o bebida vegetal. // Tomar 1 o 2 veces al día, preferentemente: // – Después del entrenamiento // – Entre comidas para aumentar la ingesta calórica // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
       {
@@ -267,7 +272,7 @@ export const productData: Category[] = [
         ],
         title: "GANADORES DE PESO - MUTANT MASS STAR NUTRITION 1.5KG",
         description: "Fórmula potente para volumen.",
-        price: "$28.200",
+        price: "$28.000",
         longDescription: "**Información nutricional por 90 g (2 scoops):** // • Valor energético: 382 kcal // • Proteínas: 23 g // • Carbohidratos: 59 g // // **Ingredientes principales:** // • Proteínas: suero de leche (whey), caseína // • Carbohidratos: maltodextrina, dextrosa, almidón de maíz // • Aminoácidos añadidos: creatina, glutamina, BCAA, taurina // • Vitaminas y minerales: complejo multivitamínico // // **Modo de uso:** // Mezclar 90 g (aproximadamente 2 medidas) en 500 ml de agua o leche. // Consumir 1 a 2 veces por día, preferentemente después del entrenamiento y/o entre comidas. // Ajustar según los requerimientos calóricos individuales. // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
       {
@@ -289,7 +294,7 @@ export const productData: Category[] = [
         ],
         title: "GANADORES DE PESO - MAXI GAIN GENTECH",
         description: "Ganador de peso económico y efectivo.",
-        price: "$20.000",
+        price: "$24.500",
         longDescription: "**Información nutricional por 100 g:** // • Valor energético: 394 kcal // • Proteínas: 20 g // • Carbohidratos: 73 g // // **Ingredientes principales:** // • Proteínas: concentrado de suero de leche (whey) // • Carbohidratos: maltodextrina, dextrosa // // **Modo de uso:** // Mezclar 100 g (aproximadamente 2 medidas) en 500-600 ml de agua o leche. // Consumir 1 a 2 veces por día, preferentemente después del entrenamiento y/o entre comidas. // Ajustar según los requerimientos calóricos individuales. // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
     ],
@@ -307,7 +312,7 @@ export const productData: Category[] = [
         ],
         title: "CREATINA - MICRONIZADA ONEFIT NEUTRA",
         description: "200GR de creatina sin sabor.",
-        price: "$18.000",
+        price: "$20.000",
         longDescription: "**Cantidad:** 200g // **Sabor:** Sin sabor // **Porciones:** 40 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -318,7 +323,7 @@ export const productData: Category[] = [
         ],
         title: "CREATINA - GENTECH NEUTRA",
         description: "250GR de creatina neutra.",
-        price: "$24.400",
+        price: "$26.500",
         longDescription: "**Cantidad:** 250g // **Sabor:** Sin sabor // **Porciones:** 50 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -327,9 +332,9 @@ export const productData: Category[] = [
           "assets/images/CREATINAS/CREATINA MONOHIDRATO.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/CREATINAS/INFO-CREATINA-GENTECH-250GR.webp"
         ],
-        title: "CREATINA - GENTECH NEUTRA",
+        title: "CREATINA - GENTECH NEUTRA (500gr)",
         description: "500GR de creatina neutra.",
-        price: "$33.400",
+        price: "$44.600",
         longDescription: "**Cantidad:** 500g // **Sabor:** Sin sabor // **Porciones:** 100 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -340,7 +345,7 @@ export const productData: Category[] = [
         ],
         title: "CREATINA - MICRONIZADA STAR NUTRITION POTE (300gr)",
         description: "300GR de creatina monohidratada.",
-        price: "$33.200",
+        price: "$31.000",
         longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -351,8 +356,9 @@ export const productData: Category[] = [
         ],
         title: "CREATINA - MICRONIZADA STAR NUTRITION DOYPACK (300gr)",
         description: "300GR en empaque doypack.",
-        price: "$30.800",
+        price: "$28.000",
         featuredId: 2,
+        offerPrice: "$23.800",
         longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -363,7 +369,7 @@ export const productData: Category[] = [
         ],
         title: "CREATINA - MICRONIZADA STAR NUTRITION POTE (500gr)",
         description: "500GR de creatina monohidratada.",
-        price: "$47.200",
+        price: "$46.500",
         longDescription: "**Cantidad:** 500g // **Sabor:** Sin sabor // **Porciones:** 100 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -372,9 +378,9 @@ export const productData: Category[] = [
           "assets/images/CREATINAS/image_1920.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/CREATINAS/INFO-CREA-STAR-1KG-POTE.webp"
         ],
-        title: "CREATINA - MICRONIZADA STAR NUTRITION POTE (1gk)",
+        title: "CREATINA - MICRONIZADA STAR NUTRITION POTE (1kg)",
         description: "1KG de creatina monohidratada.",
-        price: "$85.500",
+        price: "$84.500",
         longDescription: "**Cantidad:** 1000g (1kg) // **Sabor:** Sin sabor // **Porciones:** 200 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -383,9 +389,9 @@ export const productData: Category[] = [
           "assets/images/CREATINAS/Creatina_Micronizada_neutra_1600x.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/CREATINAS/INFO-CREATINA-ENA-SPORT.webp"
         ],
-        title: "CREATINA - MICRONIZADA ENA SPORT",
+        title: "CREATINA - MICRONIZADA ENA SPORT (300gr)",
         description: "300GR micronizada para mejor absorción.",
-        price: "$34.800",
+        price: "$31.500",
         longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -394,10 +400,11 @@ export const productData: Category[] = [
           "assets/images/CREATINAS/creatina_monohidrato_gold_nutrition_doypack.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/CREATINAS/INFO-CREATINA-GOLD-NUTRITION.webp"
         ],
-        title: "CREATINA - MICRONIZADA GOLD NUTRITION",
+        title: "CREATINA - MICRONIZADA GOLD NUTRITION (300gr)",
         description: "300GR de creatina de alta pureza.",
-        price: "$26.500",
+        price: "$28.000",
         featuredId: 1,
+        offerPrice: "$23.800",
         longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
     ],
@@ -415,7 +422,7 @@ export const productData: Category[] = [
         ],
         title: "L-GLUTAMINA - STAR NUTRITION - 300g",
         description: "300GR para recuperación muscular.",
-        price: "$26.900",
+        price: "$25.500",
         longDescription: "**Cantidad:** 300 gr // **Porción:** 5 gramos (1 cucharadita) // **Servicios:** 60 porciones aprox. // // **Modo de uso:** Tomar 5 gramos después del entrenamiento o antes de dormir, mezclado con agua o bebida de tu preferencia. // // **Beneficios principales:** // • Acelera la recuperación muscular // • Refuerza el sistema inmunológico // • Contribuye a la salud intestinal // • Fácil absorción y mezcla"
       },
       {
@@ -426,7 +433,7 @@ export const productData: Category[] = [
         ],
         title: "AMINO - 4500 ENA SPORT",
         description: "150 comp. para recuperación muscular.",
-        price: "$22.900",
+        price: "$26.500",
         longDescription: "**Cantidad:** 150 comprimidos // **Porción mínima:** 6 comprimidos // **Porción máxima:** 10 comprimidos // **Servicios:** 25 a 15 por envase (según dosis) // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, L-Lisina, L-Metionina, L-Fenilalanina, L-Treonina, L-Arginina, Glicina, L-Prolina, L-Ácido glutámico. // // **Uso recomendado:** Consumir entre 6 y 10 comprimidos por día, distribuidos en 2 tomas: antes del entrenamiento (3 a 5 comprimidos) y después del entrenamiento (3 a 5 comprimidos). En días de descanso: tomar con el desayuno o entre comidas. // // **Beneficios:** // • Favorece la recuperación muscular. // • Previene la pérdida de masa muscular (catabolismo). // • Aporta aminoácidos esenciales de forma práctica. // • Mejora el rendimiento y la resistencia física. // • Ideal para entrenamientos intensos y dietas exigentes."
       },
       {
@@ -437,7 +444,7 @@ export const productData: Category[] = [
         ],
         title: "AMINO - 9000 GENTECH",
         description: "160 comp. de aminoácidos esenciales.",
-        price: "$15.000",
+        price: "$25.000",
         longDescription: "**Cantidad:** 160 comprimidos // **Porción mínima:** 4 comprimidos // **Porción máxima:** 9 comprimidos // **Servicios:** 40 a 18 por envase (según dosis) // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, L-Lisina, L-Metionina, L-Fenilalanina, L-Treonina, L-Histidina, L-Arginina, L-Ácido aspártico, L-Ácido glutámico, Glicina, L-Prolina, L-Serina, L-Tirosina, L-Alanina. // // **Uso recomendado:** Consumir entre 4 y 9 comprimidos por día. // – Dosis mínima (4 comprimidos): dividir en 2 tomas, antes y después del entrenamiento. // – Dosis máxima (9 comprimidos): dividir en 3 tomas de 3 comprimidos: una antes del entrenamiento, una después y otra entre comidas o al desayuno. En días de descanso: mantener las tomas repartidas durante el día (desayuno, almuerzo, merienda). // // **Beneficios:** // • Favorece la recuperación muscular. // • Previene la pérdida de masa muscular (catabolismo). // • Aporta aminoácidos esenciales de forma práctica. // • Mejora el rendimiento y la resistencia física. // • Ideal para entrenamientos intensos y dietas exigentes."
       },
       {
@@ -448,7 +455,7 @@ export const productData: Category[] = [
         ],
         title: "AMINO - 6400 NUTREMAX",
         description: "200 comp. de alta potencia.",
-        price: "$19.600",
+        price: "$22.000",
         longDescription: "**Cantidad:** 200 comprimidos // **Porción:** 8 comprimidos // **Servicios:** 25 por envase // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, L-Lisina, L-Metionina, L-Fenilalanina, L-Treonina, L-Arginina, L-Histidina, L-Alanina, Glicina, L-Prolina, L-Serina, L-Ácido aspártico, L-Ácido glutámico. // // **Uso recomendado:** Consumir 8 comprimidos por día, divididos en 2 tomas: // – 4 comprimidos antes del entrenamiento // – 4 comprimidos después del entrenamiento // En días de descanso: puede tomarse 4 con el desayuno y 4 con la merienda. // // **Beneficios:** // • Favorece la recuperación muscular. // • Previene la pérdida de masa muscular (catabolismo). // • Aporta aminoácidos esenciales de forma práctica. // • Mejora el rendimiento y la resistencia física. // • Ideal para entrenamientos intensos y dietas exigentes."
       },
       {
@@ -459,7 +466,7 @@ export const productData: Category[] = [
         ],
         title: "BCAA - 2000 STAR NUTRITION",
         description: "120 comp. de BCAA 8:1:1.",
-        price: "$15.000",
+        price: "$14.500",
         longDescription: "**Cantidad:** 120 cápsulas // **Porción:** 4 cápsulas // **Servicios:** 30 // **Ratio:** 8:1:1 // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina // // **Modo de uso:** Dividir 4 cápsulas diarias en 2 tomas: // – 2 cápsulas antes del entrenamiento // – 2 cápsulas después del entrenamiento // // **Beneficios:** // • Estimulan la síntesis de proteínas musculares. // • Aceleran la recuperación post-entreno. // • Ayudan a reducir el catabolismo muscular. // • Mejoran el rendimiento y la resistencia. // • Disminuyen la fatiga durante el ejercicio. // // **Información adicional:** // El ratio 8:1:1 indica la proporción de leucina frente a isoleucina y valina. Esto significa que por cada 8 porciones de leucina, hay 1 de isoleucina y 1 de valina. La leucina es clave porque activa la síntesis proteica muscular, siendo el aminoácido más importante para el crecimiento y recuperación muscular."
       },
       {
@@ -470,8 +477,9 @@ export const productData: Category[] = [
         ],
         title: "BCAA - RELOAD ENA SPORT",
         description: "220GR de BCAA en polvo.",
-        price: "$19.200",
+        price: "$22.000",
         exclusiveId: 3,
+        offerPrice: "$19.000",
         longDescription: "**Cantidad:** 200 g // **Porción:** 11 g (2 scoops) // **Servicios:** 20 // **Ratio:** 2:1:1 // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, Magnesio, Potasio, Sodio, Cloruro, Carbohidratos // // **Modo de uso:** Tomar 2 porciones diarias disueltas en agua, distribuidas en alguna de las siguientes formas: // – 1 porción antes y 1 porción durante el entrenamiento // – 1 porción durante y 1 porción después del entrenamiento // – 1 porción durante y 1 porción después del entrenamiento // // **Beneficios:** // • Estimulan la síntesis de proteínas musculares. // • Aceleran la recuperación post-entreno. // • Ayudan a reducir el catabolismo muscular. // • Mejoran el rendimiento y la resistencia. // • Disminuyen la fatiga durante el ejercicio. // // **Información adicional:** // El ratio 2:1:1 indica la proporción de leucina frente a isoleucina y valina. Esto significa que por cada 2 porciones de leucina, hay 1 de isoleucina y 1 de valina. La leucina es clave porque activa la síntesis proteica muscular, siendo el aminoácido más importante para el crecimiento y recuperación muscular."
       },
     ],
@@ -489,7 +497,7 @@ export const productData: Category[] = [
         ],
         title: "PRE-ENTRENO - WAR ENA SPORT",
         description: "400GR de energía explosiva.",
-        price: "$27.000",
+        price: "$31.000",
         longDescription: "**Cantidad:** 400g // **Porción:** 20g // **Servicios:** 20 // **Cafeína:** 200mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
@@ -500,7 +508,7 @@ export const productData: Category[] = [
         ],
         title: "PRE-ENTRENO - TNT DYNAMITE STAR NUTRITION",
         description: "240GR de potencia previa al entrenamiento.",
-        price: "$21.100",
+        price: "$20.500",
         longDescription: "**Cantidad:** 240g // **Porción:** 8g // **Servicios:** 30 // **Cafeína:** 150mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
@@ -511,8 +519,9 @@ export const productData: Category[] = [
         ],
         title: "PRE-ENTRENO - PUMP V8 STAR NUTRITION",
         description: "285GR de foco y resistencia.",
-        price: "$28.100",
+        price: "$27.000",
         featuredId: 6,
+        offerPrice: "$23.000",
         longDescription: "**Cantidad:** 285g // **Porción:** 9.5g // **Servicios:** 30 // **Cafeína:** 200mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
@@ -523,7 +532,7 @@ export const productData: Category[] = [
         ],
         title: "PRE-ENTRENO - GOLD NUTRITION",
         description: "300gr para máximo rendimiento.",
-        price: "$18.500",
+        price: "$20.500",
         longDescription: "**Cantidad:** 300g // **Porción:** 14g (2 cucharadas) // **Servicios:** 20 // **Cafeína:** 176mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
@@ -534,7 +543,7 @@ export const productData: Category[] = [
         ],
         title: "PRE-ENTRENO - KILLER 5.0 GENERATION FIT",
         description: "300GR de explosividad en cada scoop.",
-        price: "$17.700",
+        price: "$20.000",
         longDescription: "**Cantidad:** 300g // **Porción:** 12g // **Servicios:** 25 // **Cafeína:** 180mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
@@ -545,7 +554,7 @@ export const productData: Category[] = [
         ],
         title: "OXIDO NITRICO - ENA SPORT",
         description: "150GR para vasodilatación intensa.",
-        price: "$15.500",
+        price: "$18.600",
         longDescription: "**Cantidad:** 210g // **Porción:** 7g - **Servicios:** 30 // // **Modo de uso:** Disolver 1 medida (7g) en 200cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // - Mejora la circulación y el flujo sanguíneo. // - Mayor congestión muscular (\"pump\"). // - Aumenta el rendimiento físico y la resistencia. // - Reduce la fatiga durante el entrenamiento. // - Favorece una recuperación más rápida.",
       },
       {
@@ -556,7 +565,7 @@ export const productData: Category[] = [
         ],
         title: "OXIDO NITRICO - GOLD NUTRITION",
         description: "195GR de óxido nítrico premium.",
-        price: "$18.500",
+        price: "$20.500",
         longDescription: "**Cantidad:** 195g // **Porción:** 7.8g - **Servicios:** 25 // // **Modo de uso:** Disolver 1 medida (7.8g) en 200cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // - Mejora la circulación y el flujo sanguíneo. // - Mayor congestión muscular (\"pump\"). // - Aumenta el rendimiento físico y la resistencia. // - Reduce la fatiga durante el entrenamiento. // - Favorece una recuperación más rápida.",
       },
       {
@@ -567,8 +576,9 @@ export const productData: Category[] = [
         ],
         title: "L-ARGININA - STAR NUTRITION 150 GRS",
         description: "150GR para vasodilatación y energía.",
-        price: "$14.700",
+        price: "$14.000",
         exclusiveId: 4,
+        offerPrice: "$12.000",
         longDescription: "**Cantidad:** 150g // **Porción:** 3.8g - **Servicios:** 39 // // **Modo de uso:** Mezclar 1 porción con 200 ml de agua. // **Días de Entrenamiento:** 1 servicio, 1 hora antes de entrenar. // **Días de Descanso:** 1 servicio, 1 hora antes del desayuno. // // **Beneficios:** // - Mejora la circulación sanguínea y la oxigenación muscular. // - Facilita el transporte de nutrientes y elimina desechos metabólicos. // - Acelera la recuperación y estimula el crecimiento muscular.",
       },
       {
@@ -577,11 +587,12 @@ export const productData: Category[] = [
           "assets/images/ARGININA-BETA-ALANINA/beta-alanina.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/ARGININA-BETA-ALANINA/INFO-BETA-ALANINA-STAR.webp"
         ],
-        title: "BETA ALANINA - STAR NUTRITION 300 GRS",
-        description: "300GR de beta alanina para resistencia.",
-        price: "$23.500",
+        title: "BETA ALANINA - STAR NUTRITION 150 GRS",
+        description: "150GR de beta alanina para resistencia.",
+        price: "$22.500",
         exclusiveId: 1,
-        longDescription: "**Cantidad:** 300g // **Porción:** 2g (media cuchara de té) - **Servicios:** 150 // // **Modo de uso:** Se pueden utilizar de 2 a 5g diarios, previo al entrenamiento. // // **Beneficios:** // - Mejora el rendimiento y la resistencia en entrenamientos de alta intensidad. // - Ayuda a reducir la fatiga muscular. // - Aumenta la capacidad de realizar repeticiones adicionales. // - Mejora el rendimiento en ejercicios que requieren explosividad y fuerza.",
+        offerPrice: "$19.500",
+        longDescription: "**Cantidad:** 150g // **Porción:** 2g (media cuchara de té) - **Servicios:** 150 // // **Modo de uso:** Se pueden utilizar de 2 a 5g diarios, previo al entrenamiento. // // **Beneficios:** // - Mejora el rendimiento y la resistencia en entrenamientos de alta intensidad. // - Ayuda a reducir la fatiga muscular. // - Aumenta la capacidad de realizar repeticiones adicionales. // - Mejora el rendimiento en ejercicios que requieren explosividad y fuerza.",
       },
       {
         id: 54,
@@ -648,7 +659,7 @@ export const productData: Category[] = [
         ],
         title: "OMEGA 3 - NATUFARMA",
         description: "30 comp. de ácidos grasos esenciales.",
-        price: "$9.000",
+        price: "$11.000",
         longDescription: "**Cantidad:** 30 comprimidos // **Porción:** 1 comprimido // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 o 2 comprimidos diarios acompañando una comida para mejorar su absorción (puede ser con el desayuno o almuerzo). // // **Beneficios principales:** // • Mejora la salud cardiovascular reduciendo colesterol y triglicéridos. // • Favorece la función cerebral, memoria y concentración. // • Posee propiedades antiinflamatorias que ayudan en la recuperación. // • Contribuye a la salud ocular y previene problemas de visión. // • Apoya la salud mental, ayudando a reducir ansiedad y depresión. // • Mejora la hidratación y elasticidad de la piel, y fortalece el cabello."
       },
       {
@@ -669,7 +680,7 @@ export const productData: Category[] = [
         ],
         title: "ZMA - GOLD NUTRITION",
         description: "60 comp. con zinc, magnesio y B6.",
-        price: "$12.000",
+        price: "$13.000",
         longDescription: "**Cantidad:** 60 comprimidos // **Porción:** 2 cápsulas // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 2 cápsulas diarias en un vaso de agua, 30 minutos antes de irte a dormir. // // **Beneficios principales:** // • Mejora la recuperación y crecimiento muscular. // • Aumenta la fuerza y el rendimiento físico. // • Promueve un sueño profundo y reparador. // • Refuerza el sistema inmunológico. // • Regula los niveles hormonales, especialmente testosterona. // • Reduce fatiga y estrés."
       },
       {
@@ -680,7 +691,7 @@ export const productData: Category[] = [
         ],
         title: "MULTIVITAMINICO - GENTECH",
         description: "60 comp. con vitaminas y minerales.",
-        price: "$6.000",
+        price: "$9.500",
         longDescription: "**Cantidad:** 60 comprimidos // **Porción:** 2 comprimidos // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 2 comprimidos diarios en un vaso de agua, preferentemente por la mañana. // // **Beneficios principales:** // • Completa la dieta con vitaminas y minerales esenciales. // • Fortalece el sistema inmunológico. // • Aumenta la energía y reduce la fatiga. // • Mejora la concentración y función cerebral. // • Promueve la salud de piel, cabello y uñas. // • Apoya el sistema nervioso."
       },
       {
@@ -691,8 +702,9 @@ export const productData: Category[] = [
         ],
         title: "COLÁGENO - ENA SPORT",
         description: "407GR para articulaciones y piel.",
-        price: "$27.000",
+        price: "$30.000",
         featuredId: 3,
+        offerPrice: "$25.500",
         longDescription: "**Cantidad:** 407 g // **Porción:** 13,54 g (1 scoop colmado) // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (1 scoop colmado) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, magnesio, cúrcuma y ácido hialurónico. // // **Beneficios principales:** // • Fortalece articulaciones, tendones y ligamentos. // • Mejora la salud de la piel, uñas y cabello. // • Favorece la recuperación muscular y previene lesiones. // • Aporta colágeno hidrolizado de fácil absorción. // • Ideal para quienes entrenan con regularidad o tienen desgaste físico."
       },
       {
@@ -725,7 +737,7 @@ export const productData: Category[] = [
         ],
         title: "CITRATO DE MAGNESIO - BAD MONKEY",
         description: "500GR para apoyo muscular y nervioso.",
-        price: "$18.500",
+        price: "$20.500",
         longDescription: "**Cantidad:** 500 g // **Porción:** 2.5 g (1/2 cucharadita de té) // **Servicios por envase:** 200 // // **Modo de uso:** Tomar 1 porción diaria disuelta en un vaso de agua, en cualquier momento del día o preferentemente 30 minutos antes de dormir. // // **Beneficios principales:** // • Previene calambres y mejora la función muscular. // • Favorece la recuperación post-entreno. // • Reduce el estrés y mejora el sueño. // • Aporta energía y mejora el rendimiento. // • Fortalece huesos y articulaciones. // • Mejora el tránsito intestinal."
       },
       {
@@ -736,7 +748,7 @@ export const productData: Category[] = [
         ],
         title: "CITRATO DE POTASIO - BAD MONKEY",
         description: "500GR para equilibrio electrolítico.",
-        price: "$20.300",
+        price: "$22.500",
         longDescription: "**Cantidad:** 500 g // **Porción:** 2.5 g (1/2 cucharadita de té) // **Servicios por envase:** 200 // // **Modo de uso:** Tomar 1 porción disuelta en un vaso de agua al día, en cualquier momento. // // **Beneficios principales:** // • Regula el equilibrio electrolítico. // • Apoya la función muscular y nerviosa. // • Contribuye a la salud cardiovascular. // • Favorece la función renal. // • Mejora el equilibrio ácido-base."
       },
       {
@@ -747,7 +759,7 @@ export const productData: Category[] = [
         ],
         title: "CITRATO MAGNESIO - ONEFIT",
         description: "150GR de magnesio en polvo.",
-        price: "$7.500",
+        price: "$8.500",
         longDescription: "**Cantidad:** 150 g // **Porción:** 2.5 g (1/2 cucharadita de té) // **Servicios por envase:** 60 // // **Modo de uso:** Tomar 1 porción diaria disuelta en un vaso de agua, en cualquier momento del día o preferentemente 30 minutos antes de dormir. // // **Beneficios principales:** // • Previene calambres y mejora la función muscular. // • Favorece la recuperación post-entreno. // • Reduce el estrés y mejora el sueño. // • Aporta energía y mejora el rendimiento. // • Fortalece huesos y articulaciones. // • Mejora el tránsito intestinal."
       },
       {
@@ -758,7 +770,7 @@ export const productData: Category[] = [
         ],
         title: "CITRATO POTASIO - ONEFIT",
         description: "150GR de potasio en polvo.",
-        price: "$7.500",
+        price: "$8.500",
         longDescription: "**Cantidad:** 150 g // **Porción:** 5 g // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción disuelta en un vaso de agua al día, en cualquier momento. // // **Beneficios principales:** // • Regula el equilibrio electrolítico. // • Apoya la función muscular y nerviosa. // • Contribuye a la salud cardiovascular. // • Favorece la función renal. // • Mejora el equilibrio ácido-base."
       },
       {
@@ -798,7 +810,7 @@ export const productData: Category[] = [
         ],
         title: "BARRA PROTEÍCA - IRON BAR GENTECH (CANT. 20)",
         description: "Sabores: Frutilla, Chocolate, Coco, Banana, Dulce de leche. Consultar disponibilidad.",
-        price: "$20.000",
+        price: "$34.000",
         longDescription: "**Cantidad:** 20 unidades por caja // **Porción:** 46 g (1 barra) // **Proteína:** 15 g // **Kcal:** 180 // **Carbohidratos:** 18 g // **Fibra:** 2 g // // Snack proteico para sumar proteínas en tu día a día, súper ricos y saludables."
       },
       {
@@ -809,7 +821,7 @@ export const productData: Category[] = [
         ],
         title: "CAFÉ PROTEICO - STARTER PROTEIN ENA",
         description: "400GR de proteína funcional con té verde y guaraná.",
-        price: "$16.000",
+        price: "$22.000",
         longDescription: "**Cantidad:** 400 g // **Porción:** 16 g (1 scoop) // **Servicios:** 25 // // **Descripción:** Starter Protein de Ena es una proteína en polvo ideal para apoyar la recuperación muscular y el desarrollo de masa magra. Además, se puede preparar como un café proteico al combinarlo con té verde y guaraná, lo que ayuda a aumentar la energía y potenciar el rendimiento durante el día. // // **Beneficios:** // • Favorece la recuperación y reparación muscular. // • Promueve el aumento de masa muscular magra. // • Aporta energía natural gracias al té verde y guaraná. // • Fácil digestión y rápida absorción. // • Contiene aminoácidos esenciales para el rendimiento deportivo. // // **Modo de uso:** // Shot proteico: 1 porción (16 g) en 100 ml. // Batido proteico: 2 porciones (32 g) en 200 ml. // Se puede utilizar con leche o agua, tanto caliente como fría.",
       },
     ],
@@ -827,7 +839,7 @@ export const productData: Category[] = [
         ],
         title: "ISOTONICA - HYDRO PLUS STAR NUTRITION",
         description: "700GR para hidratación y rendimiento.",
-        price: "$15.500",
+        price: "$15.000",
         longDescription: "**Cantidad:** 700g // **Porción:** 35g // **Servicios por envase:** 20 // // **Modo de uso:** Disolver 1 porción (35g) en 500 ml de agua. Consumir antes, durante o después del entrenamiento para mantener una hidratación óptima y reponer electrolitos. También puede tomarse en cualquier momento del día para mejorar el rendimiento físico en condiciones de alta exigencia o calor. // // **Ingredientes:** Carbohidratos, vitamina E, vitamina C, calcio, sodio, potasio, magnesio, BCAA. // // **Beneficios principales:** // • Reponen electrolitos perdidos durante el ejercicio. // • Mejoran la hidratación y el rendimiento físico. // • Aportan energía rápida gracias a sus carbohidratos simples. // • Reducen el cansancio y previenen calambres. // • Ideal para entrenamientos intensos o días de calor.",
       },
       {
@@ -838,8 +850,9 @@ export const productData: Category[] = [
         ],
         title: "ISOTONICA - HYDROMAX SPORT DRINK NUTREMAX",
         description: "1520GR de bebida isotónica.",
-        price: "$19.500",
+        price: "$22.000",
         featuredId: 7,
+        offerPrice: "$19.000",
         longDescription: "**Cantidad:** 1520g // **Porción:** 33g (4 scoops) // **Servicios por envase:** 46 // // **Modo de uso:** Disolver 1 porción (33g) en 500 ml de agua. Consumir antes, durante o después del entrenamiento para mantener una hidratación óptima y reponer electrolitos. También puede tomarse en cualquier momento del día para mejorar el rendimiento físico en condiciones de alta exigencia o calor. // // **Ingredientes:** Carbohidratos, sodio, potasio, vitamina E, vitamina C. // // **Beneficios principales:** // • Reponen electrolitos perdidos durante el ejercicio. // • Mejoran la hidratación y el rendimiento físico. // • Aportan energía rápida gracias a sus carbohidratos simples. // • Reducen el cansancio y previenen calambres. // • Ideal para entrenamientos intensos o días de calor.",
       },
       {
@@ -850,7 +863,7 @@ export const productData: Category[] = [
         ],
         title: "ISOTONICA - HYDROMAX SPORT DRINK DISPLAY",
         description: "Caja de 20 unidades.",
-        price: "$11.900",
+        price: "$13.000",
         longDescription: "**Cantidad:** 20 sobres de 33g // **Porción:** 33g (1 sobre) // **Servicios por caja:** 20 // // **Modo de uso:** Disolver 1 porción (1 sobre – 33g) en 500 ml de agua. Consumir antes, durante o después del entrenamiento para mantener una hidratación óptima y reponer electrolitos. También puede tomarse en cualquier momento del día para mejorar el rendimiento físico en condiciones de alta exigencia o calor. // // **Ingredientes:** Carbohidratos, sodio, potasio, vitamina E, vitamina C. // // **Beneficios principales:** // • Reponen electrolitos perdidos durante el ejercicio. // • Mejoran la hidratación y el rendimiento físico. // • Aportan energía rápida gracias a sus carbohidratos simples. // • Reducen el cansancio y previenen calambres. // • Ideal para entrenamientos intensos o días de calor.",
       },
       {
@@ -861,7 +874,7 @@ export const productData: Category[] = [
         ],
         title: "CÁPSULAS ELECTROLITOS - PRO SALTS NUTREMAX",
         description: "60 comp. para rehidratación avanzada.",
-        price: "$9.000",
+        price: "$10.000",
         longDescription: "**Cantidad:** 60 cápsulas // // **Modo de uso:** Tomar 1 cápsula cada 60 minutos durante la actividad física. // // **Ingredientes:** Sodio, potasio, magnesio, cloruros, calcio, vitamina D. // // **Beneficios principales:** // • Reponen rápidamente los electrolitos perdidos por sudoración. // • Ayudan a prevenir calambres musculares. // • Mantienen el equilibrio hídrico y la hidratación corporal. // • Mejoran el rendimiento físico y la recuperación. // • Sin azúcares ni calorías adicionales. // // **Recomendado para:** Deportes de alto rendimiento y actividades de larga duración.",
       },
       {
@@ -908,7 +921,7 @@ export const productData: Category[] = [
         images: ["assets/images/SHAKERS/Shaker-GOT-PROTEIN-BLENDER_c5417a30-e671-4fea-95ea-b6e0b102dd93.webp"],
         title: "SHAKER - GOT PROTEIN",
         description: "Consulta disponibilidad y precio actualizado.",
-        price: "",
+        price: "9.000",
       },
     ],
   },

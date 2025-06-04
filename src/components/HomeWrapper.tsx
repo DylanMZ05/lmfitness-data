@@ -19,11 +19,11 @@ const offerSlides = [
     imageMobile: "assets/images/SLIDER/CATALOGO/02-mobile.webp",
     link: "/producto/70",
   },
-  {
-    imageDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
-    imageMobile: "assets/images/SLIDER/CATALOGO/03-mobile.webp",
-    link: "/producto/71",
-  },
+  // {
+  //   imageDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
+  //   imageMobile: "assets/images/SLIDER/CATALOGO/03-mobile.webp",
+  //   link: "/producto/71",
+  // },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/04-mobile.webp",

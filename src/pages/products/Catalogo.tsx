@@ -27,19 +27,19 @@ const slides = [
       positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
     },
   },
+  // {
+  //   id: 3,
+  //   bgMobile: "assets/images/SLIDER/CATALOGO/03.webp",
+  //   bgDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
+  //   button: {
+  //     text: "VER COMBO",
+  //     link: "/producto/71",
+  //     positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
+  //     positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
+  //   },
+  // },
   {
     id: 3,
-    bgMobile: "assets/images/SLIDER/CATALOGO/03.webp",
-    bgDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
-    button: {
-      text: "VER COMBO",
-      link: "/producto/71",
-      positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
-      positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
-    },
-  },
-  {
-    id: 4,
     bgMobile: "assets/images/SLIDER/CATALOGO/04.webp",
     bgDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
     button: {
