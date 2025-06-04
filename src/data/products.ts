@@ -774,7 +774,7 @@ export const productData: Category[] = [
         ],
         title: "VITAMINA C - STAR NUTRITION",
         description: "60 comp. antioxidantes para defensa inmunológica.",
-        price: "$7.500",
+        price: "$7.000",
         longDescription: "**Cantidad:** 60 comprimidos // **Porción:** 2 comprimidos // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (2 comprimidos) por día, preferentemente con una comida. // // **Beneficios principales:** // • Refuerza el sistema inmunológico. // • Potente antioxidante. // • Favorece la recuperación muscular. // • Estimula la producción de colágeno. // • Mejora la absorción del hierro. // • Apoya la salud cardiovascular."
       },
       {
@@ -785,7 +785,7 @@ export const productData: Category[] = [
         ],
         title: "COLÁGENO SPORT - STAR NUTRITION",
         description: "360GR para articulaciones, piel y recuperación.",
-        price: "$22.000",
+        price: "$18.500",
         longDescription: "**Cantidad:** 360 g // **Porción:** 12 g (2 scoops colmados) // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (2 scoops colmados) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, citrato de magnesio, cafeína. // // **Beneficios principales:** // • Fortalece articulaciones, tendones y ligamentos. // • Mejora la salud de la piel, uñas y cabello. // • Favorece la recuperación muscular y previene lesiones. // • Aporta colágeno hidrolizado de fácil absorción. // • Ideal para quienes entrenan con regularidad o tienen desgaste físico."
       }
     ],

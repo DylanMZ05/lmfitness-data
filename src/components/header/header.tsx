@@ -1,3 +1,7 @@
+// ==============================
+// 📦 BLOQUE 1: IMPORTACIONES Y SETUP INICIAL
+// ==============================
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Search } from 'lucide-react';
 import useActiveSection from './useActiveSection';
@@ -8,6 +12,18 @@ import useScroll from './useScroll';
 import { productData } from "../../data/products";
 import { AnimatePresence, motion } from "framer-motion";
 
+// 🔧 Función utilitaria para mejorar las búsquedas (ignora tildes y mayúsculas)
+const normalizarTexto = (texto: string) => {
+    return texto
+        .normalize("NFD") // descompone tildes
+        .replace(/[\u0300-\u036f]/g, "") // elimina tildes
+        .toLowerCase()
+        .trim();
+};
+
+// ==============================
+// 🎯 INICIO DEL COMPONENTE
+// ==============================
 
 const Header: React.FC = () => {
     const searchRef = useRef<HTMLDivElement>(null);
@@ -29,21 +45,19 @@ const Header: React.FC = () => {
     const [betweenStreets, setBetweenStreets] = useState('');
     const [showMobileSearch, setShowMobileSearch] = useState(false);
     const mobileSearchRef = useRef<HTMLDivElement>(null);
-
     const [forceShowHeader, setForceShowHeader] = useState(false);
-
     const [showSearch, setShowSearch] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
     const envio = location === "Otro"
-    ? 8000
-    : ["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)
-    ? 1000
-    : ["Nueva Atlantis"].includes(locality)
-    ? 1500
-    : location === "Partido de La Costa" && locality !== ""
-    ? 3500
-    : 0;
+        ? 8000
+        : ["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)
+        ? 1000
+        : ["Nueva Atlantis"].includes(locality)
+        ? 1500
+        : location === "Partido de La Costa" && locality !== ""
+        ? 3500
+        : 0;
 
     const sectionLabels: { [key: string]: string } = {
         'inicio': 'Inicio',
@@ -115,23 +129,36 @@ const Header: React.FC = () => {
             : 1);
 
     const handleConfirmPurchase = () => {
-        const productList = cart.map(item => `- ${item.product.title} (${item.quantity}x)`).join("\n");
+    if (
+        !fullName.trim() ||
+        !location ||
+        (location === "Partido de La Costa" && !locality) ||
+        (location === "Otro" && (!otherCity.trim() || !postalCode.trim())) ||
+        !street.trim()
+    ) {
+        alert("Por favor, completá todos los campos obligatorios.");
+        return;
+    }
 
-        const message = `Hola! Me gustaría realizar una compra.%0A%0A`
-            + `*Productos elegidos*: %0A${productList}%0A%0A`
-            + `*Nombre completo*: ${fullName}%0A`
-            + `*Localidad*: ${location === "Partido de La Costa" ? locality : otherCity}%0A`
-            + `*Código Postal*: ${location === "Otro" ? postalCode : "N/A"}%0A`
-            + `*Calle*: ${street}%0A`
-            + `*Entre calles*: ${betweenStreets || 'N/A'}%0A%0A`
-            + `*Método de pago*: ${paymentMethod}%0A`
-            + `*Envío*: $${envio}%0A`
-            + `*Total a pagar*: $${totalToPay.toFixed(2)}`;
+    const productList = cart
+        .map(item => `. *${item.product.title}* (${item.quantity}x)`)
+        .join("\n");
 
-        const phoneNumber = "+5492257531656";
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
-        window.open(whatsappURL, "_blank");
-    };
+    const message =
+        "Hola LMFITNESS\u{1F947}. Quisiera realizar la compra\u{1F64C}\u{1F3FB}\n\n" + // 🥇🙌🏻
+        "*Productos elegidos:*\n" + productList + "\n\n" +
+        `*Nombre completo:* ${fullName}\n` +
+        `*Localidad:* ${location === "Partido de La Costa" ? locality : otherCity}\n` +
+        `*Código Postal:* ${location === "Otro" ? postalCode : "N/A"}\n` +
+        `*Calle:* ${street}\n` +
+        `*Entre calles:* ${betweenStreets || 'N/A'}\n\n` +
+        `*Método de pago:* ${paymentMethod}\n` +
+        `*Envío:* $${envio}\n` +
+        `*Total a pagar:* $${totalToPay.toFixed(2)}`;
+
+    const whatsappURL = `https://wa.me/+5492257531656?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
+};
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -265,63 +292,70 @@ const Header: React.FC = () => {
                             />
 
                             {showSearch && (
-                                <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg max-h-64 overflow-y-auto z-40 text-black">
-                                    {/* Resultados del buscador Desktop, agrupados por categoría */}
-                                    {productData.some(category =>
-                                    category.products.some(product =>
-                                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
-                                    )
-                                    ) ? (
-                                    // Recorremos todas las categorías
-                                    productData.map((category) => {
-                                        // Filtramos los productos dentro de cada categoría según la búsqueda
-                                        const matchingProducts = category.products.filter(product =>
-                                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
-                                        );
+                            <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg max-h-64 overflow-y-auto z-40 text-black">
+                                {/* Resultados del buscador Desktop, agrupados por categoría */}
 
-                                        if (matchingProducts.length === 0) return null; // Si no hay coincidencias en esa categoría, la salteamos
+                                {productData.some(category =>
+                                category.products.some(product => {
+                                    const query = normalizarTexto(searchQuery);
+                                    const textoProducto = normalizarTexto(product.title);
+                                    const textoCategoria = normalizarTexto(category.name);
+                                    const palabras = query.split(" ");
+                                    return palabras.every(palabra =>
+                                    textoProducto.includes(palabra) || textoCategoria.includes(palabra)
+                                    );
+                                })
+                                ) ? (
+                                productData.map((category) => {
+                                    const matchingProducts = category.products.filter(product => {
+                                    const query = normalizarTexto(searchQuery);
+                                    const textoProducto = normalizarTexto(product.title);
+                                    const textoCategoria = normalizarTexto(category.name);
+                                    const palabras = query.split(" ");
+                                    return palabras.every(palabra =>
+                                        textoProducto.includes(palabra) || textoCategoria.includes(palabra)
+                                    );
+                                    });
 
-                                        return (
-                                        <div key={category.slug} className="px-4 py-2">
-                                            {/* Nombre de la categoría */}
-                                            <h3 className="text-sm font-bold text-gray-800 uppercase mb-2 border-b border-gray-300 pb-1">
-                                            {category.name}
-                                            </h3>
+                                    if (matchingProducts.length === 0) return null;
 
-                                            {/* Productos coincidentes dentro de esa categoría */}
-                                            {matchingProducts.map((product) => (
-                                            <Link
-                                                key={product.id}
-                                                to={`/producto/${product.id}`}
-                                                onClick={() => {
-                                                setShowSearch(false);
-                                                setShowMobileSearch(false);
-                                                setSearchQuery('');
-                                                }}
-                                                className="flex items-center gap-3 px-2 py-2 hover:bg-gray-100 rounded-md"
-                                            >
-                                                <img
-                                                src={product.images[0]}
-                                                alt={product.title}
-                                                className="w-10 h-10 object-cover rounded"
-                                                />
-                                                <div className="flex flex-col">
-                                                <span className="font-medium text-sm">{product.title}</span>
-                                                <span className="text-xs text-gray-600">{product.price}</span>
-                                                </div>
-                                            </Link>
-                                            ))}
-                                        </div>
-                                        );
-                                    })
-                                    ) : (
-                                    // Si no se encuentra ningún producto ni categoría
-                                    <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
-                                    )}
-                                </div>
+                                    return (
+                                    <div key={category.slug} className="px-4 py-2">
+                                        <h3 className="text-sm font-bold text-gray-800 uppercase mb-2 border-b border-gray-300 pb-1">
+                                        {category.name}
+                                        </h3>
+
+                                        {matchingProducts.map((product) => (
+                                        <Link
+                                            key={product.id}
+                                            to={`/producto/${product.id}`}
+                                            onClick={() => {
+                                            setShowSearch(false);
+                                            setShowMobileSearch(false);
+                                            setSearchQuery('');
+                                            }}
+                                            className="flex items-center gap-3 px-2 py-2 hover:bg-gray-100 rounded-md"
+                                        >
+                                            <img
+                                            src={product.images[0]}
+                                            alt={product.title}
+                                            className="w-10 h-10 object-cover rounded"
+                                            />
+                                            <div className="flex flex-col">
+                                            <span className="font-medium text-sm">{product.title}</span>
+                                            <span className="text-xs text-gray-600">{product.price}</span>
+                                            </div>
+                                        </Link>
+                                        ))}
+                                    </div>
+                                    );
+                                })
+                                ) : (
+                                <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
+                                )}
+                            </div>
                             )}
+
                         </div>
 
                         {/* Lupa y carrito Mobile */}
@@ -356,50 +390,55 @@ const Header: React.FC = () => {
                             </div>
 
                             {searchQuery && (
-                            <div className="absolute mt-2 w-80 bg-white rounded-md shadow-lg text-black max-h-80 overflow-y-auto z-50">
-                                {productData
+                                <div className="absolute mt-2 w-80 bg-white rounded-md shadow-lg text-black max-h-80 overflow-y-auto z-50">
+                                    {productData
                                     .map((category) => {
-                                    const matchingProducts = category.products.filter((product) =>
-                                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
-                                    );
+                                        const matchingProducts = category.products.filter((product) => {
+                                        const query = normalizarTexto(searchQuery);
+                                        const textoProducto = normalizarTexto(product.title);
+                                        const textoCategoria = normalizarTexto(category.name);
+                                        const palabras = query.split(" ");
+                                        return palabras.every(palabra =>
+                                            textoProducto.includes(palabra) || textoCategoria.includes(palabra)
+                                        );
+                                        });
 
-                                    if (matchingProducts.length === 0) return null;
+                                        if (matchingProducts.length === 0) return null;
 
-                                    return (
+                                        return (
                                         <div key={category.slug} className="px-4 py-2">
-                                        <h3 className="text-sm font-bold text-gray-800 uppercase mb-2 border-b border-gray-300 pb-1">
+                                            <h3 className="text-sm font-bold text-gray-800 uppercase mb-2 border-b border-gray-300 pb-1">
                                             {category.name}
-                                        </h3>
-                                        {matchingProducts.map((product) => (
+                                            </h3>
+                                            {matchingProducts.map((product) => (
                                             <Link
-                                            key={product.id}
-                                            to={`/producto/${product.id}`}
-                                            onClick={() => {
+                                                key={product.id}
+                                                to={`/producto/${product.id}`}
+                                                onClick={() => {
                                                 setSearchQuery('');
                                                 setShowSearch(false);
                                                 setShowMobileSearch(false);
-                                            }}
-                                            className="flex items-center gap-3 px-2 py-2 hover:bg-gray-100 rounded-md"
+                                                }}
+                                                className="flex items-center gap-3 px-2 py-2 hover:bg-gray-100 rounded-md"
                                             >
-                                            <img
+                                                <img
                                                 src={product.images[0]}
                                                 alt={product.title}
                                                 className="w-10 h-10 object-cover rounded"
-                                            />
-                                            <div className="flex flex-col">
+                                                />
+                                                <div className="flex flex-col">
                                                 <span className="font-medium text-sm">{product.title}</span>
                                                 <span className="text-xs text-gray-600">{product.price}</span>
-                                            </div>
+                                                </div>
                                             </Link>
-                                        ))}
+                                            ))}
                                         </div>
-                                    );
+                                        );
                                     })
-                                    .filter(Boolean) // Para evitar nulls
-                                }
-                            </div>
+                                    .filter(Boolean)}
+                                </div>
                             )}
+
                         </div>
                         )}
 
@@ -785,53 +824,64 @@ const Header: React.FC = () => {
 
                 {/* Listado productos Mobile */}
                 <div className="max-h-64 overflow-y-auto text-black">
-                {productData.some(category =>
-                    category.products.some(product =>
-                    product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    category.name.toLowerCase().includes(searchQuery.toLowerCase())
-                    )
-                ) ? (
-                    productData.map((category) => {
-                    const matchingProducts = category.products.filter(product =>
-                        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        category.name.toLowerCase().includes(searchQuery.toLowerCase())
-                    );
+                    {productData.some(category =>
+                        category.products.some(product => {
+                        const query = normalizarTexto(searchQuery);
+                        const textoProducto = normalizarTexto(product.title);
+                        const textoCategoria = normalizarTexto(category.name);
+                        const palabras = query.split(" ");
+                        return palabras.every(palabra =>
+                            textoProducto.includes(palabra) || textoCategoria.includes(palabra)
+                        );
+                        })
+                    ) ? (
+                        productData.map((category) => {
+                        const matchingProducts = category.products.filter(product => {
+                            const query = normalizarTexto(searchQuery);
+                            const textoProducto = normalizarTexto(product.title);
+                            const textoCategoria = normalizarTexto(category.name);
+                            const palabras = query.split(" ");
+                            return palabras.every(palabra =>
+                            textoProducto.includes(palabra) || textoCategoria.includes(palabra)
+                            );
+                        });
 
-                    if (matchingProducts.length === 0) return null;
+                        if (matchingProducts.length === 0) return null;
 
-                    return (
-                        <div key={category.slug} className="px-4 py-2">
-                        <h3 className="text-sm font-bold text-gray-700 uppercase mb-2 border-b border-gray-300 pb-1">
-                            {category.name}
-                        </h3>
-                        {matchingProducts.map((product) => (
-                            <Link
-                            key={product.id}
-                            to={`/producto/${product.id}`}
-                            className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
-                            onClick={() => {
-                                setShowMobileSearch(false);
-                                setSearchQuery('');
-                            }}
-                            >
-                            <img
-                                src={product.images[0]}
-                                alt={product.title}
-                                className="w-12 h-12 object-cover rounded-md"
-                            />
-                            <div className="flex flex-col">
-                                <span className="font-medium">{product.title}</span>
-                                <span className="text-sm text-gray-600">{product.price}</span>
+                        return (
+                            <div key={category.slug} className="px-4 py-2">
+                            <h3 className="text-sm font-bold text-gray-700 uppercase mb-2 border-b border-gray-300 pb-1">
+                                {category.name}
+                            </h3>
+                            {matchingProducts.map((product) => (
+                                <Link
+                                key={product.id}
+                                to={`/producto/${product.id}`}
+                                className="flex items-center gap-3 px-4 py-2 hover:bg-gray-200 border-b border-gray-100"
+                                onClick={() => {
+                                    setShowMobileSearch(false);
+                                    setSearchQuery('');
+                                }}
+                                >
+                                <img
+                                    src={product.images[0]}
+                                    alt={product.title}
+                                    className="w-12 h-12 object-cover rounded-md"
+                                />
+                                <div className="flex flex-col">
+                                    <span className="font-medium">{product.title}</span>
+                                    <span className="text-sm text-gray-600">{product.price}</span>
+                                </div>
+                                </Link>
+                            ))}
                             </div>
-                            </Link>
-                        ))}
-                        </div>
-                    );
-                    })
-                ) : (
-                    <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
-                )}
-                </div>
+                        );
+                        })
+                    ) : (
+                        <div className="px-4 py-2 text-gray-500">No se encontraron productos.</div>
+                    )}
+                    </div>
+
             </div>
             )}
         </>
