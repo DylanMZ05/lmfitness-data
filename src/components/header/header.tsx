@@ -658,7 +658,7 @@ const Header: React.FC = () => {
                         >
                         <button
                             onClick={() => setShowCheckout(false)}
-                            className="absolute top-3 right-4 text-2xl text-black font-bold"
+                            className="absolute top-3 right-4 text-2xl text-black font-bold cursor-pointer"
                         >
                             ✖
                         </button>
@@ -800,7 +800,7 @@ const Header: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={handleConfirmPurchase}
-                                    className="w-full mt-3 bg-blue-500 text-white py-2 rounded-lg"
+                                    className="w-full mt-3 bg-blue-500 text-white py-2 rounded-lg cursor-pointer"
                                 >
                                     Confirmar Compra
                                 </button>
