@@ -35,16 +35,15 @@ export const productData: Category[] = [
         images: ["assets/images/COMBOS/combo-1.webp"],
         title: "COMBO STAR NUTRITION",
         description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - STAR NUTRITION",
-        price: "$66.300",
-        offerPrice: "$60.300",
+        price: "$62.500",
       },
       {
         id: 70,
         images: ["assets/images/COMBOS/combo-2.webp"],
         title: "COMBO GOLD NUTRITION",
         description: "Combo 1kg de PROTEÍNA + 300gr de CREATINA - GOLD NUTRITION",
-        price: "$43.000",
-        offerPrice: "$35.000",
+        price: "$66.300",
+        offerPrice: "$60.300",
       },
       // {
       //   id: 71,
@@ -58,7 +57,8 @@ export const productData: Category[] = [
         images: ["assets/images/COMBOS/combo-4.webp"],
         title: "COMBO ONEFIT",
         description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - ONEFIT",
-        price: "$62.500",
+        price: "$43.000",
+        offerPrice: "$35.000",
       },
     ],
   },
@@ -77,7 +77,6 @@ export const productData: Category[] = [
       description: "Proteína avanzada.",
       price: "$34.500",
       featuredId: 5,
-      offerPrice: "$29.500",
       longDescription: "Blend de proteína ultra concentrada, aislado de suero lácteo e hidrolizado de alta calidad. Ideal para ganar masa muscular, mejorar la recuperación y sumar proteína completa de forma práctica. Buena disolución, rico sabor y fácil digestión. // // **Cantidad:** 908 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 25 g // • Carbohidratos: 2.6 g // • Grasas: 1.8 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -101,7 +100,6 @@ export const productData: Category[] = [
       description: "Ideal para recuperación.",
       featuredId: 4,
       price: "$36.500",
-      offerPrice: "$31.000",
       longDescription: "Proteína de suero lácteo concentrada y aislada de alta calidad, diseñada para favorecer el desarrollo muscular, acelerar la recuperación y aportar un perfil completo de aminoácidos. Ideal para sumar proteína de forma rápida y eficiente a tu dieta diaria. // // **Cantidad:** 930 g // **Porción:** 31 g // **Servicios:** 30 // // **Información nutricional por porción (31 g):** // • Proteína: 25 g // • Carbohidratos: 1.9 g // • Grasas: 2.3 g // // **Modo de uso:** Mezclar 1 medida (31 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -223,7 +221,6 @@ export const productData: Category[] = [
       description: "Nutrición diaria accesible.",
       price: "$23.000",
       featuredId: 8,
-      offerPrice: "$19.500",
       longDescription: "Proteína concentrada de suero lácteo, ideal para favorecer el desarrollo muscular y mejorar la recuperación. Excelente opción para quienes buscan sumar proteínas completas a su dieta diaria de manera práctica y efectiva. // // **Cantidad:** 1 kg // **Porción:** 40 g // **Servicios:** 30 // // **Información nutricional por porción (40 g):** // • Proteína: 24 g // • Carbohidratos: 4.5 g // • Grasas: 3.8 g // // **Modo de uso:** Mezclar 1 medida (40 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -358,7 +355,6 @@ export const productData: Category[] = [
         description: "300GR en empaque doypack.",
         price: "$28.000",
         featuredId: 2,
-        offerPrice: "$23.800",
         longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
       {
@@ -404,7 +400,6 @@ export const productData: Category[] = [
         description: "300GR de creatina de alta pureza.",
         price: "$28.000",
         featuredId: 1,
-        offerPrice: "$23.800",
         longDescription: "**Cantidad:** 300g // **Sabor:** Sin sabor // **Porciones:** 60 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
       },
     ],
@@ -521,7 +516,6 @@ export const productData: Category[] = [
         description: "285GR de foco y resistencia.",
         price: "$27.000",
         featuredId: 6,
-        offerPrice: "$23.000",
         longDescription: "**Cantidad:** 285g // **Porción:** 9.5g // **Servicios:** 30 // **Cafeína:** 200mg por porción // // **Modo de uso:** Disolver 1 medida en 500cm³ de agua fría. Consumir 15 a 30 minutos antes del entrenamiento o la competencia. No consumir más de 2 porciones diarias. // // **Beneficios:** // 1. Aumento de energía y resistencia para entrenamientos más intensos. // 2. Mejora de la concentración y enfoque durante el ejercicio. // 3. Aumento del rendimiento físico, ayudando a maximizar la fuerza y la potencia muscular. // 4. Mejora de la circulación y el flujo sanguíneo para un mejor rendimiento durante la actividad física.",
       },
       {
@@ -704,7 +698,6 @@ export const productData: Category[] = [
         description: "407GR para articulaciones y piel.",
         price: "$30.000",
         featuredId: 3,
-        offerPrice: "$25.500",
         longDescription: "**Cantidad:** 407 g // **Porción:** 13,54 g (1 scoop colmado) // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (1 scoop colmado) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, magnesio, cúrcuma y ácido hialurónico. // // **Beneficios principales:** // • Fortalece articulaciones, tendones y ligamentos. // • Mejora la salud de la piel, uñas y cabello. // • Favorece la recuperación muscular y previene lesiones. // • Aporta colágeno hidrolizado de fácil absorción. // • Ideal para quienes entrenan con regularidad o tienen desgaste físico."
       },
       {
@@ -852,7 +845,6 @@ export const productData: Category[] = [
         description: "1520GR de bebida isotónica.",
         price: "$22.000",
         featuredId: 7,
-        offerPrice: "$19.000",
         longDescription: "**Cantidad:** 1520g // **Porción:** 33g (4 scoops) // **Servicios por envase:** 46 // // **Modo de uso:** Disolver 1 porción (33g) en 500 ml de agua. Consumir antes, durante o después del entrenamiento para mantener una hidratación óptima y reponer electrolitos. También puede tomarse en cualquier momento del día para mejorar el rendimiento físico en condiciones de alta exigencia o calor. // // **Ingredientes:** Carbohidratos, sodio, potasio, vitamina E, vitamina C. // // **Beneficios principales:** // • Reponen electrolitos perdidos durante el ejercicio. // • Mejoran la hidratación y el rendimiento físico. // • Aportan energía rápida gracias a sus carbohidratos simples. // • Reducen el cansancio y previenen calambres. // • Ideal para entrenamientos intensos o días de calor.",
       },
       {
