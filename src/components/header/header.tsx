@@ -145,7 +145,7 @@ const Header: React.FC = () => {
         .join("\n");
 
     const message =
-        "Hola LMFITNESS\u{1F947}. Quisiera realizar la compra\u{1F64C}\u{1F3FB}\n\n" + // 🥇🙌🏻
+        "Hola LMFITNESS. Quisiera realizar la compra\n\n" +
         "*Productos elegidos:*\n" + productList + "\n\n" +
         `*Nombre completo:* ${fullName}\n` +
         `*Localidad:* ${location === "Partido de La Costa" ? locality : otherCity}\n` +
