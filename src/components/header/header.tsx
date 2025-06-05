@@ -96,7 +96,8 @@ const Header: React.FC = () => {
     const navigate = useNavigate();
 
     const total = cart.reduce((acc: number, item) => {
-        const price = parseFloat(item.product.price.toString().replace(/[^0-9.-]+/g, ""));
+        const rawPrice = item.product.offerPrice || item.product.price;
+        const price = parseFloat(rawPrice.replace(/[^0-9.-]+/g, ""));
         const quantity = Number(item.quantity);
         return acc + quantity * price * 1000;
     }, 0);
@@ -248,7 +249,7 @@ const Header: React.FC = () => {
                     </button>
 
                     {/* Logo */}
-                    <Link to="//" onClick={scrollToTop} className="flex items-center justify-center z-50 mx-5 w-[70px] xl:ml-15">
+                    <Link to="/" onClick={scrollToTop} className="flex items-center justify-center z-50 mx-5 w-[70px] xl:ml-15">
                         <img src="assets/logo.jpeg" alt="Logo" className="h-13 img-shadow" />
                     </Link>
 
@@ -616,7 +617,7 @@ const Header: React.FC = () => {
                                     <div className='w-[300px]'>
                                     <h3 className="text-sm font-semibold">{item.product.title}</h3>
                                     <p className="text-sm">
-                                        {item.quantity} x ${item.product.price}
+                                        {item.quantity} x ${item.product.offerPrice || item.product.price}
                                     </p>
                                     </div>
                                     <button onClick={() => removeFromCart(item.product.id)} className="text-red-500 cursor-pointer">
