@@ -56,7 +56,7 @@ export const productData: Category[] = [
         id: 72,
         images: ["assets/images/COMBOS/combo-4.webp"],
         title: "COMBO ONEFIT",
-        description: "Combo 1kg de PROTEÍNA + 250gr de CREATINA - ONEFIT",
+        description: "Combo 1kg de PROTEÍNA + 200gr de CREATINA - ONEFIT",
         price: "$43.000",
         offerPrice: "$35.000",
       },
