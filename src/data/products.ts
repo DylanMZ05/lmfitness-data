@@ -110,7 +110,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – ENA 100% WHEY",
       description: "Rendimiento y pureza.",
-      price: "$35.000",
+      price: "$35.600",
       longDescription: "Proteína concentrada de suero lácteo, ideal para acompañar entrenamientos, mejorar la recuperación y sumar proteína de forma práctica y efectiva en el día a día. // // **Cantidad:** 900 g // **Porción:** 36 g // **Servicios:** 25 // // **Información nutricional por porción (36 g):** // • Proteína: 20 g // • Carbohidratos: 12 g // • Grasas: 1.9 g // // **Modo de uso:** Mezclar 1 medida (36 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -258,7 +258,7 @@ export const productData: Category[] = [
         ],
         title: "GANADORES DE PESO - ULTRA MASS ENA SPORT 1.5KG",
         description: "Gana masa muscular rápidamente.",
-        price: "$33.000",
+        price: "$33.700",
         longDescription: "**Información nutricional (por 100 g – aprox. 3 scoops):** // • Valor energético: 402 kcal // • Proteínas: 25 g // • Carbohidratos: 70 g // // **Ingredientes principales:** // • Proteína concentrada de suero (Whey Protein Concentrate) // • Proteína de caseína // • Maltodextrina (fuente de carbohidratos) // • Azúcares simples // • Vitaminas y minerales (según fórmula específica) // // **Modo de uso:** // Mezclar 1 a 2 porciones (aprox. 100 a 150 g) en 300 a 400 ml de agua, leche o bebida vegetal. // Tomar 1 o 2 veces al día, preferentemente: // – Después del entrenamiento // – Entre comidas para aumentar la ingesta calórica // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
       {
@@ -472,9 +472,9 @@ export const productData: Category[] = [
         ],
         title: "BCAA - RELOAD ENA SPORT",
         description: "220GR de BCAA en polvo.",
-        price: "$22.000",
+        price: "$22.200",
         exclusiveId: 3,
-        offerPrice: "$19.200",
+        offerPrice: "$19.400",
         longDescription: "**Cantidad:** 200 g // **Porción:** 11 g (2 scoops) // **Servicios:** 20 // **Ratio:** 2:1:1 // // **Ingredientes:** L-Leucina, L-Isoleucina, L-Valina, Magnesio, Potasio, Sodio, Cloruro, Carbohidratos // // **Modo de uso:** Tomar 2 porciones diarias disueltas en agua, distribuidas en alguna de las siguientes formas: // – 1 porción antes y 1 porción durante el entrenamiento // – 1 porción durante y 1 porción después del entrenamiento // – 1 porción durante y 1 porción después del entrenamiento // // **Beneficios:** // • Estimulan la síntesis de proteínas musculares. // • Aceleran la recuperación post-entreno. // • Ayudan a reducir el catabolismo muscular. // • Mejoran el rendimiento y la resistencia. // • Disminuyen la fatiga durante el ejercicio. // // **Información adicional:** // El ratio 2:1:1 indica la proporción de leucina frente a isoleucina y valina. Esto significa que por cada 2 porciones de leucina, hay 1 de isoleucina y 1 de valina. La leucina es clave porque activa la síntesis proteica muscular, siendo el aminoácido más importante para el crecimiento y recuperación muscular."
       },
     ],
@@ -696,7 +696,7 @@ export const productData: Category[] = [
         ],
         title: "COLÁGENO - ENA SPORT",
         description: "407GR para articulaciones y piel.",
-        price: "$30.000",
+        price: "$31.000",
         featuredId: 3,
         longDescription: "**Cantidad:** 407 g // **Porción:** 13,54 g (1 scoop colmado) // **Servicios por envase:** 30 // // **Modo de uso:** Tomar 1 porción (1 scoop colmado) en un vaso de agua al día, preferentemente por la mañana. // // **Ingredientes:** Colágeno hidrolizado tipo 2, vitamina C, magnesio, cúrcuma y ácido hialurónico. // // **Beneficios principales:** // • Fortalece articulaciones, tendones y ligamentos. // • Mejora la salud de la piel, uñas y cabello. // • Favorece la recuperación muscular y previene lesiones. // • Aporta colágeno hidrolizado de fácil absorción. // • Ideal para quienes entrenan con regularidad o tienen desgaste físico."
       },
