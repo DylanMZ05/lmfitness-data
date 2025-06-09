@@ -145,7 +145,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – WHEY ADVANCED XTRENGHT",
       description: "Para entrenamientos intensos.",
-      price: "$41.500",
+      price: "$42.700",
       longDescription: "Blend de proteína ultra concentrada e aislada con proceso de hidrolizado para mejorar su absorción. Diseñada para maximizar el crecimiento y la recuperación muscular. Con un perfil balanceado de aminoácidos, es ideal para quienes buscan potenciar su rendimiento y resultados en el entrenamiento. // // **Cantidad:** 907 g // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 24 g // • Carbohidratos: 2.0 g // • Grasas: 1.7 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -189,7 +189,7 @@ export const productData: Category[] = [
       ],
       title: "PROTEINA – CON CREATINA BEST WHEY XTRENGHT",
       description: "Fuerza y recuperación.",
-      price: "$34.500",
+      price: "$35.500",
       longDescription: "Proteína en polvo con una fórmula balanceada que suma creatina y taurina para potenciar el crecimiento muscular y acelerar la recuperación. Ideal para deportistas que buscan un suplemento eficiente con rápida absorción y alto valor biológico. // // **Cantidad:** 907 g // **Porción:** 35 g // **Servicios:** 26 // // **Información nutricional por porción (35 g):** // • Proteína: 24 g // • Carbohidratos: 4.8 g // • Grasas: 1.9 g // // **Modo de uso:** Mezclar 1 medida (35 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
     },
     {
@@ -280,7 +280,7 @@ export const productData: Category[] = [
         ],
         title: "GANADORES DE PESO - NITROGAIN XTRENGHT 1.5KG",
         description: "Aumenta peso y fuerza.",
-        price: "$27.500",
+        price: "$28.000",
         longDescription: "**Información nutricional por 100 g:** // • Valor energético: 394 kcal // • Proteínas: 22 g // • Carbohidratos: 72 g // // **Ingredientes principales:** // • Proteínas: concentrado de suero de leche (whey), caseína // • Carbohidratos: maltodextrina, dextrosa // • Aminoácidos añadidos: creatina, glutamina, BCAA // • Vitaminas y minerales: complejo multivitamínico // // **Modo de uso:** // Mezclar 100 g (aproximadamente 2 medidas) en 500-600 ml de agua o leche. // Consumir 1 a 2 veces por día, preferentemente después del entrenamiento y/o entre comidas. // Ajustar según los requerimientos calóricos individuales. // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
       },
       {
