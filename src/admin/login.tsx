@@ -1,6 +1,8 @@
+// src/pages/Login.tsx
+import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { useState } from "react";
+import { FirebaseError } from "firebase/app";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,8 +14,16 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       window.location.href = "/admin/dashboard";
-    } catch (err: any) {
-      setError("Credenciales incorrectas");
+    } catch (err) {
+      if (err instanceof FirebaseError) {
+        if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+          setError("Credenciales incorrectas");
+        } else {
+          setError("Error: " + err.message);
+        }
+      } else {
+        setError("Error desconocido");
+      }
     }
   };
 
@@ -36,7 +46,10 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 w-full rounded">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 w-full rounded hover:bg-blue-700"
+        >
           Ingresar
         </button>
       </form>

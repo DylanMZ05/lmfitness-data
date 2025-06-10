@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+// src/App.tsx
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Header from "./components/header/header";
 import Footer from "./components/footer";
 import Catalogo from "./pages/products/Catalogo";
@@ -7,24 +13,26 @@ import { CartProvider } from "./context/CartContext";
 import WspButton from "./components/WspButton";
 import HomeWrapper from "./components/HomeWrapper";
 import Login from "./admin/login";
+import Dashboard from "./admin/dashboard";
 
 function AppContent() {
   const location = useLocation();
-  const isLoginRoute = location.pathname === "/admin/login";
+  const isAdminRoute = ["/admin/login", "/admin/dashboard"].includes(location.pathname);
 
   return (
     <>
-      {!isLoginRoute && <Header />}
+      {!isAdminRoute && <Header />}
 
       <Routes>
         <Route path="/" element={<HomeWrapper />} />
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/producto/:id" element={<ProductoDetalle />} />
         <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
       </Routes>
 
-      {!isLoginRoute && <WspButton />}
-      {!isLoginRoute && <Footer />}
+      {!isAdminRoute && <WspButton />}
+      {!isAdminRoute && <Footer />}
     </>
   );
 }
