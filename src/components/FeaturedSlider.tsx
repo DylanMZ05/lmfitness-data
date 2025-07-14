@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import useScrollToTop from "../hooks/useScrollToTop";
 
 interface Props {
-  title: string;
+  title?: string;
   categories: Category[];
   bgColor?: string;
   mode?: "featured" | "exclusive";
