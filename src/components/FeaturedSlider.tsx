@@ -72,7 +72,7 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
   };
 
   return (
-    <section className={`w-full flex flex-col items-center py-10 px-4 ${bgColor}`}>
+    <section className={`w-full flex flex-col items-center pb-10 px-4 ${bgColor}`}>
       <h2 className="text-4xl font-bold text-center">{title}</h2>
       <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full"></div>
 

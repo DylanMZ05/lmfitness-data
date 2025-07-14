@@ -5,8 +5,30 @@ import ShippingMarquee from "../../components/ShippingMarquee";
 import FullSlider from "../../components/FullSlider";
 
 const slides = [
+  // {
+  //   id: 1,
+  //   bgMobile: "assets/images/SLIDER/CATALOGO/05.webp",
+  //   bgDesktop: "assets/images/SLIDER/CATALOGO/05-desktop-1.webp",
+  //   button: {
+  //     text: "VER COMBO",
+  //     link: "/producto/73",
+  //     positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
+  //     positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
+  //   },
+  // },
   {
     id: 1,
+    bgMobile: "assets/images/SLIDER/CATALOGO/06.webp",
+    bgDesktop: "assets/images/SLIDER/CATALOGO/06-desktop-1.webp",
+    button: {
+      text: "VER OFERTAS",
+      link: "/catalogo#super-precios-gentech",
+      positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
+      positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
+    },
+  },
+  {
+    id: 2,
     bgMobile: "assets/images/SLIDER/CATALOGO/01.webp",
     bgDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
     button: {
@@ -17,7 +39,7 @@ const slides = [
     },
   },
   {
-    id: 2,
+    id: 3,
     bgMobile: "assets/images/SLIDER/CATALOGO/02.webp",
     bgDesktop: "assets/images/SLIDER/CATALOGO/02-desktop-1.webp",
     button: {
@@ -39,7 +61,7 @@ const slides = [
   //   },
   // },
   {
-    id: 3,
+    id: 4,
     bgMobile: "assets/images/SLIDER/CATALOGO/04.webp",
     bgDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
     button: {
@@ -50,6 +72,7 @@ const slides = [
     },
   },
 ];
+
 
 const Catalogo: React.FC = () => {
   return (

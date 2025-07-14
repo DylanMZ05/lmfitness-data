@@ -12,8 +12,8 @@ import ProductoDetalle from "./pages/products/ProductoDetalle";
 import { CartProvider } from "./context/CartContext";
 import WspButton from "./components/WspButton";
 import HomeWrapper from "./components/HomeWrapper";
-import Login from "./admin/login";
-import Dashboard from "./admin/dashboard";
+import Login from "./admin/admin";
+// import Upload from "./admin/Upload";
 
 function AppContent() {
   const location = useLocation();
@@ -27,8 +27,8 @@ function AppContent() {
         <Route path="/" element={<HomeWrapper />} />
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/producto/:id" element={<ProductoDetalle />} />
-        <Route path="/admin/login" element={<Login />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/dashboard" element={<Login />} />
+        {/* <Route path="/admin/upload" element={<Upload />} /> */}
       </Routes>
 
       {!isAdminRoute && <WspButton />}

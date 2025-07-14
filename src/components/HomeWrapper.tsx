@@ -9,6 +9,16 @@ import FeaturedSlider from "../components/FeaturedSlider";
 import { productData } from "../data/products";
 
 const offerSlides = [
+  // {
+  //   imageDesktop: "assets/images/SLIDER/CATALOGO/05-desktop-1.webp",
+  //   imageMobile: "assets/images/SLIDER/CATALOGO/05-mobile.webp",
+  //   link: "/producto/73",
+  // },
+  {
+    imageDesktop: "assets/images/SLIDER/CATALOGO/06-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/06-mobile.webp",
+    link: "/catalogo#super-precios-gentech",
+  },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/01-mobile.webp",
@@ -58,13 +68,13 @@ const HomeWrapper = () => {
         </h2>
         <ParallaxSlider slides={offerSlides} width="w-full" />
       </section>
-      <hr className="text-black/20"/>
+      <hr className="text-black/20 mb-10"/>
       <FeaturedSlider
         title="PRODUCTOS DESTACADOS"
         categories={productData}
         bgColor="bg-white"
       />
-      <hr className="text-black/20"/>
+      <hr className="text-black/20 mb-10"/>
       <FeaturedSlider
         title="PRODUCTOS EXCLUSIVOS"
         categories={productData}

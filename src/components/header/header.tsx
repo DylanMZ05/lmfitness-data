@@ -97,9 +97,9 @@ const Header: React.FC = () => {
 
     const total = cart.reduce((acc: number, item) => {
         const rawPrice = item.product.offerPrice || item.product.price;
-        const price = parseFloat(rawPrice.replace(/[^0-9.-]+/g, ""));
+        const price = parseFloat(String(rawPrice).replace(/[^0-9.-]+/g, ""));
         const quantity = Number(item.quantity);
-        return acc + quantity * price * 1000;
+        return acc + quantity * price;
     }, 0);
 
     const handleClick = (id: string) => {
@@ -620,7 +620,7 @@ const Header: React.FC = () => {
                                         {item.quantity} x ${item.product.offerPrice || item.product.price}
                                     </p>
                                     </div>
-                                    <button onClick={() => removeFromCart(item.product.id)} className="text-red-500 cursor-pointer">
+                                    <button onClick={() => removeFromCart(Number(item.product.id))} className="text-red-500 cursor-pointer">
                                     ❌
                                     </button>
                                 </div>

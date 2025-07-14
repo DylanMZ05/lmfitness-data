@@ -3,31 +3,75 @@ import { useParams } from "react-router-dom";
 import { useCart } from "../../context/useCart";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
-import { productData, Product, Category, parseFormattedText } from "../../data/products";
-
+import { parseFormattedText } from "../../data/products";
 import FeaturedSlider from "../../components/FeaturedSlider";
+import { db } from "../../firebase";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { productData } from "../../data/products";
 
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  offerPrice?: number;
+  images: string[];
+  description?: string;
+  longDescription?: string;
+}
 
 const ProductoDetalle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const productId = Number(id);
   const { addToCart } = useCart();
 
   const [quantity, setQuantity] = useState<number>(1);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [zoomOpen, setZoomOpen] = useState<boolean>(false);
   const [showPopup, setShowPopup] = useState<boolean>(false);
-
-  const foundProduct: Product | undefined = productData
-    .flatMap((category: Category) => category.products)
-    .find((p: Product) => p.id === productId);
+  const [foundProduct, setFoundProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log("Producto encontrado:", foundProduct);
-    if (foundProduct) {
-      console.log("Array de imágenes:", foundProduct.images);
-    }
-  }, [foundProduct]);
+    const fetchProduct = async () => {
+      try {
+        const categoriasSnap = await getDocs(collection(db, "productos"));
+        for (const catDoc of categoriasSnap.docs) {
+          const itemRef = doc(db, "productos", catDoc.id, "items", id || "");
+          const itemSnap = await getDoc(itemRef);
+          if (itemSnap.exists()) {
+            const data = itemSnap.data();
+            setFoundProduct({
+              id: itemSnap.id,
+              title: data.title,
+              price: Number(data.price),
+              offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
+              images: Array.isArray(data.images)
+                ? data.images.map((img: string) =>
+                    img.startsWith("/") ? img : `/${img}`
+                  )
+                : [],
+              description: data.description,
+              longDescription: data.longDescription,
+            });
+            break;
+          }
+        }
+      } catch (err) {
+        console.error("Error al cargar producto:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="p-4 h-[calc(100vh-216px)] flex justify-center items-center">
+        <div className="w-12 h-12 border-4 border-gray-300 border-t-orange-500 rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!foundProduct) {
     return (
@@ -60,11 +104,11 @@ const ProductoDetalle: React.FC = () => {
       images: [images[currentSlide], ...foundProduct.images.filter(img => img !== images[currentSlide])]
     };
     addToCart(productToAdd, quantity);
-
-    // Mostrar el popup
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 2500);
   };
+
+  const finalDescription = foundProduct.longDescription || foundProduct.description || "";
 
   return (
     <>
@@ -74,11 +118,10 @@ const ProductoDetalle: React.FC = () => {
         </header>
 
         <div className="flex flex-col md:flex-row gap-4 w-full mb-10">
-          {/* Imagen con flechas */}
           <div className="relative w-full md:w-1/2 flex items-center justify-center">
             <motion.img
               key={currentSlide}
-              src={`../${images[currentSlide]}`}
+              src={images[currentSlide]}
               alt={foundProduct.title}
               className="object-contain w-full h-64 cursor-pointer"
               initial={{ opacity: 0, x: 50 }}
@@ -98,25 +141,29 @@ const ProductoDetalle: React.FC = () => {
             </button>
           </div>
 
-          {/* Info producto */}
           <div className="w-full md:w-1/2 px-5">
             <h1 className="text-2xl font-bold mb-2">{foundProduct.title}</h1>
             <div
               className="text-gray-600 mb-2 text-sm"
               dangerouslySetInnerHTML={{
-                __html: parseFormattedText(foundProduct.longDescription || foundProduct.description),
+                __html: parseFormattedText(finalDescription),
               }}
             />
             {foundProduct.offerPrice ? (
               <div className="mb-4">
-                <p className="text-sm text-gray-500 line-through">{foundProduct.price}</p>
-                <p className="text-xl font-semibold text-red-600">{foundProduct.offerPrice}</p>
+                <p className="text-sm text-gray-500 line-through">
+                  $ {foundProduct.price.toLocaleString("es-AR")}
+                </p>
+                <p className="text-xl font-semibold text-red-600">
+                  $ {foundProduct.offerPrice.toLocaleString("es-AR")}
+                </p>
               </div>
             ) : (
-              <p className="text-xl font-semibold mb-4">{foundProduct.price}</p>
+              <p className="text-xl font-semibold mb-4">
+                $ {foundProduct.price.toLocaleString("es-AR")}
+              </p>
             )}
 
-            {/* Cantidad */}
             <div className="flex items-center mb-4">
               <button className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer" onClick={() => adjustQuantity(-1)}>-</button>
               <span className="px-4 border-y-2 border-gray-200 h-10 flex justify-center items-center">{quantity}</span>
@@ -132,7 +179,6 @@ const ProductoDetalle: React.FC = () => {
           </div>
         </div>
 
-        {/* Zoom modal */}
         {zoomOpen && (
           <div className="fixed inset-0 bg-black/70 bg-opacity-70 flex items-center justify-center z-[2000]" onClick={closeZoom}>
             <div className="relative">
@@ -140,7 +186,7 @@ const ProductoDetalle: React.FC = () => {
                 <FaTimes />
               </button>
               <img
-                src={`../${images[currentSlide]}`}
+                src={images[currentSlide]}
                 alt={foundProduct.title}
                 className="max-w-full max-h-screen object-contain"
                 onClick={(e) => e.stopPropagation()}
@@ -149,12 +195,19 @@ const ProductoDetalle: React.FC = () => {
           </div>
         )}
 
-        <div className="w-screen bg-neutral-200">
-          <FeaturedSlider title="PRODUCTOS DESTACADOS" categories={productData}/>
-        </div>
+          <FeaturedSlider
+            title="PRODUCTOS DESTACADOS"
+            categories={productData}
+            bgColor="bg-white"
+          />
+          <FeaturedSlider
+            title="PRODUCTOS EXCLUSIVOS"
+            categories={productData}
+            mode="exclusive"
+            bgColor="bg-white"
+            />
       </div>
 
-      {/* ✅ Popup de producto añadido */}
       <AnimatePresence>
         {showPopup && (
           <motion.div
