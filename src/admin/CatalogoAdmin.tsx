@@ -264,154 +264,156 @@ const CatalogoAdmin = () => {
         </div>
       ))}
 
-{selectedProduct && (
-  <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full relative">
-      <button
-        onClick={() => {
-          setSelectedProduct(null);
-          setCategoriasSeleccionadas([]);
-        }}
-        className="absolute top-2 right-2 text-gray-500 hover:text-black"
-      >
-        <FaTimes />
-      </button>
+    {selectedProduct && (
+      <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 relative border border-gray-300 overflow-y-auto max-h-[90vh]">
+          <div className="p-6">
+            <button
+              onClick={() => {
+                setSelectedProduct(null);
+                setCategoriasSeleccionadas([]);
+              }}
+              className="absolute top-2 right-2 text-gray-500 hover:text-black"
+            >
+              <FaTimes />
+            </button>
 
-      <h2 className="text-xl font-bold mb-4">Detalle del Producto</h2>
+            <h2 className="text-xl font-bold mb-4">Detalle del Producto</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <img
-            src={selectedProduct.images?.[0] || "/placeholder.jpg"}
-            alt={selectedProduct.title}
-            className="w-full object-contain border p-2"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Título</label>
-          <input
-            type="text"
-            value={selectedProduct.title}
-            onChange={(e) =>
-              setSelectedProduct((prev) =>
-                prev ? { ...prev, title: e.target.value } : prev
-              )
-            }
-            className="border rounded p-2"
-          />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <img
+                  src={selectedProduct.images?.[0] || "/placeholder.jpg"}
+                  alt={selectedProduct.title}
+                  className="w-full object-contain border p-2"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium">Título</label>
+                <input
+                  type="text"
+                  value={selectedProduct.title}
+                  onChange={(e) =>
+                    setSelectedProduct((prev) =>
+                      prev ? { ...prev, title: e.target.value } : prev
+                    )
+                  }
+                  className="border rounded p-2"
+                />
 
-          <label className="text-sm font-medium">Descripción</label>
-          <textarea
-            value={selectedProduct.description || ""}
-            onChange={(e) =>
-              setSelectedProduct((prev) =>
-                prev ? { ...prev, description: e.target.value } : prev
-              )
-            }
-            className="border rounded p-2"
-          />
+                <label className="text-sm font-medium">Descripción</label>
+                <textarea
+                  value={selectedProduct.description || ""}
+                  onChange={(e) =>
+                    setSelectedProduct((prev) =>
+                      prev ? { ...prev, description: e.target.value } : prev
+                    )
+                  }
+                  className="border rounded p-2"
+                />
 
-          <label className="text-sm font-medium">Descripción Larga</label>
-          <textarea
-            value={selectedProduct.longDescription || ""}
-            onChange={(e) =>
-              setSelectedProduct((prev) =>
-                prev ? { ...prev, longDescription: e.target.value } : prev
-              )
-            }
-            className="border rounded p-2"
-          />
+                <label className="text-sm font-medium">Descripción Larga</label>
+                <textarea
+                  value={selectedProduct.longDescription || ""}
+                  onChange={(e) =>
+                    setSelectedProduct((prev) =>
+                      prev ? { ...prev, longDescription: e.target.value } : prev
+                    )
+                  }
+                  className="border rounded p-2"
+                />
 
-          <label className="text-sm font-medium">Precio</label>
-          <input
-            type="number"
-            value={selectedProduct.price}
-            onChange={(e) =>
-              setSelectedProduct((prev) =>
-                prev ? { ...prev, price: Number(e.target.value) } : prev
-              )
-            }
-            className="border rounded p-2"
-          />
+                <label className="text-sm font-medium">Precio</label>
+                <input
+                  type="number"
+                  value={selectedProduct.price}
+                  onChange={(e) =>
+                    setSelectedProduct((prev) =>
+                      prev ? { ...prev, price: Number(e.target.value) } : prev
+                    )
+                  }
+                  className="border rounded p-2"
+                />
 
-          <label className="text-sm font-medium mt-2">CATEGORÍAS:</label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1 max-h-32 overflow-y-auto">
-            {data.map((cat) => {
-              const isChecked = categoriasSeleccionadas.includes(cat.slug);
-              return (
-                <label key={cat.slug} className="text-sm flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={isChecked}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setCategoriasSeleccionadas((prev) => [...prev, cat.slug]);
-                      } else {
-                        const nuevas = categoriasSeleccionadas.filter((slug) => slug !== cat.slug);
-                        if (nuevas.length === 0) {
-                          alert("❌ El producto debe pertenecer al menos a una categoría.");
-                          return;
-                        }
-                        setCategoriasSeleccionadas(nuevas);
+                <label className="text-sm font-medium mt-2">CATEGORÍAS:</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-1 max-h-32 overflow-y-auto border p-2 rounded">
+                  {data.map((cat) => {
+                    const isChecked = categoriasSeleccionadas.includes(cat.slug);
+                    return (
+                      <label key={cat.slug} className="text-sm flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setCategoriasSeleccionadas((prev) => [...prev, cat.slug]);
+                            } else {
+                              const nuevas = categoriasSeleccionadas.filter((slug) => slug !== cat.slug);
+                              if (nuevas.length === 0) {
+                                alert("❌ El producto debe pertenecer al menos a una categoría.");
+                                return;
+                              }
+                              setCategoriasSeleccionadas(nuevas);
+                            }
+                          }}
+                        />
+                        {cat.name}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <button
+              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full"
+              onClick={async () => {
+                try {
+                  if (categoriasSeleccionadas.length === 0) {
+                    alert("❌ El producto debe pertenecer al menos a una categoría.");
+                    return;
+                  }
+
+                  const allSlugs = data.map((cat) => cat.slug);
+
+                  for (const slug of allSlugs) {
+                    const ref = doc(db, "productos", slug, "items", selectedProduct.id.toString());
+
+                    if (categoriasSeleccionadas.includes(slug)) {
+                      await setDoc(ref, {
+                        ...selectedProduct,
+                        id: selectedProduct.id.toString(),
+                        offerPrice: selectedProduct.offerPrice ?? null,
+                        featuredId: selectedProduct.featuredId ?? null,
+                        exclusiveId: selectedProduct.exclusiveId ?? null,
+                        images: selectedProduct.images || [],
+                      });
+                    } else {
+                      const cat = data.find((c) => c.slug === slug);
+                      if (cat && cat.products.some((p) => p.id === selectedProduct.id)) {
+                        await deleteDoc(ref);
                       }
-                    }}
-                  />
-                  {cat.name}
-                </label>
-              );
-            })}
+                    }
+                  }
+
+                  alert("✅ Cambios guardados");
+                  setSelectedProduct(null);
+                  setCategoriasSeleccionadas([]);
+                  fetchData();
+                } catch (err) {
+                  console.error("🔥 ERROR al guardar producto:", err);
+                  alert("❌ Hubo un error al guardar.");
+                }
+              }}
+            >
+              Guardar cambios
+            </button>
           </div>
         </div>
       </div>
+    )}
 
-      <button
-        className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-        onClick={async () => {
-          try {
-            if (categoriasSeleccionadas.length === 0) {
-              alert("❌ El producto debe pertenecer al menos a una categoría.");
-              return;
-            }
 
-            const allSlugs = data.map((cat) => cat.slug);
-
-            for (const slug of allSlugs) {
-              const ref = doc(db, "productos", slug, "items", selectedProduct.id.toString());
-
-              if (categoriasSeleccionadas.includes(slug)) {
-                // Crear o actualizar
-                await setDoc(ref, {
-                  ...selectedProduct,
-                  id: selectedProduct.id.toString(),
-                  offerPrice: selectedProduct.offerPrice ?? null,
-                  featuredId: selectedProduct.featuredId ?? null,
-                  exclusiveId: selectedProduct.exclusiveId ?? null,
-                  images: selectedProduct.images || [],
-                });
-              } else {
-                // Eliminar si estaba antes
-                const cat = data.find((c) => c.slug === slug);
-                if (cat && cat.products.some((p) => p.id === selectedProduct.id)) {
-                  await deleteDoc(ref);
-                }
-              }
-            }
-
-            alert("✅ Cambios guardados");
-            setSelectedProduct(null);
-            setCategoriasSeleccionadas([]);
-            fetchData();
-          } catch (err) {
-            console.error("🔥 ERROR al guardar producto:", err);
-            alert("❌ Hubo un error al guardar.");
-          }
-        }}
-      >
-        Guardar cambios
-      </button>
-    </div>
-  </div>
-)}
 
 
     </div>
