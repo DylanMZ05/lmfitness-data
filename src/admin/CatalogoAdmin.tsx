@@ -32,6 +32,7 @@ const CatalogoAdmin = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<string[]>([]);
   
+  
 
   const fetchData = async () => {
     const categoriasSnap = await getDocs(collection(db, "productos"));

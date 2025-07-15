@@ -15,7 +15,12 @@ const CARD_WIDTH = 250;
 const GAP = 16;
 const SIDE_PADDING = GAP / 2;
 
-const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neutral-200", mode = "featured" }) => {
+const FeaturedSlider: React.FC<Props> = ({
+  title,
+  categories,
+  bgColor = "bg-white",
+  mode = "featured",
+}) => {
   const scrollToTop = useScrollToTop();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -26,8 +31,8 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
   const filteredProducts = categories
     .flatMap((cat) => cat.products)
     .filter((p) => {
-      if (mode === "exclusive") return p.exclusiveId !== undefined;
-      return p.featuredId !== undefined;
+      if (mode === "exclusive") return typeof p.exclusiveId === "number";
+      return typeof p.featuredId === "number";
     })
     .sort((a, b) => {
       const idA = mode === "exclusive" ? a.exclusiveId ?? 0 : a.featuredId ?? 0;
@@ -74,7 +79,6 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
   return (
     <section className={`w-full flex flex-col items-center pb-10 px-4 ${bgColor}`}>
       <h2 className="text-4xl font-bold text-center">{title}</h2>
-      <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full"></div>
 
       <div className="w-full flex justify-center">
         <div
@@ -117,11 +121,11 @@ const FeaturedSlider: React.FC<Props> = ({ title, categories, bgColor = "bg-neut
                     <p className="text-xs text-gray-600">{product.description}</p>
                     {product.offerPrice ? (
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500 line-through">{product.price}</p>
-                        <p className="text-lg font-bold text-red-600">{product.offerPrice}</p>
+                        <p className="text-sm text-gray-500 line-through">$ {product.price}</p>
+                        <p className="text-lg font-bold text-red-600">$ {product.offerPrice}</p>
                       </div>
                     ) : (
-                      <p className="text-lg font-bold mt-2">{product.price}</p>
+                      <p className="text-lg font-bold mt-2">$ {product.price}</p>
                     )}
                   </div>
                   <Link

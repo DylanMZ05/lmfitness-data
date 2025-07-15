@@ -1,6 +1,7 @@
 // src/admin/dashboard.tsx
 import React, { useEffect, useState } from "react";
 import CatalogoAdmin from "./CatalogoAdmin";
+import AdminOrdenPopup from "./AdminOrdenPopup";
 import {
   signOut,
   signInWithEmailAndPassword,
@@ -15,6 +16,7 @@ const Dashboard: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -89,16 +91,25 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="pt-8 bg-white pb-8 min-h-screen">
-      <div className="flex justify-between items-center px-6 mb-6">
-        <h2 className="text-4xl font-bold text-black">NUESTRO CATÁLOGO</h2>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-        >
-          Cerrar Sesión
-        </button>
+      <div className="flex justify-between items-center px-6 mb-6 flex-wrap gap-4">
+        <h2 className="text-4xl font-bold text-black">ADMIN PANEL</h2>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowPopup(true)}
+            className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded cursor-pointer"
+          >
+            Administrar Exclusivos/Destacados
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
       </div>
       <CatalogoAdmin />
+      {showPopup && <AdminOrdenPopup onClose={() => setShowPopup(false)} />}
     </div>
   );
 };

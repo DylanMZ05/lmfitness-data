@@ -80,7 +80,7 @@ export const productData: Category[] = [
     name: "SÚPER PRECIOS GENTECH",
     slug: "super-precios-gentech",
     image: "assets/images/GANADORES-DE-PESO/1201-4f03bb0a06a31abf3716580805730431-480-0.webp",
-    orden: 2,
+    orden: 10,
     products: [
       {
         id: 13,
@@ -136,7 +136,7 @@ export const productData: Category[] = [
   name: "PROTEÍNA",
   slug: "proteinas",
   image: "assets/images/PROTEINAS/PWI-2lb-Chocolate.webp",
-  orden: 3,
+  orden: 20,
   products: [
     {
       id: 1,
@@ -321,7 +321,7 @@ export const productData: Category[] = [
     name: "GANADORES DE PESO",
     slug: "ganadores-de-peso",
     image: "assets/images/GANADORES-DE-PESO/nitrogain-15-kg__1.webp",
-    orden: 4,
+    orden: 30,
     products: [
       {
         id: 18,
@@ -373,7 +373,7 @@ export const productData: Category[] = [
     name: "CREATINAS MONOHIDRATO",
     slug: "creatinas",
     image: "assets/images/CREATINAS/creatina_monohidrato_gold_nutrition_doypack.webp",
-    orden: 5,
+    orden: 40,
     products: [
       {
         id: 23,
@@ -482,7 +482,7 @@ export const productData: Category[] = [
     name: "AMINOACIDOS Y BCAA",
     slug: "aminoacidos-bcaa",
     image: "assets/images/AMINOACIDOS-BCAA/1547749785269559737.webp",
-    orden: 6,
+    orden: 50,
     products: [
       {
         id: 32,
@@ -558,7 +558,7 @@ export const productData: Category[] = [
     name: "PRE ENTRENOS",
     slug: "pre-entrenos",
     image: "assets/images/PRE-ENTRENOS/killer.webp",
-    orden: 7,
+    orden: 60,
     products: [
       {
         id: 40,
@@ -680,7 +680,7 @@ export const productData: Category[] = [
     name: "QUEMADORES DE GRASA",
     slug: "quemadores",
     image: "assets/images/QUEMADORES/D_NQ_NP_719950-MLA42153030443_062020.webp",
-    orden: 8,
+    orden: 70,
     products: [
       {
         id: 47,
@@ -720,7 +720,7 @@ export const productData: Category[] = [
     name: "SALUD/BIENESTAR",
     slug: "omega-3-cafeina-zma",
     image: "assets/images/OMEGA-3-ZMA-CAFEINA/zma_gold_nutrition.webp",
-    orden: 9,
+    orden: 80,
     products: [
       {
         id: 53,
@@ -871,7 +871,7 @@ export const productData: Category[] = [
     name: "BARRAS PROTEÍCAS - CAFÉS ENERGETICOS",
     slug: "barras-proteicas",
     image: "assets/images/BARRAS-PROTEICAS/barras.webp",
-    orden: 10,
+    orden: 90,
     products: [
       {
         id: 56,
@@ -901,7 +901,7 @@ export const productData: Category[] = [
     name: "HIDRATACIÓN Y RECUPERACIÓN",
     slug: "bebidas-isotonicas-electrolitos",
     image: "assets/images/BEBIDAS-ISOTONICAS-ELECTROLITOS/1674561753884646192.webp",
-    orden: 11,
+    orden: 100,
     products: [
       {
         id: 57,
@@ -965,7 +965,7 @@ export const productData: Category[] = [
     name: "SHAKER MEZCLADOR",
     slug: "shaker-mezclador",
     image: "assets/images/SHAKERS/Shaker-GOT-PROTEIN-BLENDER_c5417a30-e671-4fea-95ea-b6e0b102dd93.webp",
-    orden: 12,
+    orden: 110,
     products: [
       {
         id: 66,
@@ -1001,6 +1001,7 @@ export const productData: Category[] = [
     name: "SIN STOCK",
     slug: "sin-stock",
     image: "assets/images/SHAKERS/Shaker-GOT-PROTEIN-BLENDER_c5417a30-e671-4fea-95ea-b6e0b102dd93.webp",
+    orden: 999,
     products: [
     ],
   },

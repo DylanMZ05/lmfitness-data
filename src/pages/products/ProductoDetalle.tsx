@@ -4,10 +4,9 @@ import { useCart } from "../../context/useCart";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
 import { parseFormattedText } from "../../data/products";
-import FeaturedSlider from "../../components/FeaturedSlider";
+import FeaturedSliderContainer from "../home/FeaturedSliderContainer";
 import { db } from "../../firebase";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
-import { productData } from "../../data/products";
 
 interface Product {
   id: string;
@@ -195,17 +194,15 @@ const ProductoDetalle: React.FC = () => {
           </div>
         )}
 
-          <FeaturedSlider
-            title="PRODUCTOS DESTACADOS"
-            categories={productData}
-            bgColor="bg-white"
-          />
-          <FeaturedSlider
-            title="PRODUCTOS EXCLUSIVOS"
-            categories={productData}
-            mode="exclusive"
-            bgColor="bg-white"
-            />
+        <hr className="text-black/20 mb-10" />
+        <h2 className="text-4xl font-bold text-center">PRODUCTOS DESTACADOS</h2>
+        <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full mx-auto"></div>
+        <FeaturedSliderContainer title="" bgColor="bg-white" mode="featured" />
+
+        <hr className="text-black/20 mb-10" />
+        <h2 className="text-4xl font-bold text-center">PRODUCTOS EXCLUSIVOS</h2>
+        <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full mx-auto"></div>
+        <FeaturedSliderContainer title="" bgColor="bg-white" mode="exclusive" />
       </div>
 
       <AnimatePresence>

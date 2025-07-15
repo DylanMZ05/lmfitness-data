@@ -5,15 +5,9 @@ import HowBuy from "../pages/home/HowBuy";
 import Products from "../pages/home/products-home/products";
 import AboutUs from "../pages/home/AboutUs";
 import ParallaxSlider from "../components/Slider";
-import FeaturedSlider from "../components/FeaturedSlider";
-import { productData } from "../data/products";
+import FeaturedSliderContainer from "../pages/home/FeaturedSliderContainer";
 
 const offerSlides = [
-  // {
-  //   imageDesktop: "assets/images/SLIDER/CATALOGO/05-desktop-1.webp",
-  //   imageMobile: "assets/images/SLIDER/CATALOGO/05-mobile.webp",
-  //   link: "/producto/73",
-  // },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/06-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/06-mobile.webp",
@@ -29,11 +23,6 @@ const offerSlides = [
     imageMobile: "assets/images/SLIDER/CATALOGO/02-mobile.webp",
     link: "/producto/70",
   },
-  // {
-  //   imageDesktop: "assets/images/SLIDER/CATALOGO/03-desktop-1.webp",
-  //   imageMobile: "assets/images/SLIDER/CATALOGO/03-mobile.webp",
-  //   link: "/producto/71",
-  // },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/04-mobile.webp",
@@ -68,20 +57,18 @@ const HomeWrapper = () => {
         </h2>
         <ParallaxSlider slides={offerSlides} width="w-full" />
       </section>
-      <hr className="text-black/20 mb-10"/>
-      <FeaturedSlider
-        title="PRODUCTOS DESTACADOS"
-        categories={productData}
-        bgColor="bg-white"
-      />
-      <hr className="text-black/20 mb-10"/>
-      <FeaturedSlider
-        title="PRODUCTOS EXCLUSIVOS"
-        categories={productData}
-        mode="exclusive"
-        bgColor="bg-white"
-      />
-      <hr className="text-black/20"/>
+
+      <hr className="text-black/20 mb-10" />
+      <h2 className="text-4xl font-bold text-center">PRODUCTOS DESTACADOS</h2>
+      <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full mx-auto"></div>
+      <FeaturedSliderContainer title="" bgColor="bg-white" mode="featured" />
+
+      <hr className="text-black/20 mb-10" />
+      <h2 className="text-4xl font-bold text-center">PRODUCTOS EXCLUSIVOS</h2>
+      <div className="w-50 h-[3px] bg-red-600 my-3 rounded-full mx-auto"></div>
+      <FeaturedSliderContainer title="" bgColor="bg-white" mode="exclusive" />
+
+      <hr className="text-black/20" />
       <Products />
       <AboutUs />
     </>

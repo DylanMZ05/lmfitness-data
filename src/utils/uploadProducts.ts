@@ -1,4 +1,4 @@
-// // src/utils/uploadProducts.ts
+
 // import { db } from "../firebase";
 // import { collection, doc, setDoc, deleteDoc, getDocs } from "firebase/firestore";
 // import { productData } from "../data/products";
@@ -10,22 +10,20 @@
 //     const slug = category.slug || category.name.toLowerCase().replace(/\s+/g, "-");
 //     const categoryRef = doc(db, "productos", slug);
 
-//     // 1. Subir datos de la categoría
 //     await setDoc(categoryRef, {
 //       name: category.name,
 //       slug,
 //       image: category.image || "",
+//       orden: category.orden ?? 999, // por si falta, le ponés un valor alto
 //     });
 
 //     const itemsCollectionRef = collection(db, "productos", slug, "items");
 
-//     // 2. Limpiar productos antiguos
 //     const existingDocs = await getDocs(itemsCollectionRef);
 //     for (const docSnap of existingDocs.docs) {
 //       await deleteDoc(docSnap.ref);
 //     }
 
-//     // 3. Subir productos nuevos
 //     for (const product of category.products) {
 //       const productRef = doc(itemsCollectionRef, product.id.toString());
 
