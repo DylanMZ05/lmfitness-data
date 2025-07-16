@@ -10,6 +10,7 @@ export interface Product {
   images: string[];
   featuredId?: number | null;
   exclusiveId?: number | null;
+  sinStock?: boolean;
 }
 
 // ✅ Tipado de categorías que vienen de Firestore
@@ -117,6 +118,7 @@ export const productData: Category[] = [
         price: "$26.500",
         offerPrice: "$23.000",
         longDescription: "**Cantidad:** 250g // **Sabor:** Sin sabor // **Porciones:** 50 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
+        sinStock: true,
       },
       {
         id: 25,

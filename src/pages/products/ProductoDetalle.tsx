@@ -31,37 +31,60 @@ const ProductoDetalle: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const categoriasSnap = await getDocs(collection(db, "productos"));
-        for (const catDoc of categoriasSnap.docs) {
-          const itemRef = doc(db, "productos", catDoc.id, "items", id || "");
-          const itemSnap = await getDoc(itemRef);
-          if (itemSnap.exists()) {
-            const data = itemSnap.data();
-            setFoundProduct({
-              id: itemSnap.id,
-              title: data.title,
-              price: Number(data.price),
-              offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
-              images: Array.isArray(data.images)
-                ? data.images.map((img: string) =>
-                    img.startsWith("/") ? img : `/${img}`
-                  )
-                : [],
-              description: data.description,
-              longDescription: data.longDescription,
-              sinStock: data.sinStock ?? false,
-            });
-            break;
+  const fetchProduct = async () => {
+    try {
+      const categoriasSnap = await getDocs(collection(db, "productos"));
+      let productoEncontrado: Product | null = null;
+
+      for (const catDoc of categoriasSnap.docs) {
+        const itemRef = doc(db, "productos", catDoc.id, "items", id || "");
+        const itemSnap = await getDoc(itemRef);
+
+        if (itemSnap.exists()) {
+          const data = itemSnap.data();
+          const sinStock = Boolean(data.sinStock);
+
+          console.log("↪ Posible producto en", catDoc.id, "sinStock:", sinStock);
+
+          const productoFormateado: Product = {
+            id: itemSnap.id,
+            title: data.title,
+            price: Number(data.price),
+            offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
+            images: Array.isArray(data.images)
+              ? data.images.map((img: string) => (img.startsWith("/") ? img : `/${img}`))
+              : [],
+            description: data.description,
+            longDescription: data.longDescription,
+            sinStock,
+          };
+
+          // Guardamos el primero encontrado
+          if (!productoEncontrado) {
+            productoEncontrado = productoFormateado;
+          }
+
+          // Pero si encontramos uno con sinStock true, lo usamos y cortamos
+          if (sinStock) {
+            setFoundProduct(productoFormateado);
+            console.log("✅ Producto con sinStock: true encontrado en", catDoc.id);
+            return;
           }
         }
-      } catch (err) {
-        console.error("Error al cargar producto:", err);
-      } finally {
-        setLoading(false);
       }
-    };
+
+      if (productoEncontrado) {
+        console.log("⚠️ Producto encontrado pero sin sinStock: true");
+        setFoundProduct(productoEncontrado);
+      }
+
+    } catch (err) {
+      console.error("Error al cargar producto:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
     fetchProduct();
   }, [id]);
@@ -87,7 +110,7 @@ const ProductoDetalle: React.FC = () => {
   };
 
   const images = foundProduct.images;
-  const isSinStock = foundProduct.sinStock;
+  const isSinStock = foundProduct?.sinStock === true;
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
@@ -126,7 +149,7 @@ const ProductoDetalle: React.FC = () => {
               src={images[currentSlide]}
               alt={foundProduct.title}
               className={`object-contain w-full h-64 cursor-pointer ${
-                isSinStock ? "opacity-50 grayscale" : ""
+                isSinStock ? "grayscale opacity-50" : ""
               }`}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -137,8 +160,9 @@ const ProductoDetalle: React.FC = () => {
                 (e.target as HTMLImageElement).src = "../assets/fallback.png";
               }}
             />
+
             {isSinStock && (
-              <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+              <span className="absolute top-2 left-2 bg-black text-white text-xs font-bold px-2 py-1 rounded">
                 SIN STOCK
               </span>
             )}
@@ -159,7 +183,7 @@ const ProductoDetalle: React.FC = () => {
               }}
             />
             {foundProduct.offerPrice ? (
-              <div className="mb-4">
+              <div className="mb-2">
                 <p className="text-sm text-gray-500 line-through">
                   $ {foundProduct.price.toLocaleString("es-AR")}
                 </p>
@@ -168,12 +192,22 @@ const ProductoDetalle: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <p className="text-xl font-semibold mb-4">
+              <p className="text-xl font-semibold mb-2">
                 $ {foundProduct.price.toLocaleString("es-AR")}
               </p>
             )}
 
-            {!isSinStock && (
+            {isSinStock ? (
+              <>
+                <p className="text-sm text-red-600 mb-4">Este producto no está disponible actualmente.</p>
+                <button
+                  className="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed"
+                  disabled
+                >
+                  SIN STOCK
+                </button>
+              </>
+            ) : (
               <>
                 <div className="flex items-center mb-4">
                   <button className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer" onClick={() => adjustQuantity(-1)}>-</button>
