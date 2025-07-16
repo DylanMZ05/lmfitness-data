@@ -16,6 +16,7 @@ interface Product {
   images: string[];
   description?: string;
   longDescription?: string;
+  sinStock?: boolean;
 }
 
 const ProductoDetalle: React.FC = () => {
@@ -50,6 +51,7 @@ const ProductoDetalle: React.FC = () => {
                 : [],
               description: data.description,
               longDescription: data.longDescription,
+              sinStock: data.sinStock ?? false,
             });
             break;
           }
@@ -85,6 +87,7 @@ const ProductoDetalle: React.FC = () => {
   };
 
   const images = foundProduct.images;
+  const isSinStock = foundProduct.sinStock;
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
@@ -122,7 +125,9 @@ const ProductoDetalle: React.FC = () => {
               key={currentSlide}
               src={images[currentSlide]}
               alt={foundProduct.title}
-              className="object-contain w-full h-64 cursor-pointer"
+              className={`object-contain w-full h-64 cursor-pointer ${
+                isSinStock ? "opacity-50 grayscale" : ""
+              }`}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
@@ -132,6 +137,11 @@ const ProductoDetalle: React.FC = () => {
                 (e.target as HTMLImageElement).src = "../assets/fallback.png";
               }}
             />
+            {isSinStock && (
+              <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                SIN STOCK
+              </span>
+            )}
             <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full" onClick={prevSlide}>
               <FaArrowLeft />
             </button>
@@ -163,18 +173,22 @@ const ProductoDetalle: React.FC = () => {
               </p>
             )}
 
-            <div className="flex items-center mb-4">
-              <button className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer" onClick={() => adjustQuantity(-1)}>-</button>
-              <span className="px-4 border-y-2 border-gray-200 h-10 flex justify-center items-center">{quantity}</span>
-              <button className="px-4 py-2 bg-gray-200 rounded-r-lg cursor-pointer" onClick={() => adjustQuantity(1)}>+</button>
-            </div>
+            {!isSinStock && (
+              <>
+                <div className="flex items-center mb-4">
+                  <button className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer" onClick={() => adjustQuantity(-1)}>-</button>
+                  <span className="px-4 border-y-2 border-gray-200 h-10 flex justify-center items-center">{quantity}</span>
+                  <button className="px-4 py-2 bg-gray-200 rounded-r-lg cursor-pointer" onClick={() => adjustQuantity(1)}>+</button>
+                </div>
 
-            <button
-              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
-              onClick={handleAddToCart}
-            >
-              Agregar al carrito
-            </button>
+                <button
+                  className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
+                  onClick={handleAddToCart}
+                >
+                  Agregar al carrito
+                </button>
+              </>
+            )}
           </div>
         </div>
 

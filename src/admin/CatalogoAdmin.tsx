@@ -13,6 +13,7 @@ interface Product {
   exclusiveId?: number;
   description?: string;
   longDescription?: string;
+  sinStock?: boolean;
 }
 
 interface Category {
@@ -31,8 +32,6 @@ const CatalogoAdmin = () => {
   const [offerEnabled, setOfferEnabled] = useState<Record<string, boolean>>({});
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<string[]>([]);
-  
-  
 
   const fetchData = async () => {
     const categoriasSnap = await getDocs(collection(db, "productos"));
@@ -55,6 +54,7 @@ const CatalogoAdmin = () => {
           exclusiveId: data.exclusiveId,
           description: data.description,
           longDescription: data.longDescription,
+          sinStock: data.sinStock || false,
         };
       });
 
@@ -141,7 +141,7 @@ const CatalogoAdmin = () => {
     return ids.length ? Math.max(...ids) + 1 : 1;
   };
 
-  if (loading) return <p className="text-center">Cargando productos...</p>;
+    if (loading) return <p className="text-center">Cargando productos...</p>;
 
   return (
     <div className="w-full max-w-5xl mx-auto p-4">
@@ -150,7 +150,12 @@ const CatalogoAdmin = () => {
           <h2 className="text-2xl font-bold mb-2">{category.name}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {category.products.map((product) => (
-              <div key={product.id} className="border rounded p-4 bg-white shadow flex flex-col">
+              <div
+                key={product.id}
+                className={`border rounded p-4 shadow flex flex-col ${
+                  product.sinStock ? "bg-gray-200 opacity-70" : "bg-white"
+                }`}
+              >
                 <img
                   src={product.images?.[0] || "/placeholder.jpg"}
                   alt={product.title}
@@ -171,13 +176,16 @@ const CatalogoAdmin = () => {
                 <label className="text-sm flex items-center gap-2 mb-1">
                   <input
                     type="checkbox"
-                    checked={offerEnabled[product.id] || false}
-                    onChange={(e) =>
-                      setOfferEnabled((prev) => ({ ...prev, [product.id]: e.target.checked }))
-                    }
+                    checked={product.sinStock || false}
+                    onChange={async (e) => {
+                      const ref = doc(db, "productos", category.slug, "items", product.id.toString());
+                      await updateDoc(ref, { sinStock: e.target.checked });
+                      fetchData();
+                    }}
                   />
-                  Activar precio en oferta
+                  Sin stock
                 </label>
+
                 <input
                   type="number"
                   step="0.01"
@@ -413,10 +421,6 @@ const CatalogoAdmin = () => {
         </div>
       </div>
     )}
-
-
-
-
     </div>
   );
 };

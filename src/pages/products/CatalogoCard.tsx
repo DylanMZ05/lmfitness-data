@@ -15,6 +15,7 @@ interface Product {
   offerPrice?: string;
   description?: string;
   images: string[];
+  sinStock?: boolean;
 }
 
 interface Category {
@@ -37,41 +38,37 @@ const CatalogoCard: React.FC = () => {
   const scrollToTop = useScrollToTop();
   const location = useLocation();
 
-useEffect(() => {
-  const fetchData = async () => {
-    const categoriasSnap = await getDocs(collection(db, "productos"));
-    const categorias: Category[] = [];
+  useEffect(() => {
+    const fetchData = async () => {
+      const categoriasSnap = await getDocs(collection(db, "productos"));
+      const categorias: Category[] = [];
 
-    for (const catDoc of categoriasSnap.docs) {
-      const catData = catDoc.data();
+      for (const catDoc of categoriasSnap.docs) {
+        const catData = catDoc.data();
+        if (catData.oculta) continue;
 
-      // ⛔️ Omitir si la categoría está marcada como oculta
-      if (catData.oculta) continue;
+        const itemsSnap = await getDocs(collection(catDoc.ref, "items"));
+        const productos = itemsSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Product[];
 
-      const itemsSnap = await getDocs(collection(catDoc.ref, "items"));
-      const productos = itemsSnap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Product[];
+        categorias.push({
+          name: catData.name || "Sin nombre",
+          image: catData.image,
+          slug: catDoc.id,
+          orden: parseInt(catData.orden ?? "999"),
+          products: productos,
+        });
+      }
 
-      categorias.push({
-        name: catData.name || "Sin nombre",
-        image: catData.image,
-        slug: catDoc.id,
-        orden: parseInt(catData.orden ?? "999"), // asegura orden como número
-        products: productos,
-      });
-    }
+      categorias.sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
+      setData(categorias);
+      setLoading(false);
+    };
 
-    // ✅ Orden final según campo 'orden'
-    categorias.sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
-    setData(categorias);
-    setLoading(false);
-  };
-
-  fetchData();
-}, []);
-
+    fetchData();
+  }, []);
 
   const toggleCategory = (slug: string) => {
     if (openCategory === slug) {
@@ -160,49 +157,62 @@ useEffect(() => {
               className="overflow-hidden bg-gray-100 rounded-b-lg"
             >
               <div className="grid grid-cols-2 px-1 pt-2 pb-1 sm:grid-cols-3 md:grid-cols-4 gap-1 md:gap-2 sm:px-2 bg-white rounded-b-lg">
-                {category.products.map((product) => (
-                  <motion.div
-                    key={product.id}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-black/30"
-                  >
-                    <div className="h-32 w-full overflow-hidden flex justify-center items-center bg-neutral-200">
-                      <img src={product.images?.[0] || "/placeholder.jpg"} alt={product.title} className="h-full object-contain p-2" />
-                    </div>
-                    <div className="p-3 flex flex-col flex-1 justify-between">
-                      <div className="flex-1">
-                        <h3 className="text-sm font-semibold mb-1">{product.title}</h3>
-                        {product.offerPrice ? (
-                          <div className="mb-2">
-                            <p className="text-sm text-gray-500 line-through">${product.price}</p>
-                            <p className="text-base font-bold text-red-600">${product.offerPrice}</p>
-                          </div>
-                        ) : (
-                          <p className="text-base font-bold mb-2">${product.price}</p>
-                        )}
+                {category.products.map((product) => {
+                  const isSinStock = product.sinStock === true;
+
+                  return (
+                    <motion.div
+                      key={product.id}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3, delay: 0.1 }}
+                      className={`flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-black/30 relative ${
+                        isSinStock ? "opacity-50 grayscale" : ""
+                      }`}
+                    >
+                      {isSinStock && (
+                        <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                          SIN STOCK
+                        </span>
+                      )}
+                      <div className="h-32 w-full overflow-hidden flex justify-center items-center bg-neutral-200">
+                        <img src={product.images?.[0] || "/placeholder.jpg"} alt={product.title} className="h-full object-contain p-2" />
                       </div>
-                      <div className="flex justify-between mt-2 items-center">
-                        <button
-                          className="bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition cursor-pointer flex items-center justify-center"
-                          onClick={() => openPopup(product)}
-                          title="Añadir al carrito"
-                        >
-                          <FaShoppingCart className="text-white text-lg" />
-                        </button>
-                        <Link
-                          to={`/producto/${product.id}`}
-                          onClick={scrollToTop}
-                          className="border border-black rounded-full w-9 h-9 flex items-center justify-center hover:bg-gray-200 transition"
-                          title="Ver detalles"
-                        >
-                          <FaEye className="text-black" />
-                        </Link>
+                      <div className="p-3 flex flex-col flex-1 justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-sm font-semibold mb-1">{product.title}</h3>
+                          {product.offerPrice ? (
+                            <div className="mb-2">
+                              <p className="text-sm text-gray-500 line-through">${product.price}</p>
+                              <p className="text-base font-bold text-red-600">${product.offerPrice}</p>
+                            </div>
+                          ) : (
+                            <p className="text-base font-bold mb-2">${product.price}</p>
+                          )}
+                        </div>
+                        <div className="flex justify-between mt-2 items-center">
+                          {!isSinStock && (
+                            <button
+                              className="bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition cursor-pointer flex items-center justify-center"
+                              onClick={() => openPopup(product)}
+                              title="Añadir al carrito"
+                            >
+                              <FaShoppingCart className="text-white text-lg" />
+                            </button>
+                          )}
+                          <Link
+                            to={`/producto/${product.id}`}
+                            onClick={scrollToTop}
+                            className="border border-black rounded-full w-9 h-9 flex items-center justify-center hover:bg-gray-200 transition"
+                            title="Ver detalles"
+                          >
+                            <FaEye className="text-black" />
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           </div>
