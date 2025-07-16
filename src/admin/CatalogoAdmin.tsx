@@ -176,14 +176,18 @@ const CatalogoAdmin = () => {
                 <label className="text-sm flex items-center gap-2 mb-1">
                   <input
                     type="checkbox"
-                    checked={product.sinStock || false}
-                    onChange={async (e) => {
-                      const ref = doc(db, "productos", category.slug, "items", product.id.toString());
-                      await updateDoc(ref, { sinStock: e.target.checked });
-                      fetchData();
+                    checked={offerEnabled[product.id] || false}
+                    onChange={(e) => {
+                      setOfferEnabled((prev) => ({
+                        ...prev,
+                        [product.id]: e.target.checked,
+                      }));
+                      if (!e.target.checked) {
+                        setOfferPriceEdits((prev) => ({ ...prev, [product.id]: "" }));
+                      }
                     }}
                   />
-                  Sin stock
+                  Precio de Oferta
                 </label>
 
                 <input
@@ -241,6 +245,20 @@ const CatalogoAdmin = () => {
                     <span className="text-xs text-gray-500 ml-1">#{product.featuredId}</span>
                   )}
                 </label>
+
+                <label className="text-sm flex items-center gap-2 mb-1">
+                  <input
+                    type="checkbox"
+                    checked={product.sinStock || false}
+                    onChange={async (e) => {
+                      const ref = doc(db, "productos", category.slug, "items", product.id.toString());
+                      await updateDoc(ref, { sinStock: e.target.checked });
+                      fetchData();
+                    }}
+                  />
+                  Sin stock
+                </label>
+                
 
                 <button
                   onClick={() =>
