@@ -1,45 +1,49 @@
 
 // import { db } from "../firebase";
-// import { collection, doc, setDoc, deleteDoc, getDocs } from "firebase/firestore";
+// import { collection, doc, setDoc } from "firebase/firestore";
 // import { productData } from "../data/products";
 
-// export async function uploadAllProducts() {
-//   console.log("📦 Iniciando reemplazo de productos...");
+// export async function uploadSinStockSinEliminar() {
+//   console.log("📦 Agregando productos nuevos a la categoría SIN STOCK (sin eliminar los existentes)...");
 
-//   for (const category of productData) {
-//     const slug = category.slug || category.name.toLowerCase().replace(/\s+/g, "-");
-//     const categoryRef = doc(db, "productos", slug);
-
-//     await setDoc(categoryRef, {
-//       name: category.name,
-//       slug,
-//       image: category.image || "",
-//       orden: category.orden ?? 999, // por si falta, le ponés un valor alto
-//     });
-
-//     const itemsCollectionRef = collection(db, "productos", slug, "items");
-
-//     const existingDocs = await getDocs(itemsCollectionRef);
-//     for (const docSnap of existingDocs.docs) {
-//       await deleteDoc(docSnap.ref);
-//     }
-
-//     for (const product of category.products) {
-//       const productRef = doc(itemsCollectionRef, product.id.toString());
-
-//       await setDoc(productRef, {
-//         ...product,
-//         price: typeof product.price === "string"
-//           ? product.price.replace("$", "").replace(/\./g, "").trim()
-//           : product.price,
-//         offerPrice: typeof product.offerPrice === "string"
-//           ? product.offerPrice.replace("$", "").replace(/\./g, "").trim()
-//           : product.offerPrice || null,
-//       });
-//     }
-
-//     console.log(`✅ Categoría "${category.name}" actualizada con ${category.products.length} productos.`);
+//   const sinStockCategory = productData.find(cat => cat.name.toUpperCase() === "SIN STOCK");
+//   if (!sinStockCategory) {
+//     console.warn("❌ No se encontró la categoría 'SIN STOCK'");
+//     return;
 //   }
 
-//   console.log("✅ Todos los productos fueron reemplazados exitosamente.");
+//   const slug = sinStockCategory.slug || sinStockCategory.name.toLowerCase().replace(/\s+/g, "-");
+//   const categoryRef = doc(db, "productos", slug);
+
+//   // Crea o actualiza el documento de la categoría (sin tocar productos aún)
+//   await setDoc(categoryRef, {
+//     name: sinStockCategory.name,
+//     slug,
+//     image: sinStockCategory.image || "",
+//     orden: sinStockCategory.orden ?? 999,
+//   });
+
+//   const itemsCollectionRef = collection(db, "productos", slug, "items");
+
+//   for (const product of sinStockCategory.products) {
+//     const productRef = doc(itemsCollectionRef, product.id.toString());
+
+//     const cleanPrice = typeof product.price === "string"
+//       ? Number(product.price.replace("$", "").replace(/\./g, "").trim())
+//       : product.price;
+
+//     const cleanOfferPrice = typeof product.offerPrice === "string"
+//       ? Number(product.offerPrice.replace("$", "").replace(/\./g, "").trim())
+//       : product.offerPrice ?? null;
+
+//     await setDoc(productRef, {
+//       ...product,
+//       price: cleanPrice,
+//       offerPrice: cleanOfferPrice,
+//     });
+//   }
+
+//   console.log(`✅ Se añadieron ${sinStockCategory.products.length} productos nuevos a la categoría 'SIN STOCK'.`);
 // }
+
+

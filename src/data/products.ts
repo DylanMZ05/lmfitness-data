@@ -290,7 +290,7 @@ export const productData: Category[] = [
     },
     {
       id: 15,
-      images: ["assets/images/PROTEINAS/one-fit-tarro.webp"],
+      images: ["assets/images/PROTEINAS/whey-protein-doypack1.webp"],
       title: "PROTEINA – CLASSIC WHEY ONEFIT",
       description: "Nutrición diaria accesible.",
       price: "$24.000",
@@ -1005,6 +1005,37 @@ export const productData: Category[] = [
     image: "assets/images/SHAKERS/Shaker-GOT-PROTEIN-BLENDER_c5417a30-e671-4fea-95ea-b6e0b102dd93.webp",
     orden: 999,
     products: [
+      {
+        id: 80,
+        images: ["assets/images/CREATINAS/creatina-of-5850132a403757eda316986845288405-1024-1024.webp"],
+        title: "CREATINA MICRONIZADA - ONEFTI (500gr)",
+        description: "",
+        price: "$42.500",
+        offerPrice: "$37.000",
+        longDescription: "**Cantidad:** 500 g // **Sabor:** Sin sabor // **Porciones:** 100 (5 g por porción) // // **Modo de uso:** 1 porción diaria (5 g), post-entreno o en cualquier momento del día. Mantener la constancia para mejores resultados. // // **Beneficios principales:** // • Aumenta el rendimiento físico, mejorando la fuerza y la potencia muscular. // • Favorece el aumento de masa muscular a largo plazo. // • Mejora la recuperación reduciendo el daño muscular y la inflamación. // • Aporta beneficios cognitivos: ayuda a la memoria, concentración y atención."
+      },
+      {
+        id: 81,
+        images: ["assets/images/AMINOACIDOS-BCAA/amino-essential.webp",
+          "assets/images/AMINOACIDOS-BCAA/info-amino-essential.webp"
+        ],
+        title: "AMINO ESSENTIAL - GOLD NUTRITION (240gr)",
+        description: "Recuperación y resistencia física.",
+        price: "$42.500",
+        offerPrice: "$37.000",
+        longDescription: "**Cantidad:** 240 g // **Porción:** 8 g (1 scoop) // **Servicios:** 30 // // **Modo de uso:** 1 scoop diario en 200 ml de agua, post entrenamiento. // // **Ingredientes (aminograma):** // **Aminoácidos esenciales:** Histidina, Isoleucina, Leucina, Lisina, Metionina, Fenilalanina, Treonina, Triptófano, Valina. // **Aminoácidos no esenciales:** Alanina, Arginina, Ácido Aspártico, Glutamina, Glicina, Prolina, Serina, Tirosina. // **Otros:** Colágeno hidrolizado. // // **Beneficios principales:** // • Favorece la recuperación muscular. // • Previene la pérdida de masa muscular (catabolismo). // • Aporta aminoácidos esenciales de forma práctica. // • Mejora el rendimiento y la resistencia física. // • Ideal para entrenamientos intensos y dietas exigentes."
+      },
+      {
+        id: 82,
+        images: ["assets/images/POTASIO-MAGNESIO/stress-killer.webp",
+          "assets/images/POTASIO-MAGNESIO/info-stress-killer.webp"
+        ],
+        title: "STRESS KILLER - LEGUILAB (60 comp.)",
+        description: "Relajación, enfoque y descanso.",
+        price: "$42.500",
+        offerPrice: "$37.000",
+        longDescription: "**Cantidad:** 60 cápsulas // **Porción:** 2 cápsulas // **Servicios:** 30 // // **Modo de uso:** Tomar 2 cápsulas diarias durante el desayuno o el almuerzo. // // **Ingredientes:** Vitamina B6 · Bisglicinato de Magnesio · L-Teanina // // **Beneficios principales:** // • Relajación muscular y nerviosa: el magnesio ayuda a reducir la tensión acumulada por el estrés. // • Promoción de la calma mental: la L-Teanina disminuye la ansiedad y favorece un estado de relajación consciente. // • Mejora del sueño: reduce la hiperactividad nerviosa y muscular, facilitando un descanso reparador. // • Apoyo al sistema nervioso: el magnesio regula los neurotransmisores y previene el agotamiento. // • Reducción del estrés: combinación sinérgica que mejora la respuesta adaptativa al estrés diario. // • Rendimiento cognitivo: promueve claridad mental y enfoque incluso en momentos de presión."      
+      },
     ],
   },
 
