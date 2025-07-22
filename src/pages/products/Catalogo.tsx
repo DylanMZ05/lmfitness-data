@@ -16,17 +16,7 @@ const slides = [
   //     positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
   //   },
   // },
-  {
-    id: 1,
-    bgMobile: "assets/images/SLIDER/CATALOGO/06.webp",
-    bgDesktop: "assets/images/SLIDER/CATALOGO/06-desktop-1.webp",
-    button: {
-      text: "VER OFERTAS",
-      link: "/catalogo#super-precios-gentech",
-      positionMobile: "top-[61%] left-1/2 -translate-x-1/2",
-      positionDesktop: "top-[81%] left-1/2 -translate-x-1/2",
-    },
-  },
+
   {
     id: 2,
     bgMobile: "assets/images/SLIDER/CATALOGO/01.webp",

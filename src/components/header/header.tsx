@@ -472,21 +472,25 @@ const Header: React.FC = () => {
                             </button>
 
                                 {/* Dropdown Desktop */}
-                                <div className={`fixed left-0 top-[108px] w-screen bg-black text-white transition-all duration-300 z-40 py-10
+                                <div
+                                className={`fixed left-0 top-[108px] w-screen bg-black text-white transition-all duration-300 z-40 py-10
                                     ${isHoveringProducts ? 'opacity-100 visible' : 'opacity-0 invisible'}
-                                `}>
+                                `}
+                                >
                                     <div className="max-w-7xl px-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-left">
-                                    {productData.map((category) => (
-                                        <Link
-                                        key={category.slug}
-                                        to={`/catalogo#${category.slug}`}
-                                        onClick={scrollToTop}
-                                        className="flex items-center gap-2 hover:text-red-500 text-lg"
-                                        >
-                                        <span className="text-red-500">•</span>
-                                        <span>{category.name}</span>
-                                        </Link>
-                                    ))}
+                                        {productData
+                                        .filter((category) => category.slug !== "sin-stock")
+                                        .map((category) => (
+                                            <Link
+                                            key={category.slug}
+                                            to={`/catalogo#${category.slug}`}
+                                            onClick={scrollToTop}
+                                            className="flex items-center gap-2 hover:text-red-500 text-lg"
+                                            >
+                                            <span className="text-red-500">•</span>
+                                            <span>{category.name}</span>
+                                            </Link>
+                                        ))}
                                     </div>
                                 </div>
                                 </>
@@ -537,22 +541,25 @@ const Header: React.FC = () => {
                                 style={{ transitionProperty: 'max-height, opacity' }}
                                 >
                                 {/* Este div interno solo tiene padding */}
-                                <div className="flex flex-col px-4 py-3">
-                                    {productData.map((category) => (
-                                    <Link
-                                        key={category.slug}
-                                        to={`/catalogo#${category.slug}`}
-                                        onClick={() => {
-                                        setMenuOpen(false);
-                                        setShowProductsMobile(false); // <<< cerramos también el dropdown al hacer click
-                                        }}
-                                        className="text-lg flex items-center gap-2 py-2 hover:text-red-500"
-                                    >
-                                        <span>•</span>
-                                        <span>{category.name}</span>
-                                    </Link>
-                                    ))}
-                                </div>
+                                    <div className="flex flex-col px-4 py-3">
+                                        {productData
+                                            .filter((category) => category.slug !== "sin-stock")
+                                            .map((category) => (
+                                            <Link
+                                                key={category.slug}
+                                                to={`/catalogo#${category.slug}`}
+                                                onClick={() => {
+                                                setMenuOpen(false);
+                                                setShowProductsMobile(false); // <<< cerramos también el dropdown al hacer click
+                                                }}
+                                                className="text-lg flex items-center gap-2 py-2 hover:text-red-500"
+                                            >
+                                                <span>•</span>
+                                                <span>{category.name}</span>
+                                            </Link>
+                                        ))}
+                                    </div>
+
                                 </div>
                             </>
                             ) : (

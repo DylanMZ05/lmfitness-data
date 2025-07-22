@@ -23,16 +23,18 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4 md:min-w-78 md:text-center">Categorías</h3>
             <ul className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-2 text-sm text-start">
-              {productData.map((category) => (
-                <li key={category.slug} className="flex items-start gap-2">
-                  <span className="text-red-500 mt-[2px]">•</span>
-                  <Link
-                    to={`/catalogo#${category.slug}`}
-                    className="hover:underline hover:text-red-500 transition-colors leading-snug"
-                  >
-                    {category.name}
-                  </Link>
-                </li>
+              {productData
+                .filter((category) => category.name.toLowerCase() !== "sin stock")
+                .map((category) => (
+                  <li key={category.slug} className="flex items-start gap-2">
+                    <span className="text-red-500 mt-[2px]">•</span>
+                    <Link
+                      to={`/catalogo#${category.slug}`}
+                      className="hover:underline hover:text-red-500 transition-colors leading-snug"
+                    >
+                      {category.name}
+                    </Link>
+                  </li>
               ))}
             </ul>
           </div>

@@ -78,63 +78,6 @@ export const productData: Category[] = [
     ],
   },
   {
-    name: "SÚPER PRECIOS GENTECH",
-    slug: "super-precios-gentech",
-    image: "assets/images/GANADORES-DE-PESO/1201-4f03bb0a06a31abf3716580805730431-480-0.webp",
-    orden: 10,
-    products: [
-      {
-        id: 13,
-        images: [
-          "assets/images/PROTEINAS/PROTEINA-WHEY-PROTEIN-7900-X-1KG.webp",
-          "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/PROTEINAS/INFO-PROTE-7900-GENTECH.webp"
-        ],
-        title: "PROTEINA – WHEY PROTEIN 7900 GENTECH",
-        description: "Energía y rendimiento.",
-        price: "$42.500",
-        offerPrice: "$37.000",
-        longDescription: "Proteína concentrada de suero lácteo de alta calidad, diseñada para favorecer el desarrollo muscular y mejorar la recuperación. Ideal para quienes buscan una opción efectiva y confiable para aumentar su ingesta diaria de proteínas. Buena absorción y excelente perfil de aminoácidos esenciales. // // **Cantidad:** 1 kg // **Porción:** 30 g // **Servicios:** 30 // // **Información nutricional por porción (30 g):** // • Proteína: 22 g // • Carbohidratos: 3.3 g // • Grasas: 2.9 g // // **Modo de uso:** Mezclar 1 medida (30 g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día para aumentar tu ingesta de proteínas. Se recomienda tomar 1 o 2 porciones máximo al día. // // **Beneficios:** // 1. Favorece el desarrollo y mantenimiento de la masa muscular. // 2. Acelera la recuperación post-entrenamiento. // 3. Aporta proteína de alta calidad y rápida absorción. // 4. Uso fácil y rápido para sumar proteína de alto valor en tu día a día. // 5. Ideal para complementar tu dieta de forma práctica."
-      },
-      {
-        id: 21,
-        images: [
-          "assets/images/GANADORES-DE-PESO/1201-4f03bb0a06a31abf3716580805730431-480-0.webp",
-          "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/GANADORES-DE-PESO/INFO-MAXI-GAIN-GENTECH.webp"
-        ],
-        title: "GANADORES DE PESO - MAXI GAIN GENTECH",
-        description: "Ganador de peso económico y efectivo.",
-        price: "$24.500",
-        offerPrice: "$21.300",
-        longDescription: "**Información nutricional por 100 g:** // • Valor energético: 394 kcal // • Proteínas: 20 g // • Carbohidratos: 73 g // // **Ingredientes principales:** // • Proteínas: concentrado de suero de leche (whey) // • Carbohidratos: maltodextrina, dextrosa // // **Modo de uso:** // Mezclar 100 g (aproximadamente 2 medidas) en 500-600 ml de agua o leche. // Consumir 1 a 2 veces por día, preferentemente después del entrenamiento y/o entre comidas. // Ajustar según los requerimientos calóricos individuales. // // **Beneficios principales:** // • Aporta calorías de calidad para favorecer el aumento de masa muscular // • Proporciona una mezcla de proteínas de rápida y lenta absorción // • Favorece la recuperación y el crecimiento muscular // • Mejora el rendimiento y la resistencia durante el entrenamiento // • Ayuda a reponer energía y glucógeno post-entrenamiento"
-      },
-      {
-        id: 24,
-        images: [
-          "assets/images/CREATINAS/CREATINA MONOHIDRATO.webp",
-          "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/CREATINAS/INFO-CREATINA-GENTECH-250GR.webp"
-        ],
-        title: "CREATINA - GENTECH NEUTRA (250gr)",
-        description: "250GR de creatina neutra.",
-        price: "$26.500",
-        offerPrice: "$23.000",
-        longDescription: "**Cantidad:** 250g // **Sabor:** Sin sabor // **Porciones:** 50 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
-        sinStock: true,
-      },
-      {
-        id: 25,
-        images: [
-          "assets/images/CREATINAS/CREATINA MONOHIDRATO.webp",
-          "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/CREATINAS/INFO-CREATINA-GENTECH-250GR.webp"
-        ],
-        title: "CREATINA - GENTECH NEUTRA (500gr)",
-        description: "500GR de creatina neutra.",
-        price: "$44.600",
-        offerPrice: "$38.800",
-        longDescription: "**Cantidad:** 500g // **Sabor:** Sin sabor // **Porciones:** 100 (5g por porción) // // **Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // // **Beneficios:** // - Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // - Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // - Recuperación más rápida, reduciendo el daño muscular y la inflamación. // - Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
-      },
-    ],
-  },
-  {
   name: "PROTEÍNA",
   slug: "proteinas",
   image: "assets/images/PROTEINAS/PWI-2lb-Chocolate.webp",
