@@ -11,6 +11,7 @@ interface Props {
 }
 
 const FeaturedSliderContainer: React.FC<Props> = ({
+  title,
   bgColor,
   mode = "featured",
 }) => {
@@ -19,50 +20,70 @@ const FeaturedSliderContainer: React.FC<Props> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const categoriasSnap = await getDocs(collection(db, "productos"));
-      const categorias: Category[] = [];
+      try {
+        const categoriasSnap = await getDocs(collection(db, "productos"));
 
-      for (const catDoc of categoriasSnap.docs) {
-        const catData = catDoc.data();
-        const itemsSnap = await getDocs(collection(catDoc.ref, "items"));
-        const productos: Product[] = itemsSnap.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            title: data.title,
-            price: Number(data.price),
-            offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
-            images: Array.isArray(data.images)
-              ? data.images.map((img: string) => img.replace(/^\/+/, ""))
-              : [],
-            featuredId: data.featuredId ?? null,
-            exclusiveId: data.exclusiveId ?? null,
-          };
-        });
+        // ✅ Cargamos todas las categorías en paralelo
+        const categoriasData = await Promise.all(
+          categoriasSnap.docs.map(async (catDoc) => {
+            const catData = catDoc.data();
+            const itemsSnap = await getDocs(collection(catDoc.ref, "items"));
+            const productos: Product[] = itemsSnap.docs.map((doc) => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                title: data.title,
+                price: Number(data.price),
+                offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
+                images: Array.isArray(data.images)
+                  ? data.images.map((img: string) => img.replace(/^\/+/, ""))
+                  : [],
+                featuredId: data.featuredId ?? null,
+                exclusiveId: data.exclusiveId ?? null,
+              };
+            });
 
-        categorias.push({
-          name: catData.name,
-          slug: catDoc.id,
-          image: catData.image,
-          orden: parseInt(catData.orden ?? "999"),
-          products: productos,
-        });
+            return {
+              name: catData.name,
+              slug: catDoc.id,
+              image: catData.image,
+              orden: parseInt(catData.orden ?? "999"),
+              products: productos,
+            } as Category;
+          })
+        );
+
+        setCategories(categoriasData);
+      } catch (error) {
+        console.error("Error cargando categorías:", error);
+      } finally {
+        setLoading(false);
       }
-
-      setCategories(categorias);
-      setLoading(false);
     };
 
     fetchData();
   }, []);
 
   return (
-    <section className={`w-full flex flex-col items-center px-4 ${bgColor}`}>
-      {/* El título y la línea roja ahora deben colocarse en el componente padre */}
+    <section
+      className={`w-full flex flex-col items-center px-4 ${bgColor}`}
+      aria-labelledby="featured-title"
+    >
+      {/* SEO + Accesibilidad */}
+      <h2
+        id="featured-title"
+        className="text-2xl font-bold text-black/90 mt-6 mb-4 text-center"
+      >
+        {title}
+      </h2>
 
       <div className="w-full flex justify-center min-h-[440px]">
         {loading ? (
-          <div className="flex gap-4">
+          <div
+            className="flex gap-4"
+            role="status"
+            aria-label="Cargando productos destacados"
+          >
             {Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={i}

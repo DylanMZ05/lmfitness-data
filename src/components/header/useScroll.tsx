@@ -1,33 +1,45 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 const useScroll = (threshold: number = 50, scrollDeltaDown: number = 700) => {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isScrollingUp, setIsScrollingUp] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrollingUp, setIsScrollingUp] = useState(true);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ticking.current) {
+        ticking.current = true; 
+
+        requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+
+          // Solo actualiza si cambia el estado (evita renders extra)
+          if (currentScrollY > threshold !== isScrolled) {
             setIsScrolled(currentScrollY > threshold);
+          }
 
-            // Mostrar inmediatamente si está subiendo
-            if (currentScrollY < lastScrollY) {
-                setIsScrollingUp(true);
-                setLastScrollY(currentScrollY);
-            }
+          if (currentScrollY < lastScrollY.current) {
+            if (!isScrollingUp) setIsScrollingUp(true);
+          } else if (
+            currentScrollY > lastScrollY.current &&
+            currentScrollY - lastScrollY.current > scrollDeltaDown
+          ) {
+            if (isScrollingUp) setIsScrollingUp(false);
+          }
 
-            // Ocultar solo si bajó más de `scrollDeltaDown`
-            if (currentScrollY > lastScrollY && currentScrollY - lastScrollY > scrollDeltaDown) {
-                setIsScrollingUp(false);
-                setLastScrollY(currentScrollY);
-            }
-        };
+          lastScrollY.current = currentScrollY;
+          ticking.current = false;
+        });
+      }
+    };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [threshold, lastScrollY, scrollDeltaDown]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [threshold, scrollDeltaDown, isScrolled, isScrollingUp]);
 
-    return { isScrolled, isScrollingUp };
+  return { isScrolled, isScrollingUp };
 };
 
 export default useScroll;

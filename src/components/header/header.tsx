@@ -2,7 +2,7 @@
 // 📦 BLOQUE 1: IMPORTACIONES Y SETUP INICIAL
 // ==============================
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ShoppingCart, Search } from 'lucide-react';
 import useActiveSection from './useActiveSection';
 import { useCart } from '../../context/useCart';
@@ -13,285 +13,322 @@ import { productData } from "../../data/products";
 import { AnimatePresence, motion } from "framer-motion";
 
 // 🔧 Función utilitaria para mejorar las búsquedas (ignora tildes y mayúsculas)
-const normalizarTexto = (texto: string) => {
-    return texto
-        .normalize("NFD") // descompone tildes
-        .replace(/[\u0300-\u036f]/g, "") // elimina tildes
-        .toLowerCase()
-        .trim();
-};
+const normalizarTexto = (texto: string) =>
+  texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // elimina tildes
+    .toLowerCase()
+    .trim();
 
 // ==============================
 // 🎯 INICIO DEL COMPONENTE
 // ==============================
 
 const Header: React.FC = () => {
-    const searchRef = useRef<HTMLDivElement>(null);
-    const { isScrolled, isScrollingUp } = useScroll(50);
-    const [isHoveringProducts, setIsHoveringProducts] = useState(false);
-    const sectionIds = ['inicio', 'productos', 'sobre-nosotros', 'contacto'];
-    const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [cartOpen, setCartOpen] = useState(false);
-    const { cart, removeFromCart, clearCart } = useCart();
-    const [showCheckout, setShowCheckout] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'transferencia' | 'debito' | 'credito'>('transferencia');
-    const [fullName, setFullName] = useState('');
-    const [location, setLocation] = useState('');
-    const [locality, setLocality] = useState('');
-    const [otherCity, setOtherCity] = useState('');
-    const [postalCode, setPostalCode] = useState('');
-    const [street, setStreet] = useState('');
-    const [betweenStreets, setBetweenStreets] = useState('');
-    const [showMobileSearch, setShowMobileSearch] = useState(false);
-    const mobileSearchRef = useRef<HTMLDivElement>(null);
-    const [forceShowHeader, setForceShowHeader] = useState(false);
-    const [showSearch, setShowSearch] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
+  const searchRef = useRef<HTMLDivElement>(null);
+  const mobileSearchRef = useRef<HTMLDivElement>(null);
+  const { isScrolled, isScrollingUp } = useScroll(50);
+  const [isHoveringProducts, setIsHoveringProducts] = useState(false);
+  const sectionIds = ['inicio', 'productos', 'sobre-nosotros', 'contacto'];
+  const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const { cart, removeFromCart, clearCart } = useCart();
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'transferencia' | 'debito' | 'credito'>('transferencia');
+  const [fullName, setFullName] = useState('');
+  const [location, setLocation] = useState('');
+  const [locality, setLocality] = useState('');
+  const [otherCity, setOtherCity] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [street, setStreet] = useState('');
+  const [betweenStreets, setBetweenStreets] = useState('');
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [forceShowHeader, setForceShowHeader] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-    const envio = location === "Otro"
-        ? 8000
-        : ["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)
-        ? 1000
-        : ["Nueva Atlantis"].includes(locality)
-        ? 1500
-        : location === "Partido de La Costa" && locality !== ""
-        ? 3500
-        : 0;
+  const scrollToTop = useScrollToTop();
+  const navigate = useNavigate();
 
-    const sectionLabels: { [key: string]: string } = {
-        'inicio': 'Inicio',
-        'productos': 'Productos',
-        'sobre-nosotros': 'Sobre nosotros',
-        'contacto': 'Contacto',
+  // ✅ useMemo para evitar cálculos en cada render
+  const envio = useMemo(() => {
+    if (location === "Otro") return 8000;
+    if (["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)) return 1000;
+    if (["Nueva Atlantis"].includes(locality)) return 1500;
+    if (location === "Partido de La Costa" && locality !== "") return 3500;
+    return 0;
+  }, [location, locality]);
+
+  const sectionLabels: Record<string, string> = {
+    'inicio': 'Inicio',
+    'productos': 'Productos',
+    'sobre-nosotros': 'Sobre nosotros',
+    'contacto': 'Contacto',
+  };
+
+  // Cerrar buscador al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearch(false);
+      }
+      if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target as Node)) {
+        setShowMobileSearch(false);
+      }
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-                setShowSearch(false);
-            }
-        };
+    document.addEventListener('pointerdown', handleClickOutside);
+    return () => document.removeEventListener('pointerdown', handleClickOutside);
+  }, []);
 
-        document.addEventListener('mousedown', handleClickOutside);
-        
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (showCheckout) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [showCheckout]);
-
-    const scrollToTop = useScrollToTop();
-    const navigate = useNavigate();
-
-    const total = cart.reduce((acc: number, item) => {
-        const rawPrice = item.product.offerPrice || item.product.price;
-        const price = parseFloat(String(rawPrice).replace(/[^0-9.-]+/g, ""));
-        const quantity = Number(item.quantity);
-        return acc + quantity * price;
-    }, 0);
-
-    const handleClick = (id: string) => {
-        setActiveSectionManually(id);
-        
-        if (id === 'productos') {
-            navigate('/catalogo');
-        } else if (window.location.pathname !== '/') {
-            // Si no estás en el home, redirigí con hash
-            window.location.href = `/#${id}`;
-        } else {
-            // Si estás en el home, hacé scroll suave
-            const target = document.getElementById(id);
-            if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-        
-        setMenuOpen(false);
+  // Evitar scroll en body cuando se abre el checkout
+  useEffect(() => {
+    document.body.style.overflow = showCheckout ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
     };
+  }, [showCheckout]);
 
-    const totalToPay =
-        (total + envio) *
-        (paymentMethod === "efectivo"
-            ? 1
-            : paymentMethod === "credito"
-            ? 1.10
-            : 1);
+  // ✅ cálculo del total optimizado
+  const total = useMemo(() =>
+    cart.reduce((acc, item) => {
+      const rawPrice = item.product.offerPrice || item.product.price;
+      const price = parseFloat(String(rawPrice).replace(/[^0-9.-]+/g, ""));
+      return acc + item.quantity * price;
+    }, 0),
+    [cart]
+  );
+  const handleClick = (id: string) => {
+    setActiveSectionManually(id);
 
-    const handleConfirmPurchase = () => {
+    if (id === "productos") {
+      navigate("/catalogo");
+    } else if (window.location.pathname !== "/") {
+      // ✅ SPA: usar navigate en vez de recargar
+      navigate(`/#${id}`);
+    } else {
+      // Scroll suave en Home
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    setMenuOpen(false);
+    setShowProductsMobile(false);
+  };
+
+  const totalToPay = useMemo(() => {
+    const factor =
+      paymentMethod === "credito" ? 1.1 : paymentMethod === "efectivo" ? 1 : 1;
+    return (total + envio) * factor;
+  }, [total, envio, paymentMethod]);
+
+  const handleConfirmPurchase = () => {
     if (
-        !fullName.trim() ||
-        !location ||
-        (location === "Partido de La Costa" && !locality) ||
-        (location === "Otro" && (!otherCity.trim() || !postalCode.trim())) ||
-        !street.trim()
+      !fullName.trim() ||
+      !location ||
+      (location === "Partido de La Costa" && !locality) ||
+      (location === "Otro" &&
+        (!otherCity.trim() || !postalCode.trim())) ||
+      !street.trim()
     ) {
-        alert("Por favor, completá todos los campos obligatorios.");
-        return;
+      window.alert("Por favor, completá todos los campos obligatorios.");
+      return;
     }
 
     const productList = cart
-        .map(item => `. *${item.product.title}* (${item.quantity}x)`)
-        .join("\n");
+      .map((item) => `• *${item.product.title}* (${item.quantity}x)`)
+      .join("\n");
 
-    const message =
-        "Hola LMFITNESS. Quisiera realizar la compra\n\n" +
-        "*Productos elegidos:*\n" + productList + "\n\n" +
-        `*Nombre completo:* ${fullName}\n` +
-        `*Localidad:* ${location === "Partido de La Costa" ? locality : otherCity}\n` +
-        `*Código Postal:* ${location === "Otro" ? postalCode : "N/A"}\n` +
-        `*Calle:* ${street}\n` +
-        `*Entre calles:* ${betweenStreets || 'N/A'}\n\n` +
-        `*Método de pago:* ${paymentMethod}\n` +
-        `*Envío:* $${envio}\n` +
-        `*Total a pagar:* $${totalToPay.toFixed(2)}`;
+    const message = [
+      "Hola LMFITNESS. Quisiera realizar la compra",
+      "",
+      "*Productos elegidos:*",
+      productList,
+      "",
+      `*Nombre completo:* ${fullName}`,
+      `*Localidad:* ${
+        location === "Partido de La Costa" ? locality : otherCity
+      }`,
+      `*Código Postal:* ${location === "Otro" ? postalCode : "N/A"}`,
+      `*Calle:* ${street}`,
+      `*Entre calles:* ${betweenStreets || "N/A"}`,
+      "",
+      `*Método de pago:* ${paymentMethod}`,
+      `*Envío:* $${envio}`,
+      `*Total a pagar:* $${totalToPay.toFixed(2)}`
+    ].join("\n");
 
-    const whatsappURL = `https://wa.me/+5492257531656?text=${encodeURIComponent(message)}`;
+    const whatsappURL = `https://wa.me/+5492257531656?text=${encodeURIComponent(
+      message
+    )}`;
     window.open(whatsappURL, "_blank");
-};
+  };
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-        if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-            setShowSearch(false);
-        }
-        if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target as Node)) {
-            setShowMobileSearch(false);
-        }
-        };
-    
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+  // ✅ Un solo listener para cerrar buscadores al click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: PointerEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setShowSearch(false);
+      }
+      if (
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(event.target as Node)
+      ) {
+        setShowMobileSearch(false);
+      }
+    };
 
-    useEffect(() => {
-        if (!isScrollingUp) {
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => {
+      document.removeEventListener("pointerdown", handleClickOutside);
+    };
+  }, []);
+
+  // ✅ Cerrar menús si se hace scroll hacia abajo
+  useEffect(() => {
+    if (!isScrollingUp) {
+      if (menuOpen) {
+        setMenuOpen(false);
+        setShowProductsMobile(false);
+      }
+      if (showSearch) setShowSearch(false);
+      if (showMobileSearch) setShowMobileSearch(false);
+    }
+  }, [isScrollingUp, menuOpen, showSearch, showMobileSearch]);
+
+  // ✅ Mostrar header tras agregar producto (sin CLS brusco)
+  useEffect(() => {
+    const handleProductoAgregado = () => {
+      requestAnimationFrame(() => {
+        setForceShowHeader(true);
+        setTimeout(() => setForceShowHeader(false), 2000);
+      });
+    };
+
+    window.addEventListener("producto-agregado", handleProductoAgregado);
+    return () => {
+      window.removeEventListener("producto-agregado", handleProductoAgregado);
+    };
+  }, []);
+const [showProductsMobile, setShowProductsMobile] = useState(false);
+const scrollRef = useRef<HTMLDivElement>(null);
+
+return (
+  <>
+    <style>{`
+      .header-transition {
+        transition: all 0.5s ease-in-out;
+      }
+      .header-hidden {
+        transform: translateY(-100%);
+      }
+      .header-visible {
+        transform: translateY(0);
+      }
+    `}</style>
+
+    <header
+      className={`w-screen h-auto py-3 fixed z-50 transition-all duration-300
+        ${(isScrolled || isHoveringProducts) ? "bg-black" : "bg-gradient-to-b from-black to-transparent"}
+        ${isScrollingUp || forceShowHeader ? "translate-y-0" : "-translate-y-full"}
+      `}
+      role="banner"
+    >
+      <div className="flex justify-between items-center text-white p-4">
+        {/* Hamburguesa */}
+        <button
+          className="w-[70px] ml-2 text-white focus:outline-none z-70 lg:hidden cursor-pointer"
+          onClick={() => {
             if (menuOpen) {
-            setMenuOpen(false);
-            setShowProductsMobile(false);
+              setMenuOpen(false);
+              setShowProductsMobile(false);
+            } else {
+              setMenuOpen(true);
             }
-            if (showSearch) {
-            setShowSearch(false);
-            }
-            if (showMobileSearch) {
-            setShowMobileSearch(false);
-            }
-        }
-    }, [isScrollingUp, menuOpen, showSearch, showMobileSearch]);
+          }}
+          aria-label="Abrir menú de navegación"
+          aria-expanded={menuOpen}
+        >
+          <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-2.5" : ""}`} />
+          <div className={`w-8 h-1 bg-white my-1.5 rounded transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+          <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-2.5" : ""}`} />
+        </button>
 
-    useEffect(() => {
-        const handleProductoAgregado = () => {
-            window.scrollTo({ top: window.scrollY - 1 }); // fuerza un pequeño cambio de scroll
-            setForceShowHeader(true);
-            setTimeout(() => {
-                setForceShowHeader(false);
-            }, 2000); // mostrar el header durante 2 segundos
-        };
-    
-        window.addEventListener('producto-agregado', handleProductoAgregado);
-    
-        return () => {
-            window.removeEventListener('producto-agregado', handleProductoAgregado);
-        };
-    }, []);
+        {/* Logo (CLS fix) */}
+        <Link
+          to="/"
+          onClick={scrollToTop}
+          className="flex items-center justify-center z-50 mx-5 w-[70px] xl:ml-15"
+        >
+          <img
+            src="assets/logo.webp"
+            alt="Logo de LM Fitness"
+            width={70}
+            height={52}
+            className="h-[52px] w-auto object-contain img-shadow"
+            loading="eager"
+            decoding="async"
+            {...({ fetchpriority: "high" } as React.ImgHTMLAttributes<HTMLImageElement>)}
+          />
+        </Link>
 
-    const [showProductsMobile, setShowProductsMobile] = useState(false);
-    const scrollRef = useRef<HTMLDivElement>(null);
+        {/* Carrito + Buscador móvil */}
+        <div className="right-24 text-white z-50 mr-4 flex w-[70px] justify-between items-center lg:hidden">
+          {/* Lupa Mobile */}
+          <button
+            onClick={() => setShowMobileSearch((prev) => !prev)}
+            className="relative cursor-pointer"
+            aria-label="Abrir buscador en móvil"
+          >
+            <Search size={26} />
+          </button>
 
-    return (
-        <>
-            <style>{`
-                .header-transition {
-                    transition: all 0.5s ease-in-out;
-                }
-                .header-hidden {
-                    transform: translateY(-100%);
-                }
-                .header-visible {
-                    transform: translateY(0);
-                }
-            `}</style>
-            <header className={`w-screen h-auto py-3 fixed z-50 transition-all duration-300
-                ${(isScrolled || isHoveringProducts) ? 'bg-black' : 'bg-gradient-to-b from-black to-transparent'}
-                ${isScrollingUp || forceShowHeader ? 'translate-y-0' : '-translate-y-full'}
-            `}>
-                <div className="flex justify-between items-center text-white p-4">
-                    {/* Hamburguesa */}
-                    <button
-                        className="w-[70px] ml-2 text-white focus:outline-none z-70 lg:hidden cursor-pointer"
-                        onClick={() => {
-                            if (menuOpen) {
-                              // Si el menú está abierto y lo estamos cerrando
-                                setMenuOpen(false);
-                                setShowProductsMobile(false); // <<< ahora sí, cerramos el desplegable al cerrar el menú
-                                } else {
-                                // Si el menú estaba cerrado, simplemente lo abrimos
-                                setMenuOpen(true);
-                                }
-                            }}
-                    >
-                        <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-2.5' : ''}`} />
-                        <div className={`w-8 h-1 bg-white my-1.5 rounded transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-                        <div className={`w-8 h-1 bg-white my-1.5 rounded transition-transform duration-300 ${menuOpen ? '-rotate-45 -translate-y-2.5' : ''}`} />
-                    </button>
+          {/* Carrito Mobile */}
+          <button
+            onClick={() => setCartOpen(!cartOpen)}
+            className="relative cursor-pointer ml-4"
+            aria-label="Abrir carrito de compras"
+          >
+            <ShoppingCart size={26} />
+            {cart.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+                {cart.reduce((acc, item) => acc + item.quantity, 0)}
+              </span>
+            )}
+          </button>
+        </div>
 
-                    {/* Logo */}
-                    <Link to="/" onClick={scrollToTop} className="flex items-center justify-center z-50 mx-5 w-[70px] xl:ml-15">
-                        <img src="assets/logo.jpeg" alt="Logo" className="h-13 img-shadow" />
-                    </Link>
+        {/* Menú Desktop */}
+        <div className="hidden lg:flex items-center">
+          {/* Buscador Desktop */}
+          <div
+            ref={searchRef}
+            className="relative hidden lg:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10"
+            role="search"
+          >
+            <div className="flex items-center justify-center w-6 h-6 mx-2">
+              <Search size={22} className="text-white" />
+            </div>
 
-                    {/* Carrito + Buscador móvil */}
-                    <div className="right-24 text-white z-50 mr-4 flex w-[70px] justify-between items-center lg:hidden">
-                    
-                    {/* Lupa Mobile */}
-                    <button onClick={() => setShowMobileSearch(prev => !prev)} className="relative cursor-pointer">
-                        <Search size={26} />
-                    </button>
-
-                    {/* Carrito Mobile */}
-                    <button onClick={() => setCartOpen(!cartOpen)} className="relative cursor-pointer ml-4">
-                        <ShoppingCart size={26} />
-                        {cart.length > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
-                            {cart.reduce((acc, item) => acc + item.quantity, 0)}
-                        </span>
-                        )}
-                    </button>
-                    </div>
-
-                    {/* Menú Desktop */}
-                    <div className="hidden lg:flex items-center">
-                        {/* Buscador Desktop */}
-                        <div ref={searchRef} className="relative hidden lg:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10">
-                            <div className="flex items-center justify-center w-6 h-6 mx-2">
-                                <Search size={22} className="text-white" />
-                            </div>
-
-                            <input
-                                type="text"
-                                placeholder="Buscar tu producto"
-                                className="bg-white text-black rounded-full w-full h-8 px-3 outline-none border-none"
-                                value={searchQuery}
-                                onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setShowSearch(true);
-                                }}
-                                onFocus={() => setShowSearch(true)}
-                            />
-
+            <input
+              type="text"
+              placeholder="Buscar tu producto"
+              className="bg-white text-black rounded-full w-full h-8 px-3 outline-none border-none"
+              aria-label="Buscar productos"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSearch(true);
+              }}
+              onFocus={() => setShowSearch(true)}
+            />
+            
                             {showSearch && (
                             <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-lg max-h-64 overflow-y-auto z-40 text-black">
                                 {/* Resultados del buscador Desktop, agrupados por categoría */}
@@ -389,6 +426,8 @@ const Header: React.FC = () => {
                                 className="flex-1 bg-transparent outline-none text-black"
                             />
                             </div>
+
+                {/* HASTA ACÁ */}
 
                             {searchQuery && (
                                 <div className="absolute mt-2 w-80 bg-white rounded-md shadow-lg text-black max-h-80 overflow-y-auto z-50">

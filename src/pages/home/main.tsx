@@ -1,3 +1,4 @@
+// src/pages/main.tsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,7 +11,7 @@ const useIsDesktop = () => {
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 768);
-    check(); // primera vez
+    check(); 
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
@@ -23,34 +24,43 @@ const slides = [
     id: 1,
     bgMobile: "assets/images/SLIDER/HOME/01.webp",
     bgDesktop: "assets/images/SLIDER/HOME/01-desktop.webp",
+    alt: "Entrenamiento personalizado en Exentra",
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
       positionMobile: "top-[53%] left-1/2 -translate-x-1/2",
       positionDesktop: "top-[75%] left-1/2 -translate-x-1/2",
     },
+    width: 720,
+    height: 400,
   },
   {
     id: 2,
     bgMobile: "assets/images/SLIDER/HOME/02.webp",
     bgDesktop: "assets/images/SLIDER/HOME/02-desktop.webp",
+    alt: "Suplementos deportivos y nutrición",
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
       positionMobile: "top-[87%] left-1/2 -translate-x-1/2",
       positionDesktop: "top-[75%] left-1/2 -translate-x-1/2",
     },
+    width: 720,
+    height: 400,
   },
   {
     id: 3,
     bgMobile: "assets/images/SLIDER/HOME/03.webp",
     bgDesktop: "assets/images/SLIDER/HOME/03-desktop.webp",
+    alt: "Accesorios y equipamiento para fitness",
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
       positionMobile: "top-[58%] left-1/2 -translate-x-1/2",
       positionDesktop: "top-[75%] left-1/2 -translate-x-1/2",
     },
+    width: 720,
+    height: 400,
   },
 ];
 
@@ -91,21 +101,29 @@ const Main: React.FC = () => {
           <div
             className="flex transition-transform duration-700 ease-in-out"
             style={{ transform: `translateX(-${index * 100}%)` }}
-            >
+          >
             {slides.map((slide, slideIndex) => (
               <div
-              key={slide.id}
+                key={slide.id}
                 className="relative w-full flex-shrink-0"
                 style={{ minWidth: "100%" }}
-                >
+              >
                 <div className="relative w-full">
                   <picture>
-                    <source media="(min-width: 768px)" srcSet={slide.bgDesktop} />
+                    <source
+                      media="(min-width: 768px)"
+                      srcSet={slide.bgDesktop}
+                    />
                     <img
                       src={slide.bgMobile}
-                      alt=""
+                      alt={slide.alt}
+                      width={slide.width}
+                      height={slide.height}
                       className="w-full h-auto object-contain block"
-                      />
+                      loading={slideIndex === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      {...({ fetchpriority: slideIndex === 0 ? "high" : "auto" } as any)}
+                    />
                   </picture>
 
                   <AnimatePresence mode="wait">
@@ -118,10 +136,10 @@ const Main: React.FC = () => {
                         transition={{ duration: 0.15 }}
                         className={`absolute z-10 w-full px-2 transform ${
                           isDesktop
-                          ? slide.button.positionDesktop
-                          : slide.button.positionMobile
+                            ? slide.button.positionDesktop
+                            : slide.button.positionMobile
                         }`}
-                        >
+                      >
                         <div className="flex justify-center">
                           <Link
                             to={slide.button.link}
@@ -142,13 +160,15 @@ const Main: React.FC = () => {
           <button
             onClick={handlePrev}
             className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
-            >
+            aria-label="Imagen anterior"
+          >
             <ChevronLeft className="text-white/80" size={30} />
           </button>
           <button
             onClick={handleNext}
             className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/0 p-2 rounded-full transition-all hover:bg-black/30 cursor-pointer"
-            >
+            aria-label="Imagen siguiente"
+          >
             <ChevronRight className="text-white/80" size={30} />
           </button>
         </div>

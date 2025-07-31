@@ -1,4 +1,5 @@
 // src/App.tsx
+import { Suspense, lazy } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,29 +8,35 @@ import {
 } from "react-router-dom";
 import Header from "./components/header/header";
 import Footer from "./components/footer";
-import Catalogo from "./pages/products/Catalogo";
-import ProductoDetalle from "./pages/products/ProductoDetalle";
 import { CartProvider } from "./context/CartContext";
 import WspButton from "./components/WspButton";
-import HomeWrapper from "./components/HomeWrapper";
-import Login from "./admin/admin";
-// import Upload from "./admin/Upload";
+
+// ✅ Lazy Loading de páginas pesadas
+const Catalogo = lazy(() => import("./pages/products/Catalogo"));
+const ProductoDetalle = lazy(() => import("./pages/products/ProductoDetalle"));
+const HomeWrapper = lazy(() => import("./components/HomeWrapper"));
+const Login = lazy(() => import("./admin/admin"));
+// const Upload = lazy(() => import("./admin/Upload"));
 
 function AppContent() {
   const location = useLocation();
-  const isAdminRoute = ["/admin/login", "/admin/dashboard"].includes(location.pathname);
+  const isAdminRoute = ["/admin/login", "/admin/dashboard"].includes(
+    location.pathname
+  );
 
   return (
     <>
       {!isAdminRoute && <Header />}
 
-      <Routes>
-        <Route path="/" element={<HomeWrapper />} />
-        <Route path="/catalogo" element={<Catalogo />} />
-        <Route path="/producto/:id" element={<ProductoDetalle />} />
-        <Route path="/admin/dashboard" element={<Login />} />
-        {/* <Route path="/admin/upload" element={<Upload />} /> */}
-      </Routes>
+      <Suspense fallback={<div style={{ textAlign: "center", marginTop: "50px" }}>Cargando...</div>}>
+        <Routes>
+          <Route path="/" element={<HomeWrapper />} />
+          <Route path="/catalogo" element={<Catalogo />} />
+          <Route path="/producto/:id" element={<ProductoDetalle />} />
+          <Route path="/admin/dashboard" element={<Login />} />
+          {/* <Route path="/admin/upload" element={<Upload />} /> */}
+        </Routes>
+      </Suspense>
 
       {!isAdminRoute && <WspButton />}
       {!isAdminRoute && <Footer />}

@@ -1,8 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
-const useActiveSection = (sectionIds: string[]): [string, (id: string) => void] => {
-  const [activeSection, setActiveSection] = useState<string>('');
+const useActiveSection = (
+  sectionIds: string[]
+): [string, (id: string) => void] => {
+  const [activeSection, setActiveSection] = useState<string>("");
   const isClicking = useRef(false);
+  const frameRef = useRef<number | null>(null);
 
   const setActiveSectionManually = (id: string) => {
     isClicking.current = true;
@@ -10,38 +13,46 @@ const useActiveSection = (sectionIds: string[]): [string, (id: string) => void] 
     setTimeout(() => {
       isClicking.current = false;
     }, 800);
-  }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       if (isClicking.current) return;
 
-      const scrollPosition = window.scrollY + window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
 
-      if (scrollPosition >= documentHeight - 5) {
-        setActiveSection(sectionIds[sectionIds.length - 1]);
-        return;
-      }
+      frameRef.current = requestAnimationFrame(() => {
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const viewportHeight = window.innerHeight;
 
-      const currentSection = sectionIds.find((id) => {
-        const element = document.getElementById(id);
-        if (!element) return false;
+        // Si llegamos al final de la página → marcar la última sección
+        if (scrollPosition >= documentHeight - 5) {
+          setActiveSection(sectionIds[sectionIds.length - 1]);
+          return;
+        }
 
-        const rect = element.getBoundingClientRect();
-        return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+        for (const id of sectionIds) {
+          const element = document.getElementById(id);
+          if (!element) continue;
+
+          const rect = element.getBoundingClientRect();
+          const elementMid = rect.top + rect.height / 2;
+
+          if (elementMid >= 0 && elementMid <= viewportHeight * 0.75) {
+            setActiveSection(id);
+            break;
+          }
+        }
       });
-
-      if (currentSection) {
-        setActiveSection(currentSection);
-      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [sectionIds]);
 
