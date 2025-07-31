@@ -24,7 +24,7 @@ const slides = [
     id: 1,
     bgMobile: "assets/images/SLIDER/HOME/01.webp",
     bgDesktop: "assets/images/SLIDER/HOME/01-desktop.webp",
-    alt: "Entrenamiento personalizado en Exentra",
+    alt: "Entrenamiento personalizado LM FITNESS",
     button: {
       text: "VER CATÁLOGO",
       link: "/catalogo",
