@@ -45,7 +45,9 @@ const CatalogoCard: React.FC = () => {
 
       for (const catDoc of categoriasSnap.docs) {
         const catData = catDoc.data();
-        if (catData.oculta) continue;
+
+        // Ocultar categoría SIN STOCK y las que tengan "oculta: true"
+        if (catData.oculta || catData.name?.toUpperCase() === "SIN STOCK") continue;
 
         const itemsSnap = await getDocs(collection(catDoc.ref, "items"));
         const productos = itemsSnap.docs.map((doc) => ({
@@ -61,6 +63,7 @@ const CatalogoCard: React.FC = () => {
           products: productos,
         });
       }
+
 
       categorias.sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
       setData(categorias);

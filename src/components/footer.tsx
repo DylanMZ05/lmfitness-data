@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
           {/* Logo */}
           <div className="flex flex-col items-center md:items-start">
             <img
-              src="assets/logo.jpeg"
+              src="assets/logo.webp"
               alt="Logo"
               className="h-20 mb-2 img-shadow"
             />
