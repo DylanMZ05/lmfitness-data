@@ -11,7 +11,9 @@ export interface Product {
   featuredId?: number | null;
   exclusiveId?: number | null;
   sinStock?: boolean;
+  sabores?: string[]; // ✅ AGREGADO
 }
+
 
 // ✅ Tipado de categorías que vienen de Firestore
 export interface Category {
@@ -769,7 +771,7 @@ export const productData: Category[] = [
       {
         id: 64,
         images: [
-          "assets/images/POTASIO-MAGNESIO/dad2c1_a28f3ab1a8c844d580b0b7b91ba8a063~mv2.webp",
+          "assets/images/POTASIO-MAGNESIO/dad2c1_b2088427c28947468ccd98d196bd30fe~mv2.webp",
           "assets/images/INFORMACION-NUTRICIONAL-PRODUCTOS/MAGNESIO-POTASIO/INFO-MAGNESIO-ONEFIT.webp"
         ],
         title: "CITRATO MAGNESIO - ONEFIT",

@@ -227,6 +227,7 @@ const CatalogoCard: React.FC = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-bold">{selectedProduct.title}</h2>
             <p className="text-gray-600">{selectedProduct.description}</p>
+
             {selectedProduct.offerPrice ? (
               <div className="mb-2">
                 <p className="text-sm text-gray-500 line-through">${selectedProduct.price}</p>
@@ -235,17 +236,43 @@ const CatalogoCard: React.FC = () => {
             ) : (
               <p className="text-lg font-bold">${selectedProduct.price}</p>
             )}
+
+            {/* Selección de sabor si existen sabores */}
+            {Array.isArray((selectedProduct as any).sabores) && (selectedProduct as any).sabores.length > 0 && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Elegí un sabor:</label>
+                <select
+                  className="w-full border border-gray-300 rounded px-2 py-1"
+                  value={(selectedProduct as any).selectedSabor || ""}
+                  onChange={(e) => {
+                    const sabor = e.target.value;
+                    setSelectedProduct((prev) => prev ? { ...prev, selectedSabor: sabor } : null);
+                  }}
+                >
+                  <option value="">Seleccionar sabor</option>
+                  {(selectedProduct as any).sabores.map((s: string, i: number) => (
+                    <option key={i} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="flex items-center justify-center my-4">
               <button className="px-4 py-2 bg-gray-200 rounded-l-lg" onClick={() => adjustQuantity(-1)}>-</button>
               <span className="px-4">{quantity}</span>
               <button className="px-4 py-2 bg-gray-200 rounded-r-lg" onClick={() => adjustQuantity(1)}>+</button>
             </div>
+
             <button
-              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition w-full"
+              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
               onClick={addToCartHandler}
+              disabled={
+                Array.isArray((selectedProduct as any).sabores) && (selectedProduct as any).sabores.length > 0 && !(selectedProduct as any).selectedSabor
+              }
             >
               Añadir al carrito
             </button>
+
             <button
               className="mt-2 w-full text-gray-600 bg-gray-200 py-2 rounded-lg hover:bg-gray-300 transition"
               onClick={() => setSelectedProduct(null)}
@@ -255,6 +282,7 @@ const CatalogoCard: React.FC = () => {
           </div>
         </div>
       )}
+
 
       <AnimatePresence>
         {showPopup && (
