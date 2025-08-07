@@ -99,6 +99,7 @@ const Header: React.FC = () => {
     }, 0),
     [cart]
   );
+
   const handleClick = (id: string) => {
     setActiveSectionManually(id);
 
@@ -130,8 +131,7 @@ const Header: React.FC = () => {
       !fullName.trim() ||
       !location ||
       (location === "Partido de La Costa" && !locality) ||
-      (location === "Otro" &&
-        (!otherCity.trim() || !postalCode.trim())) ||
+      (location === "Otro" && (!otherCity.trim() || !postalCode.trim())) ||
       !street.trim()
     ) {
       window.alert("Por favor, completá todos los campos obligatorios.");
@@ -139,33 +139,39 @@ const Header: React.FC = () => {
     }
 
     const productList = cart
-      .map((item) => `• *${item.product.title}* (${item.quantity}x)`)
+      .map((item) => {
+        const titleWithSabor = item.sabor
+          ? `${item.product.title} - ${item.sabor}`
+          : item.product.title;
+        const unitPrice = Number(item.product.offerPrice || item.product.price);
+        const subtotal = unitPrice * item.quantity;
+        return `* ${titleWithSabor} (${item.quantity}x) - $${subtotal.toLocaleString("es-AR")}`;
+      })
       .join("\n");
 
     const message = [
       "Hola LMFITNESS. Quisiera realizar la compra",
       "",
-      "*Productos elegidos:*",
-      productList,
-      "",
       `*Nombre completo:* ${fullName}`,
-      `*Localidad:* ${
-        location === "Partido de La Costa" ? locality : otherCity
-      }`,
+      `*Localidad:* ${location === "Partido de La Costa" ? locality : otherCity}`,
       `*Código Postal:* ${location === "Otro" ? postalCode : "N/A"}`,
       `*Calle:* ${street}`,
       `*Entre calles:* ${betweenStreets || "N/A"}`,
       "",
+      "*Productos elegidos:*",
+      productList,
+      "",
       `*Método de pago:* ${paymentMethod}`,
       `*Envío:* $${envio}`,
-      `*Total a pagar:* $${totalToPay.toFixed(2)}`
+      `*Total a pagar:* $${totalToPay.toLocaleString("es-AR", { minimumFractionDigits: 2 })}`
     ].join("\n");
 
-    const whatsappURL = `https://wa.me/+5492257531656?text=${encodeURIComponent(
-      message
-    )}`;
+    const whatsappURL = `https://wa.me/+5492257531656?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
+
+
+
 
   // ✅ Un solo listener para cerrar buscadores al click fuera
   useEffect(() => {
@@ -622,76 +628,93 @@ return (
                 )}
 
                 {/* Carrito */}
-                <AnimatePresence>
-                    {cartOpen && (
-                        <>
-                        {/* Fondo oscuro animado */}
-                        <motion.div
-                            key="overlay"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 0.7 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="fixed inset-0 h-screen bg-black z-150"
-                            onClick={() => setCartOpen(false)}
-                        />
+<AnimatePresence>
+  {cartOpen && (
+    <>
+      {/* Fondo oscuro animado */}
+      <motion.div
+        key="overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.7 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 h-screen bg-black z-150"
+        onClick={() => setCartOpen(false)}
+      />
 
-                        {/* Carrito deslizante animado */}
-                        <motion.div
-                            key="cart"
-                            initial={{ x: '100%' }}
-                            animate={{ x: 0 }}
-                            exit={{ x: '100%' }}
-                            transition={{ type: 'tween', duration: 0.3 }}
-                            className="fixed top-0 right-0 w-85 max-w-screen h-screen bg-white shadow-lg p-4 px-7 text-black z-160 overflow-y-auto"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <button
-                            onClick={() => setCartOpen(false)}
-                            className="absolute top-4 right-8 text-black text-2xl font-bold cursor-pointer"
-                            >
-                            ✖
-                            </button>
+      {/* Carrito deslizante animado */}
+      <motion.div
+        key="cart"
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ type: 'tween', duration: 0.3 }}
+        className="fixed top-0 right-0 w-85 max-w-screen h-screen bg-white shadow-lg p-4 px-7 text-black z-160 overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={() => setCartOpen(false)}
+          className="absolute top-4 right-8 text-black text-2xl font-bold cursor-pointer"
+        >
+          ✖
+        </button>
 
-                            <h2 className="text-xl font-bold">Carrito</h2>
-                            {cart.length === 0 ? (
-                            <p className="text-gray-500">El carrito está vacío.</p>
-                            ) : (
-                            <div>
-                                {cart.map((item) => (
-                                <div key={item.product.id} className="flex justify-between items-center border-b py-2">
-                                    <div className='w-[300px]'>
-                                    <h3 className="text-sm font-semibold">{item.product.title}</h3>
-                                    <p className="text-sm">
-                                        {item.quantity} x ${item.product.offerPrice || item.product.price}
-                                    </p>
-                                    </div>
-                                    <button onClick={() => removeFromCart(Number(item.product.id))} className="text-red-500 cursor-pointer">
-                                    ❌
-                                    </button>
-                                </div>
-                                ))}
+        <h2 className="text-xl font-bold mb-4">Carrito</h2>
 
-                                <div className="flex justify-between items-center font-bold mt-4">
-                                <span>Total:</span>
-                                <span>${total.toFixed(2)}</span>
-                                </div>
+        {cart.length === 0 ? (
+          <p className="text-gray-500">El carrito está vacío.</p>
+        ) : (
+          <div>
+            {cart.map((item) => (
+              <div
+                key={`${item.product.id}-${item.sabor || 'default'}`}
+                className="flex justify-between items-center border-b py-2"
+              >
+                <div className="w-[300px]">
+                  <h3 className="text-sm font-semibold">
+                    {item.product.title}
+                    {item.sabor ? ` - ${item.sabor}` : ""}
+                  </h3>
+                  <p className="text-sm">
+                    {item.quantity} x ${item.product.offerPrice || item.product.price}
+                  </p>
+                </div>
+                <button
+                  onClick={() => removeFromCart(Number(item.product.id), item.sabor)}
+                  className="text-red-500 cursor-pointer"
+                >
+                  ❌
+                </button>
+              </div>
+            ))}
 
-                                <button onClick={clearCart} className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg cursor-pointer">
-                                Vaciar carrito
-                                </button>
-                                <button
-                                onClick={() => setShowCheckout(true)}
-                                className="w-full mt-2 bg-green-500 text-white py-2 rounded-lg cursor-pointer"
-                                >
-                                Comprar
-                                </button>
-                            </div>
-                            )}
-                        </motion.div>
-                        </>
-                    )}
-                </AnimatePresence>
+            <div className="flex justify-between items-center font-bold mt-4">
+              <span>Total:</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
+
+            <button
+              onClick={clearCart}
+              className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg cursor-pointer"
+            >
+              Vaciar carrito
+            </button>
+            <button
+              onClick={() => setShowCheckout(true)}
+              className="w-full mt-2 bg-green-500 text-white py-2 rounded-lg cursor-pointer"
+            >
+              Comprar
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </>
+  )}
+</AnimatePresence>
+
+
+
+
 
                 {/* Checkout */}
                 {showCheckout && (

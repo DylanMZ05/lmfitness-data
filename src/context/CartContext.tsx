@@ -1,15 +1,17 @@
 import React, { createContext, useState, useContext } from "react";
-import { Product } from "../data/products"; // Asegúrate de ajustar la ruta según tu estructura
+import { Product } from "../data/products";
 
+// ✅ CartItem ahora incluye 'sabor' como campo obligatorio
 interface CartItem {
   product: Product;
   quantity: number;
+  sabor: string;
 }
 
 interface CartContextType {
   cart: CartItem[];
-  addToCart: (product: Product, quantity: number) => void;
-  removeFromCart: (id: number) => void;
+  addToCart: (product: Product, quantity: number, sabor: string) => void;
+  removeFromCart: (productId: number | string, sabor: string) => void;
   clearCart: () => void;
 }
 
@@ -18,26 +20,32 @@ export const CartContext = createContext<CartContextType | undefined>(undefined)
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  const addToCart = (product: Product, quantity: number) => {
+  const addToCart = (product: Product, quantity: number, sabor: string) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
-        (item) => item.product.id === product.id
+        (item) => item.product.id === product.id && item.sabor === sabor
       );
+
       if (existingItem) {
-        // Si el producto ya está en el carrito, se incrementa la cantidad
+        // Si ya existe el producto con ese sabor, actualiza cantidad
         return prevCart.map((item) =>
-          item.product.id === product.id
+          item.product.id === product.id && item.sabor === sabor
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      // Si no está, se agrega un nuevo CartItem
-      return [...prevCart, { product, quantity }];
+
+      // Si no existe ese producto con ese sabor, lo agrega nuevo
+      return [...prevCart, { product, quantity, sabor }];
     });
   };
 
-  const removeFromCart = (id: number) => {
-    setCart((prevCart) => prevCart.filter((item) => item.product.id !== id));
+  const removeFromCart = (productId: number | string, sabor: string) => {
+    setCart((prevCart) =>
+      prevCart.filter(
+        (item) => !(item.product.id === productId && item.sabor === sabor)
+      )
+    );
   };
 
   const clearCart = () => {
@@ -45,17 +53,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart }}
-    >
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-/**
- * Hook para consumir el contexto del carrito
- */
+// ✅ Hook para consumir el contexto del carrito
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {

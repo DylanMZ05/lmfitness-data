@@ -11,7 +11,8 @@ export interface Product {
   featuredId?: number | null;
   exclusiveId?: number | null;
   sinStock?: boolean;
-  sabores?: string[]; // ✅ AGREGADO
+  sabores?: string[];
+  sabor?: string;
 }
 
 

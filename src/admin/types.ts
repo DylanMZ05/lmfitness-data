@@ -10,6 +10,7 @@ export interface Product {
   exclusiveId?: number | null;
   sinStock?: boolean;
   sabores?: string[];
+  sabor?: string;
 }
 
 export interface Category {

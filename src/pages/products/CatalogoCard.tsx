@@ -16,7 +16,12 @@ interface Product {
   description?: string;
   images: string[];
   sinStock?: boolean;
+  selectedSabor?: string; // <- para el modal (selección)
+  sabores?: string[];
+  sabor?: string;         // <- para el carrito (guardar el valor final)
 }
+
+
 
 interface Category {
   name: string;
@@ -103,13 +108,21 @@ const CatalogoCard: React.FC = () => {
   const addToCartHandler = () => {
     if (selectedProduct) {
       const price = selectedProduct.offerPrice || selectedProduct.price;
-      addToCart({ ...selectedProduct, price }, quantity);
+      const sabor = (selectedProduct as any).selectedSabor || "";
+
+      // 🔥 Esto es lo correcto:
+      addToCart({ ...selectedProduct, price }, quantity, sabor);
+
       setSelectedProduct(null);
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 2500);
       window.dispatchEvent(new CustomEvent("producto-agregado"));
     }
   };
+
+
+
+
 
   useEffect(() => {
     const hash = location.hash.replace("#", "");

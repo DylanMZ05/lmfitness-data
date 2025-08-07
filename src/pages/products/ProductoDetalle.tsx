@@ -11,13 +11,15 @@ import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 interface Product {
   id: string;
   title: string;
-  price: number;
-  offerPrice?: number;
-  images: string[];
+  price: string;
+  offerPrice?: string;
   description?: string;
-  longDescription?: string;
+  images: string[];
   sinStock?: boolean;
+  selectedSabor?: string; // <- para el modal (selección)
+  sabores?: string;         // <- para el carrito (guardar el valor final)
 }
+
 
 const ProductoDetalle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
