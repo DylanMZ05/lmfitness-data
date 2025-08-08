@@ -11,14 +11,16 @@ import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 interface Product {
   id: string;
   title: string;
-  price: string;
-  offerPrice?: string;
+  price: number;
+  offerPrice?: number;
   description?: string;
+  longDescription?: string; // ✅ <- Agregalo acá
   images: string[];
   sinStock?: boolean;
-  selectedSabor?: string; // <- para el modal (selección)
-  sabores?: string;         // <- para el carrito (guardar el valor final)
+  selectedSabor?: string;
+  sabores?: string[];
 }
+
 
 
 const ProductoDetalle: React.FC = () => {
@@ -31,6 +33,7 @@ const ProductoDetalle: React.FC = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [foundProduct, setFoundProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedSabor, setSelectedSabor] = useState<string>("");
 
   useEffect(() => {
   const fetchProduct = async () => {
@@ -130,7 +133,7 @@ const ProductoDetalle: React.FC = () => {
       ...foundProduct,
       images: [images[currentSlide], ...foundProduct.images.filter(img => img !== images[currentSlide])]
     };
-    addToCart(productToAdd, quantity);
+    addToCart(productToAdd, quantity, selectedSabor);
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 2500);
   };
@@ -211,12 +214,36 @@ const ProductoDetalle: React.FC = () => {
               </>
             ) : (
               <>
-                <div className="flex items-center mb-4">
+                {/* Selector de sabor si existe */}
+                {foundProduct?.sabores && (
+                  <div className="mt-4">
+                    <p className="text-sm mb-1">Elegí un sabor:</p>
+                    <div className="flex gap-2 flex-wrap">
+                      {foundProduct.sabores.map((sabor) => (
+                        <button
+                          key={sabor}
+                          onClick={() => setSelectedSabor(sabor.trim())}
+                          className={`px-3 py-1 rounded-full border transition ${
+                            selectedSabor === sabor.trim()
+                              ? "bg-blue-600 text-white"
+                              : "bg-white text-gray-700"
+                          }`}
+                        >
+                          {sabor.trim()}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Selector de cantidad */}
+                <div className="flex items-center mt-4 mb-4">
                   <button className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer" onClick={() => adjustQuantity(-1)}>-</button>
                   <span className="px-4 border-y-2 border-gray-200 h-10 flex justify-center items-center">{quantity}</span>
                   <button className="px-4 py-2 bg-gray-200 rounded-r-lg cursor-pointer" onClick={() => adjustQuantity(1)}>+</button>
                 </div>
 
+                {/* Botón agregar al carrito */}
                 <button
                   className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
                   onClick={handleAddToCart}
