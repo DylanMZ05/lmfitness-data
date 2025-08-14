@@ -14,14 +14,12 @@ interface Product {
   price: number;
   offerPrice?: number;
   description?: string;
-  longDescription?: string; // ✅ <- Agregalo acá
+  longDescription?: string;
   images: string[];
   sinStock?: boolean;
   selectedSabor?: string;
   sabores?: string[];
 }
-
-
 
 const ProductoDetalle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,63 +31,58 @@ const ProductoDetalle: React.FC = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [foundProduct, setFoundProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // Popup estilo catálogo
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedSabor, setSelectedSabor] = useState<string>("");
 
   useEffect(() => {
-  const fetchProduct = async () => {
-    try {
-      const categoriasSnap = await getDocs(collection(db, "productos"));
-      let productoEncontrado: Product | null = null;
+    const fetchProduct = async () => {
+      try {
+        const categoriasSnap = await getDocs(collection(db, "productos"));
+        let productoEncontrado: Product | null = null;
 
-      for (const catDoc of categoriasSnap.docs) {
-        const itemRef = doc(db, "productos", catDoc.id, "items", id || "");
-        const itemSnap = await getDoc(itemRef);
+        for (const catDoc of categoriasSnap.docs) {
+          const itemRef = doc(db, "productos", catDoc.id, "items", id || "");
+          const itemSnap = await getDoc(itemRef);
 
-        if (itemSnap.exists()) {
-          const data = itemSnap.data();
-          const sinStock = Boolean(data.sinStock);
+          if (itemSnap.exists()) {
+            const data = itemSnap.data();
+            const sinStock = Boolean(data.sinStock);
 
-          console.log("↪ Posible producto en", catDoc.id, "sinStock:", sinStock);
+            const productoFormateado: Product = {
+              id: itemSnap.id,
+              title: data.title,
+              price: Number(data.price),
+              offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
+              images: Array.isArray(data.images)
+                ? data.images.map((img: string) => (img.startsWith("/") ? img : `/${img}`))
+                : [],
+              description: data.description,
+              longDescription: data.longDescription,
+              sinStock,
+              sabores: Array.isArray(data.sabores) ? data.sabores.map((s: string) => s.trim()) : undefined, // ✅ Traemos sabores
+            };
 
-          const productoFormateado: Product = {
-            id: itemSnap.id,
-            title: data.title,
-            price: Number(data.price),
-            offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
-            images: Array.isArray(data.images)
-              ? data.images.map((img: string) => (img.startsWith("/") ? img : `/${img}`))
-              : [],
-            description: data.description,
-            longDescription: data.longDescription,
-            sinStock,
-          };
-
-          // Guardamos el primero encontrado
-          if (!productoEncontrado) {
-            productoEncontrado = productoFormateado;
-          }
-
-          // Pero si encontramos uno con sinStock true, lo usamos y cortamos
-          if (sinStock) {
-            setFoundProduct(productoFormateado);
-            console.log("✅ Producto con sinStock: true encontrado en", catDoc.id);
-            return;
+            if (!productoEncontrado) {
+              productoEncontrado = productoFormateado;
+            }
+            if (sinStock) {
+              setFoundProduct(productoFormateado);
+              return;
+            }
           }
         }
+
+        if (productoEncontrado) {
+          setFoundProduct(productoEncontrado);
+        }
+      } catch (err) {
+        console.error("Error al cargar producto:", err);
+      } finally {
+        setLoading(false);
       }
-
-      if (productoEncontrado) {
-        console.log("⚠️ Producto encontrado pero sin sinStock: true");
-        setFoundProduct(productoEncontrado);
-      }
-
-    } catch (err) {
-      console.error("Error al cargar producto:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+    };
 
     fetchProduct();
   }, [id]);
@@ -117,28 +110,44 @@ const ProductoDetalle: React.FC = () => {
   const images = foundProduct.images;
   const isSinStock = foundProduct?.sinStock === true;
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % images.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
-  };
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % images.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
 
   const openZoom = () => setZoomOpen(true);
   const closeZoom = () => setZoomOpen(false);
 
-  const handleAddToCart = () => {
+  const openAddToCartModal = () => {
+    setSelectedSabor("");      // reset
+    setQuantity(1);            // reset
+    setModalOpen(true);        // abre el popup igual que en catálogo
+  };
+
+  const addToCartFromModal = () => {
+    if (!foundProduct) return;
+
+    const price = (foundProduct.offerPrice ?? foundProduct.price) as number;
+
+    // Reordenamos imágenes para que la actual vaya primero (igual que antes)
     const productToAdd = {
       ...foundProduct,
-      images: [images[currentSlide], ...foundProduct.images.filter(img => img !== images[currentSlide])]
+      price,
+      images: [images[currentSlide], ...foundProduct.images.filter((img) => img !== images[currentSlide])],
     };
-    addToCart(productToAdd, quantity, selectedSabor);
+
+    // Si tiene sabores, requerimos selección
+    const needsFlavor = Array.isArray(foundProduct.sabores) && foundProduct.sabores.length > 0;
+    const sabor = needsFlavor ? selectedSabor : "";
+
+    if (needsFlavor && !sabor) return; // botón ya se deshabilita, esto es de seguridad
+
+    addToCart(productToAdd, quantity, sabor);
+    setModalOpen(false);
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 2500);
   };
 
   const finalDescription = foundProduct.longDescription || foundProduct.description || "";
+  const hasSabores = Array.isArray(foundProduct.sabores) && foundProduct.sabores.length > 0;
 
   return (
     <>
@@ -153,9 +162,7 @@ const ProductoDetalle: React.FC = () => {
               key={currentSlide}
               src={images[currentSlide]}
               alt={foundProduct.title}
-              className={`object-contain w-full h-64 cursor-pointer ${
-                isSinStock ? "grayscale opacity-50" : ""
-              }`}
+              className={`object-contain w-full h-64 cursor-pointer ${isSinStock ? "grayscale opacity-50" : ""}`}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
@@ -171,22 +178,48 @@ const ProductoDetalle: React.FC = () => {
                 SIN STOCK
               </span>
             )}
-            <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full" onClick={prevSlide}>
+            <button
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
+              onClick={prevSlide}
+            >
               <FaArrowLeft />
             </button>
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full" onClick={nextSlide}>
+            <button
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
+              onClick={nextSlide}
+            >
               <FaArrowRight />
             </button>
           </div>
 
           <div className="w-full md:w-1/2 px-5">
             <h1 className="text-2xl font-bold mb-2">{foundProduct.title}</h1>
+
             <div
               className="text-gray-600 mb-2 text-sm"
-              dangerouslySetInnerHTML={{
-                __html: parseFormattedText(finalDescription),
-              }}
+              dangerouslySetInnerHTML={{ __html: parseFormattedText(finalDescription) }}
             />
+
+            {/* 🔎 Info de sabores debajo de la descripción */}
+            {hasSabores && (
+            <div className="mb-4">
+              <p className="text-sm font-medium text-gray-600 mb-2">Sabores disponibles</p>
+              <div className="flex flex-wrap gap-2">
+                {foundProduct.sabores!.map((s, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                              bg-rose-50 text-rose-700 ring-1 ring-rose-200"
+                  >
+                    {s.trim()}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+
+
             {foundProduct.offerPrice ? (
               <div className="mb-2">
                 <p className="text-sm text-gray-500 line-through">
@@ -214,39 +247,16 @@ const ProductoDetalle: React.FC = () => {
               </>
             ) : (
               <>
-                {/* Selector de sabor si existe */}
-                {foundProduct?.sabores && (
-                  <div className="mt-4">
-                    <p className="text-sm mb-1">Elegí un sabor:</p>
-                    <div className="flex gap-2 flex-wrap">
-                      {foundProduct.sabores.map((sabor) => (
-                        <button
-                          key={sabor}
-                          onClick={() => setSelectedSabor(sabor.trim())}
-                          className={`px-3 py-1 rounded-full border transition ${
-                            selectedSabor === sabor.trim()
-                              ? "bg-blue-600 text-white"
-                              : "bg-white text-gray-700"
-                          }`}
-                        >
-                          {sabor.trim()}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Selector de cantidad */}
+                {/* En lugar de selector inline, abrimos el popup estilo Catálogo */}
                 <div className="flex items-center mt-4 mb-4">
                   <button className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer" onClick={() => adjustQuantity(-1)}>-</button>
                   <span className="px-4 border-y-2 border-gray-200 h-10 flex justify-center items-center">{quantity}</span>
                   <button className="px-4 py-2 bg-gray-200 rounded-r-lg cursor-pointer" onClick={() => adjustQuantity(1)}>+</button>
                 </div>
 
-                {/* Botón agregar al carrito */}
                 <button
                   className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
-                  onClick={handleAddToCart}
+                  onClick={openAddToCartModal}
                 >
                   Agregar al carrito
                 </button>
@@ -282,10 +292,92 @@ const ProductoDetalle: React.FC = () => {
         <FeaturedSliderContainer title="" bgColor="bg-white" mode="exclusive" />
       </div>
 
+      {/* 👉 Popup estilo Catálogo para sabor + cantidad */}
+      <AnimatePresence>
+        {modalOpen && (
+          <div className="fixed inset-0 bg-black/70 flex justify-center items-center px-4 z-[2100]">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 30 }}
+              className="bg-white p-6 rounded-lg shadow-lg w-96"
+            >
+              <h2 className="text-lg font-bold">{foundProduct.title}</h2>
+              <p className="text-gray-600">{foundProduct.description}</p>
+
+              {foundProduct.offerPrice ? (
+                <div className="mb-2">
+                  <p className="text-sm text-gray-500 line-through">
+                    $ {foundProduct.price.toLocaleString("es-AR")}
+                  </p>
+                  <p className="text-lg font-bold text-red-600">
+                    $ {foundProduct.offerPrice.toLocaleString("es-AR")}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-lg font-bold">
+                  $ {foundProduct.price.toLocaleString("es-AR")}
+                </p>
+              )}
+
+              {hasSabores && (
+              <div className="mb-4">
+                <p className="block text-sm font-medium text-gray-700 mb-2">Elegí un sabor:</p>
+                <div className="flex flex-wrap gap-2">
+                  {foundProduct.sabores!.map((s) => {
+                    const active = selectedSabor === s.trim();
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSelectedSabor(s.trim())}
+                        className={[
+                          "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer",
+                          "ring-1",
+                          active
+                            ? "bg-rose-600 text-white ring-rose-600"
+                            : "bg-rose-50 text-rose-700 ring-rose-200 hover:bg-rose-100"
+                        ].join(" ")}
+                      >
+                        {s.trim()}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+
+              <div className="flex items-center justify-center my-4">
+                <button className="px-4 py-2 bg-gray-200 rounded-l-lg" onClick={() => adjustQuantity(-1)}>-</button>
+                <span className="px-4">{quantity}</span>
+                <button className="px-4 py-2 bg-gray-200 rounded-r-lg" onClick={() => adjustQuantity(1)}>+</button>
+              </div>
+
+              <button
+                className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
+                onClick={addToCartFromModal}
+                disabled={hasSabores && !selectedSabor}
+              >
+                Añadir al carrito
+              </button>
+
+              <button
+                className="mt-2 w-full text-gray-600 bg-gray-200 py-2 rounded-lg hover:bg-gray-300 transition"
+                onClick={() => setModalOpen(false)}
+              >
+                Cancelar
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Toast de añadido */}
       <AnimatePresence>
         {showPopup && (
           <motion.div
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 z-[9999]"
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 z-[2200]"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}

@@ -680,7 +680,7 @@ return (
                   </p>
                 </div>
                 <button
-                  onClick={() => removeFromCart(Number(item.product.id), item.sabor)}
+                  onClick={() => removeFromCart(String(item.product.id), item.sabor)} // 👈 sin Number(...)
                   className="text-red-500 cursor-pointer"
                 >
                   ❌

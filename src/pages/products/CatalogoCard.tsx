@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
 import { FaEye, FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../context/useCart";
 import useScrollToTop from "../../hooks/useScrollToTop";
@@ -16,12 +15,13 @@ interface Product {
   description?: string;
   images: string[];
   sinStock?: boolean;
-  selectedSabor?: string; // <- para el modal (selección)
+  // selección temporal en el modal
+  selectedSabor?: string;
+  // sabores disponibles
   sabores?: string[];
-  sabor?: string;         // <- para el carrito (guardar el valor final)
+  // sabor elegido que viaja al carrito
+  sabor?: string;
 }
-
-
 
 interface Category {
   name: string;
@@ -69,7 +69,6 @@ const CatalogoCard: React.FC = () => {
         });
       }
 
-
       categorias.sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
       setData(categorias);
       setLoading(false);
@@ -79,9 +78,8 @@ const CatalogoCard: React.FC = () => {
   }, []);
 
   const toggleCategory = (slug: string) => {
-    if (openCategory === slug) {
-      setOpenCategory(null);
-    } else {
+    if (openCategory === slug) setOpenCategory(null);
+    else {
       setOpenCategory(null);
       setTimeout(() => {
         setOpenCategory(slug);
@@ -106,23 +104,16 @@ const CatalogoCard: React.FC = () => {
   };
 
   const addToCartHandler = () => {
-    if (selectedProduct) {
-      const price = selectedProduct.offerPrice || selectedProduct.price;
-      const sabor = (selectedProduct as any).selectedSabor || "";
+    if (!selectedProduct) return;
+    const price = (selectedProduct.offerPrice || selectedProduct.price) as string;
+    const sabor = (selectedProduct as any).selectedSabor || "";
+    addToCart({ ...selectedProduct, price }, quantity, sabor);
 
-      // 🔥 Esto es lo correcto:
-      addToCart({ ...selectedProduct, price }, quantity, sabor);
-
-      setSelectedProduct(null);
-      setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 2500);
-      window.dispatchEvent(new CustomEvent("producto-agregado"));
-    }
+    setSelectedProduct(null);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 2500);
+    window.dispatchEvent(new CustomEvent("producto-agregado"));
   };
-
-
-
-
 
   useEffect(() => {
     const hash = location.hash.replace("#", "");
@@ -191,21 +182,46 @@ const CatalogoCard: React.FC = () => {
                           SIN STOCK
                         </span>
                       )}
-                      <div className="h-32 w-full overflow-hidden flex justify-center items-center bg-neutral-200">
-                        <img src={product.images?.[0] || "/placeholder.jpg"} alt={product.title} className="h-full object-contain p-2" />
-                      </div>
+
+                      {/* Imagen enlaza al detalle */}
+                      <Link
+                        to={`/producto/${product.id}`}
+                        onClick={scrollToTop}
+                        title="Ver detalle"
+                        className="h-32 w-full overflow-hidden flex justify-center items-center bg-neutral-200"
+                      >
+                        <img
+                          src={product.images?.[0] || "/placeholder.jpg"}
+                          alt={product.title}
+                          className="h-full object-contain p-2"
+                        />
+                      </Link>
+
                       <div className="p-3 flex flex-col flex-1 justify-between">
                         <div className="flex-1">
-                          <h3 className="text-sm font-semibold mb-1">{product.title}</h3>
+                          {/* Título enlaza al detalle */}
+                          <Link
+                            to={`/producto/${product.id}`}
+                            onClick={scrollToTop}
+                            title="Ver detalle"
+                            className="block"
+                          >
+                            <h3 className="text-sm font-semibold mb-1">{product.title}</h3>
+                          </Link>
+
+                          {/* Precio */}
                           {product.offerPrice ? (
-                            <div className="mb-2">
-                              <p className="text-sm text-gray-500 line-through">${product.price}</p>
+                            <div className="mb-1">
+                              <p className="text-xs text-gray-500 line-through">${product.price}</p>
                               <p className="text-base font-bold text-red-600">${product.offerPrice}</p>
                             </div>
                           ) : (
-                            <p className="text-base font-bold mb-2">${product.price}</p>
+                            <p className="text-base font-bold mb-1">${product.price}</p>
                           )}
+
+                          {/* ⛔️ Sin chips de sabores en la card (solo en el popup) */}
                         </div>
+
                         <div className="flex justify-between mt-2 items-center">
                           {!isSinStock && (
                             <button
@@ -235,6 +251,7 @@ const CatalogoCard: React.FC = () => {
         );
       })}
 
+      {/* Popup de sabor + cantidad con chips */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-black/70 flex justify-center items-center px-4 z-[1000]">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -250,23 +267,35 @@ const CatalogoCard: React.FC = () => {
               <p className="text-lg font-bold">${selectedProduct.price}</p>
             )}
 
-            {/* Selección de sabor si existen sabores */}
+            {/* Chips clickeables para elegir sabor (solo aquí) */}
             {Array.isArray((selectedProduct as any).sabores) && (selectedProduct as any).sabores.length > 0 && (
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Elegí un sabor:</label>
-                <select
-                  className="w-full border border-gray-300 rounded px-2 py-1"
-                  value={(selectedProduct as any).selectedSabor || ""}
-                  onChange={(e) => {
-                    const sabor = e.target.value;
-                    setSelectedProduct((prev) => prev ? { ...prev, selectedSabor: sabor } : null);
-                  }}
-                >
-                  <option value="">Seleccionar sabor</option>
-                  {(selectedProduct as any).sabores.map((s: string, i: number) => (
-                    <option key={i} value={s}>{s}</option>
-                  ))}
-                </select>
+                <p className="block text-sm font-medium text-gray-700 mb-2">Elegí un sabor:</p>
+                <div className="flex flex-wrap gap-2 cupo">
+                  {(selectedProduct as any).sabores.map((s: string) => {
+                    const active = (selectedProduct as any).selectedSabor === s.trim();
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() =>
+                          setSelectedProduct((prev) =>
+                            prev ? { ...prev, selectedSabor: s.trim() } : prev
+                          )
+                        }
+                        className={[
+                          "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer",
+                          "ring-1",
+                          active
+                            ? "bg-rose-600 text-white ring-rose-600"
+                            : "bg-rose-50 text-rose-700 ring-rose-200 hover:bg-rose-100",
+                        ].join(" ")}
+                      >
+                        {s.trim()}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             )}
 
@@ -280,7 +309,9 @@ const CatalogoCard: React.FC = () => {
               className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
               onClick={addToCartHandler}
               disabled={
-                Array.isArray((selectedProduct as any).sabores) && (selectedProduct as any).sabores.length > 0 && !(selectedProduct as any).selectedSabor
+                Array.isArray((selectedProduct as any).sabores) &&
+                (selectedProduct as any).sabores.length > 0 &&
+                !(selectedProduct as any).selectedSabor
               }
             >
               Añadir al carrito
@@ -295,7 +326,6 @@ const CatalogoCard: React.FC = () => {
           </div>
         </div>
       )}
-
 
       <AnimatePresence>
         {showPopup && (
