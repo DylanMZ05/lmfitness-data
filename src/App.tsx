@@ -10,6 +10,7 @@ import Header from "./components/header/header";
 import Footer from "./components/footer";
 import { CartProvider } from "./context/CartContext";
 import WspButton from "./components/WspButton";
+import FeaturedAthletesPage from "./pages/atletas/FeaturedAthletesPage";
 
 // ✅ Lazy Loading de páginas pesadas
 const Catalogo = lazy(() => import("./pages/products/Catalogo"));
@@ -33,6 +34,7 @@ function AppContent() {
           <Route path="/" element={<HomeWrapper />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/producto/:id" element={<ProductoDetalle />} />
+          <Route path="/atletas-lm" element={<FeaturedAthletesPage />} />
           <Route path="/admin/dashboard" element={<Login />} />
           {/* <Route path="/admin/upload" element={<Upload />} /> */}
         </Routes>
