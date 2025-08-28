@@ -255,7 +255,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center text-white p-4">
           {/* Hamburguesa */}
           <button
-            className="w-[70px] ml-2 text-white focus:outline-none z-70 lg:hidden cursor-pointer"
+            className="w-[70px] ml-2 text-white focus:outline-none z-70 xl:hidden cursor-pointer"
             onClick={() => {
               if (menuOpen) {
                 setMenuOpen(false);
@@ -291,7 +291,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Carrito + Buscador móvil */}
-          <div className="right-24 text-white z-50 mr-4 flex w-[70px] justify-between items-center lg:hidden">
+          <div className="right-24 text-white z-50 mr-4 flex w-[70px] justify-between items-center xl:hidden">
             {/* Lupa Mobile */}
             <button
               onClick={() => setShowMobileSearch((prev) => !prev)}
@@ -317,11 +317,11 @@ const Header: React.FC = () => {
           </div>
 
           {/* Menú Desktop */}
-          <div className="hidden lg:flex items-center">
+          <div className="hidden xl:flex items-center">
             {/* Buscador Desktop */}
             <div
               ref={searchRef}
-              className="relative hidden lg:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10"
+              className="relative hidden xl:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10"
               role="search"
             >
               <div className="flex items-center justify-center w-6 h-6 mx-2">
@@ -408,7 +408,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Lupa y carrito Mobile (ocultos en desktop, pero el bloque quedó) */}
-            <div className="flex items-center lg:hidden">
+            <div className="flex items-center xl:hidden">
               <button onClick={() => setShowMobileSearch(!showMobileSearch)} className="relative cursor-pointer">
                 <Search size={26} />
               </button>
@@ -425,7 +425,7 @@ const Header: React.FC = () => {
 
             {/* Buscador Mobile desplegado */}
             {showSearch && (
-              <div className="lg:hidden w-full px-4 mt-2">
+              <div className="xl:hidden w-full px-4 mt-2">
                 <div className="flex items-center bg-white rounded-full px-3 py-2 shadow">
                   <Search size={18} className="text-gray-500 mr-2" />
                   <input
@@ -493,26 +493,41 @@ const Header: React.FC = () => {
               </div>
             )}
 
-            <ul className="flex justify-between items-center w-150 mr-10 font-medium text-xl xl:mr-8">
+            <ul className="flex justify-between items-center w-170 mr-10 font-medium text-xl xl:mr-8">
               {sectionIds.map((id) => (
-                <li
-                  key={id}
-                  className="relative group"
-                  onMouseEnter={() => setIsHoveringProducts(true)}
-                  onMouseLeave={() => setIsHoveringProducts(false)}
-                >
-                  {id === 'productos' ? (
-                    <>
+                <li key={id} className="relative">
+                  {id === "productos" ? (
+                    // ✅ Solo "Productos" controla el hover del dropdown
+                    <div
+                      className="relative"
+                      onMouseEnter={() => setIsHoveringProducts(true)}
+                      onMouseLeave={() => setIsHoveringProducts(false)}
+                      // accesibilidad por teclado (opcional)
+                      onFocus={() => setIsHoveringProducts(true)}
+                      onBlur={() => setIsHoveringProducts(false)}
+                    >
                       <button
                         className="font-medium flex items-center gap-1 hover:text-red-500 transition-all duration-100 cursor-pointer"
+                        aria-haspopup="true"
+                        aria-expanded={isHoveringProducts}
                       >
                         {/* Texto 'Productos' */}
-                        <span className={`${activeSection === 'productos' ? 'underline underline-offset-5 decoration-2 scale-105 text-red-500' : ''}`}>
+                        <span
+                          className={`${
+                            activeSection === "productos"
+                              ? "underline underline-offset-5 decoration-2 scale-105 text-red-500"
+                              : ""
+                          }`}
+                        >
                           Productos
                         </span>
 
-                        {/* Flechita separada, cambia color si está activo, pero sin subrayado */}
-                        <span className={`transition-transform duration-300 group-hover:rotate-180 text-2xl mt-1 ${activeSection === 'productos' ? 'text-red-500' : ''}`}>
+                        {/* Flechita separada */}
+                        <span
+                          className={`transition-transform duration-300 group-hover:rotate-180 text-2xl mt-1 ${
+                            activeSection === "productos" ? "text-red-500" : ""
+                          }`}
+                        >
                           ▼
                         </span>
                       </button>
@@ -520,8 +535,11 @@ const Header: React.FC = () => {
                       {/* Dropdown Desktop */}
                       <div
                         className={`fixed left-0 top-[108px] w-screen bg-black text-white transition-all duration-300 z-40 py-10
-                          ${isHoveringProducts ? 'opacity-100 visible' : 'opacity-0 invisible'}
+                          ${isHoveringProducts ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"}
                         `}
+                        // mantener abierto al mover el mouse dentro del dropdown
+                        onMouseEnter={() => setIsHoveringProducts(true)}
+                        onMouseLeave={() => setIsHoveringProducts(false)}
                       >
                         <div className="max-w-7xl px-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-left">
                           {productData
@@ -539,11 +557,16 @@ const Header: React.FC = () => {
                             ))}
                         </div>
                       </div>
-                    </>
+                    </div>
                   ) : (
+                    // 🔹 El resto de los ítems NO modifican isHoveringProducts
                     <button
                       onClick={() => handleClick(id)}
-                      className={`font-medium hover:text-red-500 transition-all duration-100 ${activeSection === id ? 'text-red-500 underline underline-offset-5 decoration-2 scale-105' : ''} focus:outline-none cursor-pointer`}
+                      className={`font-medium hover:text-red-500 transition-all duration-100 ${
+                        activeSection === id
+                          ? "text-red-500 underline underline-offset-5 decoration-2 scale-105"
+                          : ""
+                      } focus:outline-none cursor-pointer`}
                     >
                       {sectionLabels[id] || id}
                     </button>
@@ -551,6 +574,7 @@ const Header: React.FC = () => {
                 </li>
               ))}
             </ul>
+
             
             <button onClick={() => setCartOpen(!cartOpen)} className="mr-10 relative text-white cursor-pointer">
               <ShoppingCart size={24} />
@@ -565,7 +589,7 @@ const Header: React.FC = () => {
         </div>
 
         {/* Menú móvil */}
-        <div className={`lg:hidden fixed z-60 top-0 left-0 h-screen w-[80%] bg-black text-white flex flex-col items-start pt-20 transition-transform duration-500 ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className={`xl:hidden fixed z-60 top-0 left-0 h-screen w-[80%] bg-black text-white flex flex-col items-start pt-20 transition-transform duration-500 ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div ref={scrollRef} className="flex flex-col items-start w-full overflow-y-auto max-h-[calc(100vh-100px)] mt-10 pb-10">
             {sectionIds.map((id) => (
               <div key={id} className="flex flex-col items-start w-full">
@@ -619,7 +643,7 @@ const Header: React.FC = () => {
 
         {menuOpen && (
           <div
-            className="fixed inset-0 h-screen bg-black/70 z-50 lg:hidden"
+            className="fixed inset-0 h-screen bg-black/70 z-50 xl:hidden"
             onClick={() => setMenuOpen(false)}
           />
         )}
@@ -876,7 +900,7 @@ const Header: React.FC = () => {
       {showMobileSearch && (
         <div 
           ref={mobileSearchRef}
-          className="fixed top-23 left-1/2 transform -translate-x-1/2 w-11/12 bg-white rounded-lg shadow-lg p-4 z-100 lg:hidden">
+          className="fixed top-23 left-1/2 transform -translate-x-1/2 w-11/12 bg-white rounded-lg shadow-lg p-4 z-100 xl:hidden">
           {/* Input Mobile */}
           <input
             type="text"

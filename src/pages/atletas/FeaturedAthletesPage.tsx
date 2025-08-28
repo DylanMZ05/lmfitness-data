@@ -21,17 +21,18 @@ export const athletes: Athlete[] = [
     photo: "/assets/images/ATLETAS/Eduardo-Thuot.jpeg",
     sport: "Jiu Jitsu",
     achievements: [
-      "🏆 9 veces Campeón Serie Bonaerense (SBUJ)",
+      "🏆 Campeón de la SBJJ",
       "🏆 3 veces Campeón Absoluto Adulto",
       "🏆 Campeón del Open Argentina",
       "🏆 Campeón del Open Ciudad de La Plata",
       "🏆 Campeón Absoluto Open Berisso",
       "🏆 Campeón Kimura Pro League",
-      "🥈 Subcampeón Copa América de Jiu Jitsu"
+      "🥈 Subcampeón Copa América de Jiu Jitsu",
+      "🥇 Primero en el ranking anual bonaerense"
     ],
     description:
-      "Atleta de 17 años de Mar del Tuyú. Faixa azul 2°, compite en alto nivel. Este año apunta al Mundial de Brasil representando a Argentina.",
-    instagram: "https://www.instagram.com/_dudu._.bjj_", // reemplazar
+      "Atleta de 18 años de Mar del Tuyú. Faixa azul 2°, compite en alto nivel. Este año apunta al Mundial de Brasil representando a Argentina.",
+    instagram: "https://www.instagram.com/_dudu._.bjj_", // reemplazar si cambia
     focal: "50% 40%"
   },
   {
@@ -58,7 +59,7 @@ export const athletes: Athlete[] = [
     ],
     description:
       "Powerlifter profesional de 47 años con más de 10 años de trayectoria. Múltiple campeón nacional e internacional, con récords en squat, bench y deadlift. Representa a Argentina en competencias internacionales de máximo nivel.",
-    instagram: "https://www.instagram.com/fernandopowerlifter", // reemplazar
+    instagram: "https://www.instagram.com/fernandopowerlifter",
     focal: "50% 40%"
   },
   {
@@ -76,7 +77,7 @@ export const athletes: Athlete[] = [
     ],
     description:
       "Con 17 años y 13 de trayectoria, integra la selección nacional de taekwondo. Clasificada a los Juegos Argentinos de Alto Rendimiento (2025).",
-    instagram: "https://www.instagram.com/prisss_rodrigues_", // reemplazar
+    instagram: "https://www.instagram.com/prisss_rodrigues_",
     focal: "50% 35%"
   },
   {
@@ -95,7 +96,7 @@ export const athletes: Athlete[] = [
     ],
     description:
       "Promesa del pádel argentino, 16 años, con más de 10 en competencia. Entrenado en academias de elite y con múltiples podios nacionales.",
-    instagram: "https://www.instagram.com/valen_saga", // reemplazar
+    instagram: "https://www.instagram.com/valen_saga",
     focal: "50% 40%"
   },
   {
@@ -111,7 +112,7 @@ export const athletes: Athlete[] = [
     ],
     description:
       "Tenista de Mar de Ajó desde los 6 años, formada con Panchi Gabotto y Joaquín Gabotto. En 2023 ganó 8 de 12 torneos europeos y hoy compite en el ranking profesional nacional e internacional.",
-    instagram: "https://www.instagram.com/katiaagabotto", // reemplazar
+    instagram: "https://www.instagram.com/katiaagabotto",
     focal: "50% 35%"
   },
   {
@@ -126,7 +127,7 @@ export const athletes: Athlete[] = [
     ],
     description:
       "Ex competidor de Taekwondo desde 2019. Descubierto como talento en Weightlifting, hoy proyecta una nueva carrera deportiva.",
-    instagram: "https://www.instagram.com/matulema__", // reemplazar
+    instagram: "https://www.instagram.com/matulema__",
     focal: "50% 35%"
   },
   {
@@ -142,7 +143,7 @@ export const athletes: Athlete[] = [
     ],
     description:
       "Atleta de San Bernardo con trayectoria en tenis, running y ciclismo. Busca inspirar a otros con disciplina y pasión por superarse.",
-    instagram: "https://www.instagram.com/sequeira.josefina", // reemplazar
+    instagram: "https://www.instagram.com/sequeira.josefina",
     focal: "50% 20%" // sube el encuadre para evitar cortar cabezas en formatos anchos
   }
 ];
