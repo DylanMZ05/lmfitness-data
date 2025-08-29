@@ -231,8 +231,7 @@ const Header: React.FC = () => {
   // ==============================
   // 🔧 FIX HOVER MENU (nuevo)
   // ==============================
-  const headerRef = useRef<HTMLElement | null>(null);
-  const [dropdownTop, setDropdownTop] = useState(108); // posición Y del dropdown
+
   const hoverCloseTimer = useRef<number | null>(null);
 
   const keepOpen = () => {
@@ -247,21 +246,6 @@ const Header: React.FC = () => {
     }, 150); // pequeño delay para cruzar sin cerrar
   };
 
-  useEffect(() => {
-    const updateTop = () => {
-      if (headerRef.current) {
-        const rect = headerRef.current.getBoundingClientRect();
-        setDropdownTop(rect.bottom);
-      }
-    };
-    updateTop();
-    window.addEventListener('resize', updateTop);
-    window.addEventListener('scroll', updateTop, { passive: true });
-    return () => {
-      window.removeEventListener('resize', updateTop);
-      window.removeEventListener('scroll', updateTop);
-    };
-  }, []);
 
   return (
     <>
@@ -278,7 +262,6 @@ const Header: React.FC = () => {
       `}</style>
 
       <header
-        ref={headerRef}
         className={`w-screen h-auto py-3 fixed z-50 transition-all duration-300
           ${(isScrolled || isHoveringProducts) ? "bg-black" : "bg-gradient-to-b from-black to-transparent"}
           ${isScrollingUp || forceShowHeader ? "translate-y-0" : "-translate-y-full"}
@@ -554,7 +537,7 @@ const Header: React.FC = () => {
                       {isHoveringProducts && (
                         <div
                           className="fixed left-0 right-0 z-40"
-                          style={{ top: dropdownTop - 12, height: 16 }}
+                          style={{ height: 16 }}
                           onMouseEnter={keepOpen}
                           onMouseLeave={scheduleClose}
                         />
@@ -565,7 +548,7 @@ const Header: React.FC = () => {
                         className={`fixed left-0 w-screen bg-black text-white transition-all duration-300 z-40 py-10
                           ${isHoveringProducts ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"}
                         `}
-                        style={{ top: dropdownTop }}
+
                         onMouseEnter={keepOpen}
                         onMouseLeave={scheduleClose}
                       >
