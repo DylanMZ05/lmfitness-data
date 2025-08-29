@@ -231,6 +231,41 @@ const Header: React.FC = () => {
   const [showProductsMobile, setShowProductsMobile] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // ==============================
+  // 🔧 FIX HOVER MENU (nuevo)
+  // ==============================
+  const headerRef = useRef<HTMLElement | null>(null);
+  const [dropdownTop, setDropdownTop] = useState(108); // posición Y del dropdown
+  const hoverCloseTimer = useRef<number | null>(null);
+
+  const keepOpen = () => {
+    if (hoverCloseTimer.current) window.clearTimeout(hoverCloseTimer.current);
+    setIsHoveringProducts(true);
+  };
+
+  const scheduleClose = () => {
+    if (hoverCloseTimer.current) window.clearTimeout(hoverCloseTimer.current);
+    hoverCloseTimer.current = window.setTimeout(() => {
+      setIsHoveringProducts(false);
+    }, 150); // pequeño delay para cruzar sin cerrar
+  };
+
+  useEffect(() => {
+    const updateTop = () => {
+      if (headerRef.current) {
+        const rect = headerRef.current.getBoundingClientRect();
+        setDropdownTop(rect.bottom);
+      }
+    };
+    updateTop();
+    window.addEventListener('resize', updateTop);
+    window.addEventListener('scroll', updateTop, { passive: true });
+    return () => {
+      window.removeEventListener('resize', updateTop);
+      window.removeEventListener('scroll', updateTop);
+    };
+  }, []);
+
   return (
     <>
       <style>{`
@@ -246,6 +281,7 @@ const Header: React.FC = () => {
       `}</style>
 
       <header
+        ref={headerRef}
         className={`w-screen h-auto py-3 fixed z-50 transition-all duration-300
           ${(isScrolled || isHoveringProducts) ? "bg-black" : "bg-gradient-to-b from-black to-transparent"}
           ${isScrollingUp || forceShowHeader ? "translate-y-0" : "-translate-y-full"}
@@ -321,7 +357,7 @@ const Header: React.FC = () => {
             {/* Buscador Desktop */}
             <div
               ref={searchRef}
-              className="relative hidden xl:flex items-center w-80 bg-gray-600 rounded-full px-1 py-1 mr-10"
+              className="relative hidden xl:flex items-center w-55 bg-gray-600 rounded-full px-1 py-1 mr-3"
               role="search"
             >
               <div className="flex items-center justify-center w-6 h-6 mx-2">
@@ -493,36 +529,31 @@ const Header: React.FC = () => {
               </div>
             )}
 
-            <ul className="flex justify-between items-center w-170 mr-10 font-medium text-xl xl:mr-8">
-              {sectionIds.map((id) => (
-                <li key={id} className="relative">
+            <ul className="flex justify-between items-center w-max mr-10 font-medium text-xl xl:mr-8">
+              {sectionIds.map((id, index) => (
+                <li key={id} className="relative flex items-center">
                   {id === "productos" ? (
-                    // ✅ Solo "Productos" controla el hover del dropdown
                     <div
                       className="relative"
-                      onMouseEnter={() => setIsHoveringProducts(true)}
-                      onMouseLeave={() => setIsHoveringProducts(false)}
-                      // accesibilidad por teclado (opcional)
-                      onFocus={() => setIsHoveringProducts(true)}
-                      onBlur={() => setIsHoveringProducts(false)}
+                      onMouseEnter={keepOpen}
+                      onMouseLeave={scheduleClose}
+                      onFocus={keepOpen}
+                      onBlur={scheduleClose}
                     >
                       <button
                         className="font-medium flex items-center gap-1 hover:text-red-500 transition-all duration-100 cursor-pointer"
                         aria-haspopup="true"
                         aria-expanded={isHoveringProducts}
                       >
-                        {/* Texto 'Productos' */}
                         <span
-                          className={`${
+                          className={`uppercase ${
                             activeSection === "productos"
                               ? "underline underline-offset-5 decoration-2 scale-105 text-red-500"
                               : ""
                           }`}
                         >
-                          Productos
+                          {sectionLabels[id] || id}
                         </span>
-
-                        {/* Flechita separada */}
                         <span
                           className={`transition-transform duration-300 group-hover:rotate-180 text-2xl mt-1 ${
                             activeSection === "productos" ? "text-red-500" : ""
@@ -532,14 +563,24 @@ const Header: React.FC = () => {
                         </span>
                       </button>
 
-                      {/* Dropdown Desktop */}
+                      {/* 🔗 Hover-bridge para no perder el hover al bajar */}
+                      {isHoveringProducts && (
+                        <div
+                          className="fixed left-0 right-0 z-40"
+                          style={{ top: dropdownTop - 12, height: 16 }}
+                          onMouseEnter={keepOpen}
+                          onMouseLeave={scheduleClose}
+                        />
+                      )}
+
+                      {/* Dropdown Desktop (RESTABLECIDO) */}
                       <div
-                        className={`fixed left-0 top-[108px] w-screen bg-black text-white transition-all duration-300 z-40 py-10
+                        className={`fixed left-0 w-screen bg-black text-white transition-all duration-300 z-40 py-10
                           ${isHoveringProducts ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"}
                         `}
-                        // mantener abierto al mover el mouse dentro del dropdown
-                        onMouseEnter={() => setIsHoveringProducts(true)}
-                        onMouseLeave={() => setIsHoveringProducts(false)}
+                        style={{ top: dropdownTop }}
+                        onMouseEnter={keepOpen}
+                        onMouseLeave={scheduleClose}
                       >
                         <div className="max-w-7xl px-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-left">
                           {productData
@@ -559,10 +600,9 @@ const Header: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    // 🔹 El resto de los ítems NO modifican isHoveringProducts
                     <button
                       onClick={() => handleClick(id)}
-                      className={`font-medium hover:text-red-500 transition-all duration-100 ${
+                      className={`uppercase font-medium hover:text-red-500 transition-all duration-100 ${
                         activeSection === id
                           ? "text-red-500 underline underline-offset-5 decoration-2 scale-105"
                           : ""
@@ -571,9 +611,15 @@ const Header: React.FC = () => {
                       {sectionLabels[id] || id}
                     </button>
                   )}
+
+                  {/* Separador | excepto en el último */}
+                  {index < sectionIds.length - 1 && (
+                    <span className="mx-3 text-gray-400">|</span>
+                  )}
                 </li>
               ))}
             </ul>
+
 
             
             <button onClick={() => setCartOpen(!cartOpen)} className="mr-10 relative text-white cursor-pointer">
