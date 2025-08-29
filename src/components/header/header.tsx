@@ -4,7 +4,6 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ShoppingCart, Search } from 'lucide-react';
-import useActiveSection from './useActiveSection';
 import { useCart } from '../../context/useCart';
 import { Link, useNavigate } from 'react-router-dom';
 import useScrollToTop from '../../hooks/useScrollToTop';
@@ -33,7 +32,6 @@ const Header: React.FC = () => {
   // ✅ Agregamos 'atletas-lm' al header
   const sectionIds = ['inicio', 'productos', 'atletas-lm', 'sobre-nosotros', 'contacto'];
 
-  const [activeSection, setActiveSectionManually] = useActiveSection(sectionIds);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { cart, removeFromCart, clearCart } = useCart();
@@ -105,7 +103,6 @@ const Header: React.FC = () => {
   );
 
   const handleClick = (id: string) => {
-    setActiveSectionManually(id);
 
     if (id === "productos") {
       navigate("/catalogo");
@@ -545,20 +542,10 @@ const Header: React.FC = () => {
                         aria-haspopup="true"
                         aria-expanded={isHoveringProducts}
                       >
-                        <span
-                          className={`uppercase ${
-                            activeSection === "productos"
-                              ? "underline underline-offset-5 decoration-2 scale-105 text-red-500"
-                              : ""
-                          }`}
-                        >
+                        <span className="uppercase">
                           {sectionLabels[id] || id}
                         </span>
-                        <span
-                          className={`transition-transform duration-300 group-hover:rotate-180 text-2xl mt-1 ${
-                            activeSection === "productos" ? "text-red-500" : ""
-                          }`}
-                        >
+                        <span className="transition-transform duration-300 text-2xl mt-1">
                           ▼
                         </span>
                       </button>
@@ -573,7 +560,7 @@ const Header: React.FC = () => {
                         />
                       )}
 
-                      {/* Dropdown Desktop (RESTABLECIDO) */}
+                      {/* Dropdown Desktop */}
                       <div
                         className={`fixed left-0 w-screen bg-black text-white transition-all duration-300 z-40 py-10
                           ${isHoveringProducts ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"}
@@ -602,11 +589,7 @@ const Header: React.FC = () => {
                   ) : (
                     <button
                       onClick={() => handleClick(id)}
-                      className={`uppercase font-medium hover:text-red-500 transition-all duration-100 ${
-                        activeSection === id
-                          ? "text-red-500 underline underline-offset-5 decoration-2 scale-105"
-                          : ""
-                      } focus:outline-none cursor-pointer`}
+                      className="uppercase font-medium hover:text-red-500 transition-all duration-100 focus:outline-none cursor-pointer"
                     >
                       {sectionLabels[id] || id}
                     </button>
@@ -643,7 +626,7 @@ const Header: React.FC = () => {
                   <>
                     <button
                       onClick={() => setShowProductsMobile(prev => !prev)}
-                      className={`text-2xl cursor-pointer mb-4 pl-7 ${activeSection === id ? 'text-red-500 underline' : ''}`}
+                      className="text-2xl cursor-pointer mb-4 pl-7"
                     >
                       Productos {showProductsMobile ? '▲' : '▼'}
                     </button>
@@ -677,7 +660,7 @@ const Header: React.FC = () => {
                 ) : (
                   <button
                     onClick={() => handleClick(id)}
-                    className={`text-2xl cursor-pointer mb-4 pl-7 ${activeSection === id ? 'text-red-500 underline' : ''}`}
+                    className="text-2xl cursor-pointer mb-4 pl-7"
                   >
                     {sectionLabels[id] || id}
                   </button>
