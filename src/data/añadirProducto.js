@@ -1,37 +1,90 @@
 // src/data/añadirProducto.js
-import { db } from "../firebase.js"; 
-import { doc, setDoc, collection } from "firebase/firestore";
+import { db } from "../firebase.js";
+import { doc, setDoc, collection, deleteDoc } from "firebase/firestore";
 
-async function addSingleProduct() {
-  const newProduct = {
-    id: 83,
-    images: ["assets/images/COMBOS/belleza.webp"],
-    title: "COMBO BELLEZA",
-    description: "Colágeno Hydroflex + Vitamina C, la fórmula más completa para piel, cabello, uñas y articulaciones.",
-    price: "$35.000",
-    offerPrice: "$29.000",
-    longDescription:
-      "**COMBO BELLEZA** // El colágeno HYDROFLEX de la línea XBODY es la fórmula más completa para el cuidado de tu piel, pelo, uñas y articulaciones. // " +
-      "Con el aporte de: Ácido hialurónico, Coenzima Q10, Resveratrol, Biotina, Vitamina E y Vitamina C. // " +
-      "👉 Beneficios: Cabello más fuerte y brilloso, uñas y huesos resistentes, piel suave y reluciente, retraso del envejecimiento celular y prevención de arrugas. // " +
-      "Además, acompañado de la Vitamina C de OneFit que acelera estos procesos y estimula la producción natural de colágeno. // " +
-      "✨ ¡El combo ideal para cuidar tu belleza desde adentro!",
-    featuredId: null,
-    exclusiveId: null,
-    sinStock: true,
-  };
+async function addProteinBars() {
+  // 🔧 Cambiá este ID si tu categoría tiene otro slug
+  const CATEGORY_ID = "barras-proteicas";
+
+  const categoryRef = doc(db, "productos", CATEGORY_ID);
+  const productsRef = collection(categoryRef, "items");
+
+  const products = [
+    {
+      id: 86,
+      images: ["assets/images/BARRAS-PROTEICAS/whey-protein-bar-mervick.webp"],
+      title: "WHEY PROTEIN BAR – MERVICK (x12)",
+      description:
+        "Snack proteico ideal para sumar proteínas de forma práctica y rica.",
+      price: "CONSULTAR",
+      offerPrice: null,
+      longDescription:
+        "**WHEY PROTEIN BAR – MERVICK** // Caja por 12 unidades. // " +
+        "**Por barra (46 g):** 15 g de proteína · 17 g de carbohidratos · 176 kcal. // " +
+        "• Aporta proteínas de alta calidad // • Saludable y delicioso // " +
+        "• Ideal para después del entrenamiento, entre comidas o como colación rápida.",
+      featuredId: null,
+      exclusiveId: null,
+      sinStock: false,
+    },
+    {
+      id: 84,
+      images: ["assets/images/BARRAS-PROTEICAS/whey-low-carb-mervick.webp"],
+      title: "WHEY LOW CARB – MERVICK (x12)",
+      description:
+        "Snack proteico bajo en carbohidratos, ideal para cuidar la ingesta sin resignar sabor.",
+      price: "CONSULTAR",
+      offerPrice: null,
+      longDescription:
+        "**WHEY LOW CARB – MERVICK** // Caja por 12 unidades. // " +
+        "**Por barra (46 g):** 15 g de proteína · 2,8 g de carbohidratos · 138 kcal. // " +
+        "• Aporta proteínas de alta calidad // • Bajo en carbos y calorías // " +
+        "• Perfecto para después del entrenamiento, entre comidas o como colación rápida.",
+      featuredId: null,
+      exclusiveId: null,
+      sinStock: false,
+    },
+    {
+      id: 85,
+      images: ["assets/images/BARRAS-PROTEICAS/barras-cereal-vitagly.webp"],
+      title: "BARRAS DE CEREAL – VITAGLY (x10)",
+      description:
+        "Snack práctico, liviano y nutritivo para cualquier momento del día.",
+      price: "CONSULTAR",
+      offerPrice: null,
+      longDescription:
+        "**BARRAS DE CEREAL – VITAGLY** // Presentación: caja por 10 unidades. // " +
+        "• Fuente de fibra // • Bajo contenido calórico // • *Sin TACC (apto celíacos)* // " +
+        "Ideales para colaciones, lunch box o para llevar al trabajo/estudio. // " +
+        "Sabores riquísimos: Cacao y almendras · Arándanos · Chocolate y cajú. // " +
+        "(CONSULTAR SABORES DISPONIBLES).",
+      featuredId: null,
+      exclusiveId: null,
+      sinStock: false,
+    },
+  ];
 
   try {
-    // ✅ ahora va a productos/sin-stock/items
-    const categoryRef = doc(db, "productos", "sin-stock");
-    const productsRef = collection(categoryRef, "items");
+    // 🗑️ Intentar borrar el producto viejo (83) en sin-stock si existe
+    try {
+      await deleteDoc(doc(db, "productos", "sin-stock", "items", "83"));
+      console.log(
+        "🗑️ Eliminado producto 83 de productos/sin-stock/items (si existía)"
+      );
+    } catch {
+      console.log("ℹ️ No se encontró 83 en sin-stock (continuamos).");
+    }
 
-    await setDoc(doc(productsRef, String(newProduct.id)), newProduct);
+    // ✍️ Upsert de los 3 productos en barras-proteicas
+    for (const p of products) {
+      await setDoc(doc(productsRef, String(p.id)), p);
+      console.log(`✅ Cargado: ${p.title}`);
+    }
 
-    console.log("✅ Producto añadido con éxito en productos/sin-stock/items");
+    console.log("🎯 Listo: BARRAS PROTEICAS actualizadas.");
   } catch (error) {
-    console.error("❌ Error al añadir producto:", error);
+    console.error("❌ Error al añadir productos:", error);
   }
 }
 
-addSingleProduct();
+addProteinBars();

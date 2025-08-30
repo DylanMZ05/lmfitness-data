@@ -9,9 +9,14 @@ import FeaturedSliderContainer from "../pages/home/FeaturedSliderContainer";
 
 const offerSlides = [
   {
-    imageDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
-    imageMobile: "assets/images/SLIDER/CATALOGO/01-mobile.webp",
-    link: "/producto/69",
+    imageDesktop: "assets/images/SLIDER/CATALOGO/07-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/07-mobile.webp",
+    link: "/producto/83",
+  },
+  {
+    imageDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/04-mobile.webp",
+    link: "/producto/72",
   },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/02-desktop-1.webp",
@@ -19,9 +24,9 @@ const offerSlides = [
     link: "/producto/70",
   },
   {
-    imageDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
-    imageMobile: "assets/images/SLIDER/CATALOGO/04-mobile.webp",
-    link: "/producto/72",
+    imageDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/01-mobile.webp",
+    link: "/producto/69",
   },
 ];
 
