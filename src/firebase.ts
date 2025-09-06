@@ -1,8 +1,13 @@
 // src/firebase.ts
-import { initializeApp } from "firebase/app";
+import { initializeApp, FirebaseError } from "firebase/app";
+import {
+  initializeFirestore,
+  CACHE_SIZE_UNLIMITED,
+  enableIndexedDbPersistence,
+  enableMultiTabIndexedDbPersistence,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage"; // ✅ Agregado
+import { getStorage } from "firebase/storage";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -18,12 +23,38 @@ const firebaseConfig = {
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
+// Firestore con cache ilimitado y sin guardar undefined
+export const db = initializeFirestore(app, {
+  cacheSizeBytes: CACHE_SIZE_UNLIMITED,
+  ignoreUndefinedProperties: true,
+});
+
+// Persistencia offline (solo en navegador)
+if (typeof window !== "undefined") {
+  // Preferimos multi-tab; si no se puede, probamos single-tab
+  enableMultiTabIndexedDbPersistence(db).catch(async (err) => {
+    const code = (err as FirebaseError).code;
+    if (code === "failed-precondition" || code === "unimplemented") {
+      try {
+        await enableIndexedDbPersistence(db);
+      } catch (err2) {
+        const code2 = (err2 as FirebaseError).code;
+        console.warn(
+          "[Firestore] IndexedDB persistence no disponible:",
+          code2 || err2
+        );
+      }
+    } else {
+      console.warn("[Firestore] Persistence error:", code || err);
+    }
+  });
+}
+
 // Exportar instancias
 export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app); // ✅ Agregado
+export const storage = getStorage(app);
 
-// (Opcional) Analytics solo en entorno de producción del navegador
+// (Opcional) Analytics solo en producción y navegador
 if (typeof window !== "undefined" && import.meta.env.MODE === "production") {
   import("firebase/analytics").then(({ getAnalytics }) => {
     getAnalytics(app);

@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
 import { parseFormattedText } from "../../data/products";
 import FeaturedSliderContainer from "../home/FeaturedSliderContainer";
-import { db } from "../../firebase";
-import { doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { getProductByIdWithCache } from "../../hooks/useCatalog";
 
 interface Product {
   id: string;
@@ -22,7 +21,7 @@ interface Product {
 }
 
 const ProductoDetalle: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id?: string }>();
   const { addToCart } = useCart();
 
   const [quantity, setQuantity] = useState<number>(1);
@@ -32,61 +31,114 @@ const ProductoDetalle: React.FC = () => {
   const [foundProduct, setFoundProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Popup estilo catálogo
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedSabor, setSelectedSabor] = useState<string>("");
 
+  // Bloquear scroll cuando hay modal/zoom
   useEffect(() => {
-    const fetchProduct = async () => {
+    const anyModalOpen = modalOpen || zoomOpen;
+    const prev = document.body.style.overflow;
+    if (anyModalOpen) document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [modalOpen, zoomOpen]);
+
+  // Cargar producto con caché / índice
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
       try {
-        const categoriasSnap = await getDocs(collection(db, "productos"));
-        let productoEncontrado: Product | null = null;
+        const { product } = await getProductByIdWithCache(id, {
+          fallbackTtlMs: 6 * 60 * 60 * 1000,
+        });
+        if (!alive) return;
 
-        for (const catDoc of categoriasSnap.docs) {
-          const itemRef = doc(db, "productos", catDoc.id, "items", id || "");
-          const itemSnap = await getDoc(itemRef);
+        if (product) {
+          const priceNum = Number(
+            (product as any).price?.toString().replace(/[^\d.-]/g, "") ?? 0
+          );
+          const offerNum =
+            (product as any).offerPrice !== undefined
+              ? Number(
+                  (product as any).offerPrice?.toString().replace(/[^\d.-]/g, "")
+                )
+              : undefined;
 
-          if (itemSnap.exists()) {
-            const data = itemSnap.data();
-            const sinStock = Boolean(data.sinStock);
+          const p: Product = {
+            id: (product as any).id,
+            title: (product as any).title ?? "",
+            price: Number.isFinite(priceNum) ? priceNum : 0,
+            offerPrice:
+              offerNum !== undefined && Number.isFinite(offerNum)
+                ? (offerNum as number)
+                : undefined,
+            images: Array.isArray((product as any).images)
+              ? ((product as any).images as string[])
+              : [],
+            description: (product as any).description,
+            longDescription: (product as any).longDescription,
+            sinStock: Boolean((product as any).sinStock),
+            sabores: Array.isArray((product as any).sabores)
+              ? ((product as any).sabores as string[]).map((s) => s.trim())
+              : undefined,
+          };
 
-            const productoFormateado: Product = {
-              id: itemSnap.id,
-              title: data.title,
-              price: Number(data.price),
-              offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
-              images: Array.isArray(data.images)
-                ? data.images.map((img: string) => (img.startsWith("/") ? img : `/${img}`))
-                : [],
-              description: data.description,
-              longDescription: data.longDescription,
-              sinStock,
-              sabores: Array.isArray(data.sabores) ? data.sabores.map((s: string) => s.trim()) : undefined, // ✅ Traemos sabores
-            };
-
-            if (!productoEncontrado) {
-              productoEncontrado = productoFormateado;
-            }
-            if (sinStock) {
-              setFoundProduct(productoFormateado);
-              return;
-            }
-          }
+          setFoundProduct(p);
+        } else {
+          setFoundProduct(null);
         }
-
-        if (productoEncontrado) {
-          setFoundProduct(productoEncontrado);
-        }
-      } catch (err) {
-        console.error("Error al cargar producto:", err);
+      } catch (e) {
+        console.error("Error al cargar producto:", e);
+        setFoundProduct(null);
       } finally {
         setLoading(false);
       }
+    })();
+    return () => {
+      alive = false;
     };
-
-    fetchProduct();
   }, [id]);
 
+  // Derivados seguros
+  const images: string[] =
+    (foundProduct?.images?.length ?? 0) > 0
+      ? (foundProduct!.images as string[])
+      : ["assets/fallback.png"];
+
+  const isSinStock = foundProduct?.sinStock === true;
+  const saboresList: string[] = Array.isArray(foundProduct?.sabores)
+    ? (foundProduct!.sabores as string[])
+    : [];
+  const hasSabores = saboresList.length > 0;
+
+  // Keydown global (Enter/Escape)
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (zoomOpen && e.key === "Escape") {
+        setZoomOpen(false);
+        return;
+      }
+      if (modalOpen) {
+        if (e.key === "Escape") setModalOpen(false);
+        if (e.key === "Enter") {
+          const needsFlavor = hasSabores;
+          if (!needsFlavor || selectedSabor) {
+            addToCartFromModal();
+          }
+        }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+    // deps cubren lo que usa el handler
+  }, [modalOpen, zoomOpen, hasSabores, selectedSabor, foundProduct]);
+
+  // --- early returns DESPUÉS de todos los hooks ---
   if (loading) {
     return (
       <div className="p-4 h-[calc(100vh-216px)] flex justify-center items-center">
@@ -103,42 +155,38 @@ const ProductoDetalle: React.FC = () => {
     );
   }
 
-  const adjustQuantity = (amount: number) => {
-    setQuantity((prev) => Math.max(1, prev + amount));
-  };
-
-  const images = foundProduct.images;
-  const isSinStock = foundProduct?.sinStock === true;
-
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % images.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+  const nextSlide = () =>
+    setCurrentSlide((prev) => (prev + 1) % images.length);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
 
   const openZoom = () => setZoomOpen(true);
   const closeZoom = () => setZoomOpen(false);
 
   const openAddToCartModal = () => {
-    setSelectedSabor("");      // reset
-    setQuantity(1);            // reset
-    setModalOpen(true);        // abre el popup igual que en catálogo
+    setSelectedSabor("");
+    setQuantity(1);
+    setModalOpen(true);
   };
 
   const addToCartFromModal = () => {
     if (!foundProduct) return;
 
-    const price = (foundProduct.offerPrice ?? foundProduct.price) as number;
+    const price: number =
+      (foundProduct.offerPrice ?? foundProduct.price) ?? foundProduct.price;
 
-    // Reordenamos imágenes para que la actual vaya primero (igual que antes)
     const productToAdd = {
       ...foundProduct,
       price,
-      images: [images[currentSlide], ...foundProduct.images.filter((img) => img !== images[currentSlide])],
+      images: [
+        images[currentSlide],
+        ...foundProduct.images.filter((img) => img !== images[currentSlide]),
+      ],
     };
 
-    // Si tiene sabores, requerimos selección
-    const needsFlavor = Array.isArray(foundProduct.sabores) && foundProduct.sabores.length > 0;
+    const needsFlavor = hasSabores;
     const sabor = needsFlavor ? selectedSabor : "";
-
-    if (needsFlavor && !sabor) return; // botón ya se deshabilita, esto es de seguridad
+    if (needsFlavor && !sabor) return;
 
     addToCart(productToAdd, quantity, sabor);
     setModalOpen(false);
@@ -146,14 +194,16 @@ const ProductoDetalle: React.FC = () => {
     setTimeout(() => setShowPopup(false), 2500);
   };
 
-  const finalDescription = foundProduct.longDescription || foundProduct.description || "";
-  const hasSabores = Array.isArray(foundProduct.sabores) && foundProduct.sabores.length > 0;
+  const finalDescription: string =
+    foundProduct.longDescription || foundProduct.description || "";
 
   return (
     <>
       <div className="max-w-4xl mx-auto pt-30 min-h-[calc(100vh-216px)] flex flex-col justify-center items-center">
         <header className="mb-6 w-full flex justify-center">
-          <h2 className="font-bold text-4xl text-center px-3 mb-10">Detalle del producto</h2>
+          <h2 className="font-bold text-4xl text-center px-3 mb-10">
+            Detalle del producto
+          </h2>
         </header>
 
         <div className="flex flex-col md:flex-row gap-4 w-full mb-10">
@@ -162,14 +212,15 @@ const ProductoDetalle: React.FC = () => {
               key={currentSlide}
               src={images[currentSlide]}
               alt={foundProduct.title}
-              className={`object-contain w-full h-64 cursor-pointer ${isSinStock ? "grayscale opacity-50" : ""}`}
+              className={`object-contain w-full h-64 cursor-pointer ${
+                isSinStock ? "grayscale opacity-50" : ""
+              }`}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               onClick={openZoom}
               onError={(e) => {
-                console.error("Error cargando imagen:", images[currentSlide]);
-                (e.target as HTMLImageElement).src = "../assets/fallback.png";
+                (e.currentTarget as HTMLImageElement).src = "assets/fallback.png";
               }}
             />
 
@@ -181,12 +232,16 @@ const ProductoDetalle: React.FC = () => {
             <button
               className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
               onClick={prevSlide}
+              aria-label="Imagen anterior"
+              type="button"
             >
               <FaArrowLeft />
             </button>
             <button
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
               onClick={nextSlide}
+              aria-label="Imagen siguiente"
+              type="button"
             >
               <FaArrowRight />
             </button>
@@ -197,30 +252,30 @@ const ProductoDetalle: React.FC = () => {
 
             <div
               className="text-gray-600 mb-2 text-sm"
-              dangerouslySetInnerHTML={{ __html: parseFormattedText(finalDescription) }}
+              dangerouslySetInnerHTML={{
+                __html: parseFormattedText(finalDescription),
+              }}
             />
 
-            {/* 🔎 Info de sabores debajo de la descripción */}
             {hasSabores && (
-            <div className="mb-4">
-              <p className="text-sm font-medium text-gray-600 mb-2">Sabores disponibles</p>
-              <div className="flex flex-wrap gap-2">
-                {foundProduct.sabores!.map((s, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                              bg-rose-50 text-rose-700 ring-1 ring-rose-200"
-                  >
-                    {s.trim()}
-                  </span>
-                ))}
+              <div className="mb-4">
+                <p className="text-sm font-medium text-gray-600 mb-2">
+                  Sabores disponibles
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {saboresList.map((s, i) => (
+                    <span
+                      key={`${s}-${i}`}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 ring-1 ring-rose-200"
+                    >
+                      {s.trim()}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-
-
-            {foundProduct.offerPrice ? (
+            {foundProduct.offerPrice !== undefined ? (
               <div className="mb-2">
                 <p className="text-sm text-gray-500 line-through">
                   $ {foundProduct.price.toLocaleString("es-AR")}
@@ -237,26 +292,43 @@ const ProductoDetalle: React.FC = () => {
 
             {isSinStock ? (
               <>
-                <p className="text-sm text-red-600 mb-4">Este producto no está disponible actualmente.</p>
+                <p className="text-sm text-red-600 mb-4">
+                  Este producto no está disponible actualmente.
+                </p>
                 <button
                   className="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed"
                   disabled
+                  type="button"
                 >
                   SIN STOCK
                 </button>
               </>
             ) : (
               <>
-                {/* En lugar de selector inline, abrimos el popup estilo Catálogo */}
                 <div className="flex items-center mt-4 mb-4">
-                  <button className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer" onClick={() => adjustQuantity(-1)}>-</button>
-                  <span className="px-4 border-y-2 border-gray-200 h-10 flex justify-center items-center">{quantity}</span>
-                  <button className="px-4 py-2 bg-gray-200 rounded-r-lg cursor-pointer" onClick={() => adjustQuantity(1)}>+</button>
+                  <button
+                    className="px-4 py-2 bg-gray-200 rounded-l-lg cursor-pointer"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    type="button"
+                  >
+                    -
+                  </button>
+                  <span className="px-4 border-y-2 border-gray-200 h-10 flex justify-center items-center">
+                    {quantity}
+                  </span>
+                  <button
+                    className="px-4 py-2 bg-gray-200 rounded-r-lg cursor-pointer"
+                    onClick={() => setQuantity((q) => q + 1)}
+                    type="button"
+                  >
+                    +
+                  </button>
                 </div>
 
                 <button
                   className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
                   onClick={openAddToCartModal}
+                  type="button"
                 >
                   Agregar al carrito
                 </button>
@@ -266,9 +338,16 @@ const ProductoDetalle: React.FC = () => {
         </div>
 
         {zoomOpen && (
-          <div className="fixed inset-0 bg-black/70 bg-opacity-70 flex items-center justify-center z-[2000]" onClick={closeZoom}>
+          <div
+            className="fixed inset-0 bg-black/70 bg-opacity-70 flex items-center justify-center z-[2000]"
+            onClick={closeZoom}
+          >
             <div className="relative">
-              <button className="absolute -top-15 -right-15 m-4 text-white text-3xl font-bold hover:text-red-500" onClick={closeZoom}>
+              <button
+                className="absolute -top-15 -right-15 m-4 text-white text-3xl font-bold hover:text-red-500"
+                onClick={closeZoom}
+                type="button"
+              >
                 <FaTimes />
               </button>
               <img
@@ -276,6 +355,9 @@ const ProductoDetalle: React.FC = () => {
                 alt={foundProduct.title}
                 className="max-w-full max-h-screen object-contain"
                 onClick={(e) => e.stopPropagation()}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "assets/fallback.png";
+                }}
               />
             </div>
           </div>
@@ -292,7 +374,7 @@ const ProductoDetalle: React.FC = () => {
         <FeaturedSliderContainer title="" bgColor="bg-white" mode="exclusive" />
       </div>
 
-      {/* 👉 Popup estilo Catálogo para sabor + cantidad */}
+      {/* Popup estilo Catálogo para sabor + cantidad */}
       <AnimatePresence>
         {modalOpen && (
           <div className="fixed inset-0 bg-black/70 flex justify-center items-center px-4 z-[2100]">
@@ -305,7 +387,7 @@ const ProductoDetalle: React.FC = () => {
               <h2 className="text-lg font-bold">{foundProduct.title}</h2>
               <p className="text-gray-600">{foundProduct.description}</p>
 
-              {foundProduct.offerPrice ? (
+              {foundProduct.offerPrice !== undefined ? (
                 <div className="mb-2">
                   <p className="text-sm text-gray-500 line-through">
                     $ {foundProduct.price.toLocaleString("es-AR")}
@@ -321,43 +403,57 @@ const ProductoDetalle: React.FC = () => {
               )}
 
               {hasSabores && (
-              <div className="mb-4">
-                <p className="block text-sm font-medium text-gray-700 mb-2">Elegí un sabor:</p>
-                <div className="flex flex-wrap gap-2">
-                  {foundProduct.sabores!.map((s) => {
-                    const active = selectedSabor === s.trim();
-                    return (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => setSelectedSabor(s.trim())}
-                        className={[
-                          "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer",
-                          "ring-1",
-                          active
-                            ? "bg-rose-600 text-white ring-rose-600"
-                            : "bg-rose-50 text-rose-700 ring-rose-200 hover:bg-rose-100"
-                        ].join(" ")}
-                      >
-                        {s.trim()}
-                      </button>
-                    );
-                  })}
+                <div className="mb-4">
+                  <p className="block text-sm font-medium text-gray-700 mb-2">
+                    Elegí un sabor:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {saboresList.map((s) => {
+                      const active = selectedSabor === s.trim();
+                      return (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setSelectedSabor(s.trim())}
+                          className={[
+                            "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer",
+                            "ring-1",
+                            active
+                              ? "bg-rose-600 text-white ring-rose-600"
+                              : "bg-rose-50 text-rose-700 ring-rose-200 hover:bg-rose-100",
+                          ].join(" ")}
+                        >
+                          {s.trim()}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
-
+              )}
 
               <div className="flex items-center justify-center my-4">
-                <button className="px-4 py-2 bg-gray-200 rounded-l-lg" onClick={() => adjustQuantity(-1)}>-</button>
+                <button
+                  className="px-4 py-2 bg-gray-200 rounded-l-lg"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  type="button"
+                >
+                  -
+                </button>
                 <span className="px-4">{quantity}</span>
-                <button className="px-4 py-2 bg-gray-200 rounded-r-lg" onClick={() => adjustQuantity(1)}>+</button>
+                <button
+                  className="px-4 py-2 bg-gray-200 rounded-r-lg"
+                  onClick={() => setQuantity((q) => q + 1)}
+                  type="button"
+                >
+                  +
+                </button>
               </div>
 
               <button
                 className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
                 onClick={addToCartFromModal}
                 disabled={hasSabores && !selectedSabor}
+                type="button"
               >
                 Añadir al carrito
               </button>
@@ -365,6 +461,7 @@ const ProductoDetalle: React.FC = () => {
               <button
                 className="mt-2 w-full text-gray-600 bg-gray-200 py-2 rounded-lg hover:bg-gray-300 transition"
                 onClick={() => setModalOpen(false)}
+                type="button"
               >
                 Cancelar
               </button>

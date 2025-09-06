@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaEye, FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../context/useCart";
 import useScrollToTop from "../../hooks/useScrollToTop";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { Category, loadCatalogWithCache } from "../../hooks/useCatalog";
 
 interface Product {
   id: string;
@@ -23,14 +22,6 @@ interface Product {
   sabor?: string;
 }
 
-interface Category {
-  name: string;
-  slug: string;
-  image?: string;
-  orden?: number;
-  products: Product[];
-}
-
 const CatalogoCard: React.FC = () => {
   const { addToCart } = useCart();
   const [openCategory, setOpenCategory] = useState<string | null>(null);
@@ -43,55 +34,47 @@ const CatalogoCard: React.FC = () => {
   const scrollToTop = useScrollToTop();
   const location = useLocation();
 
+  // bloquear scroll del body cuando hay popup abierto
   useEffect(() => {
-    const fetchData = async () => {
-      const categoriasSnap = await getDocs(collection(db, "productos"));
-      const categorias: Category[] = [];
-
-      for (const catDoc of categoriasSnap.docs) {
-        const catData = catDoc.data();
-
-        // Ocultar categoría SIN STOCK y las que tengan "oculta: true"
-        if (catData.oculta || catData.name?.toUpperCase() === "SIN STOCK") continue;
-
-        const itemsSnap = await getDocs(collection(catDoc.ref, "items"));
-        const productos = itemsSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Product[];
-
-        categorias.push({
-          name: catData.name || "Sin nombre",
-          image: catData.image,
-          slug: catDoc.id,
-          orden: parseInt(catData.orden ?? "999"),
-          products: productos,
-        });
-      }
-
-      categorias.sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
-      setData(categorias);
-      setLoading(false);
+    if (!selectedProduct) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
     };
+  }, [selectedProduct]);
 
-    fetchData();
+  // Carga con cache + lectura única de meta/versión
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const { data: catalogData } = await loadCatalogWithCache({
+        fallbackTtlMs: 6 * 60 * 60 * 1000,
+      });
+      if (!alive) return;
+      setData(catalogData);
+      setLoading(false);
+    })();
+    return () => {
+      alive = false;
+    };
   }, []);
 
+  const smoothScrollTo = (el: HTMLElement, offset = 120) => {
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
   const toggleCategory = (slug: string) => {
-    if (openCategory === slug) setOpenCategory(null);
-    else {
+    if (openCategory === slug) {
       setOpenCategory(null);
-      setTimeout(() => {
-        setOpenCategory(slug);
-        setTimeout(() => {
-          const el = document.getElementById(slug);
-          if (el) {
-            const y = el.getBoundingClientRect().top + window.scrollY - 120;
-            window.scrollTo({ top: y, behavior: "smooth" });
-          }
-        }, 300);
-      }, 200);
+      return;
     }
+    setOpenCategory(slug);
+    setTimeout(() => {
+      const el = document.getElementById(slug);
+      if (el) smoothScrollTo(el, 120);
+    }, 320);
   };
 
   const openPopup = (product: Product) => {
@@ -105,9 +88,10 @@ const CatalogoCard: React.FC = () => {
 
   const addToCartHandler = () => {
     if (!selectedProduct) return;
-    const price = (selectedProduct.offerPrice || selectedProduct.price) as string;
-    const sabor = (selectedProduct as any).selectedSabor || "";
-    addToCart({ ...selectedProduct, price }, quantity, sabor);
+    const priceStr = (selectedProduct.offerPrice || selectedProduct.price) as string;
+    const priceNumber = Number(priceStr.toString().replace(/[^\d.-]/g, ""));
+    const sabor = selectedProduct.selectedSabor || "";
+    addToCart({ ...selectedProduct, price: priceNumber }, quantity, sabor);
 
     setSelectedProduct(null);
     setShowPopup(true);
@@ -115,19 +99,39 @@ const CatalogoCard: React.FC = () => {
     window.dispatchEvent(new CustomEvent("producto-agregado"));
   };
 
+  // hash deep-link
   useEffect(() => {
     const hash = location.hash.replace("#", "");
     if (hash) {
       setOpenCategory(hash);
       const el = document.getElementById(hash);
       if (el) {
-        setTimeout(() => {
-          const y = el.getBoundingClientRect().top + window.scrollY - 115;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }, 300);
+        setTimeout(() => smoothScrollTo(el, 115), 350);
       }
     }
   }, [location]);
+
+  // teclado: Enter confirma, Esc cierra
+  const onKeyHandler = useCallback(
+    (e: KeyboardEvent) => {
+      if (!selectedProduct) return;
+      if (e.key === "Escape") setSelectedProduct(null);
+      if (e.key === "Enter") {
+        const needsFlavor =
+          Array.isArray(selectedProduct.sabores) &&
+          selectedProduct.sabores.length > 0;
+        if (!needsFlavor || selectedProduct.selectedSabor) {
+          addToCartHandler();
+        }
+      }
+    },
+    [selectedProduct] // addToCartHandler usa selectedProduct, así que con esto alcanza
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyHandler);
+    return () => window.removeEventListener("keydown", onKeyHandler);
+  }, [onKeyHandler]);
 
   if (loading) {
     return (
@@ -143,18 +147,20 @@ const CatalogoCard: React.FC = () => {
       {data.map((category) => {
         const isOpen = openCategory === category.slug;
         return (
-          <div key={category.slug} id={category.slug} className="mb-4 shadow-lg">
+          <div key={category.slug} id={category.slug} className="mb-4 shadow-lg scroll-mt-[120px]">
             <div
               className={`flex justify-between items-center p-4 bg-white cursor-pointer border border-black/20 ${isOpen ? "rounded-t-lg" : "rounded-lg"}`}
               onClick={() => toggleCategory(category.slug)}
+              aria-expanded={isOpen}
+              role="button"
             >
               <div className="flex items-center gap-2">
                 {category.image && (
-                  <img src={category.image} alt={category.name} className="h-10 w-10 object-contain" />
+                  <img src={category.image} alt={category.name} className="h-10 w-10 object-contain" loading="lazy" />
                 )}
                 <h2 className="text-lg font-bold">{category.name}</h2>
               </div>
-              <button className="text-xl">{isOpen ? "➖" : "➕"}</button>
+              <span className="text-xl select-none">{isOpen ? "➖" : "➕"}</span>
             </div>
 
             <motion.div
@@ -166,16 +172,13 @@ const CatalogoCard: React.FC = () => {
               <div className="grid grid-cols-2 px-1 pt-2 pb-1 sm:grid-cols-3 md:grid-cols-4 gap-1 md:gap-2 sm:px-2 bg-white rounded-b-lg">
                 {category.products.map((product) => {
                   const isSinStock = product.sinStock === true;
-
                   return (
                     <motion.div
                       key={product.id}
                       initial={{ opacity: 0, y: -10 }}
                       animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
                       transition={{ duration: 0.3, delay: 0.1 }}
-                      className={`flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-black/30 relative ${
-                        isSinStock ? "opacity-50 grayscale" : ""
-                      }`}
+                      className={`flex flex-col bg-white rounded-lg shadow-lg overflow-hidden border border-black/30 relative ${isSinStock ? "opacity-50 grayscale" : ""}`}
                     >
                       {isSinStock && (
                         <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
@@ -183,7 +186,6 @@ const CatalogoCard: React.FC = () => {
                         </span>
                       )}
 
-                      {/* Imagen enlaza al detalle */}
                       <Link
                         to={`/producto/${product.id}`}
                         onClick={scrollToTop}
@@ -191,25 +193,22 @@ const CatalogoCard: React.FC = () => {
                         className="h-32 w-full overflow-hidden flex justify-center items-center bg-neutral-200"
                       >
                         <img
-                          src={product.images?.[0] || "/placeholder.jpg"}
+                          src={product.images?.[0] || "assets/fallback.png"}
                           alt={product.title}
                           className="h-full object-contain p-2"
+                          loading="lazy"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = "assets/fallback.png";
+                          }}
                         />
                       </Link>
 
                       <div className="p-3 flex flex-col flex-1 justify-between">
                         <div className="flex-1">
-                          {/* Título enlaza al detalle */}
-                          <Link
-                            to={`/producto/${product.id}`}
-                            onClick={scrollToTop}
-                            title="Ver detalle"
-                            className="block"
-                          >
+                          <Link to={`/producto/${product.id}`} onClick={scrollToTop} title="Ver detalle" className="block">
                             <h3 className="text-sm font-semibold mb-1">{product.title}</h3>
                           </Link>
 
-                          {/* Precio */}
                           {product.offerPrice ? (
                             <div className="mb-1">
                               <p className="text-xs text-gray-500 line-through">${product.price}</p>
@@ -218,8 +217,6 @@ const CatalogoCard: React.FC = () => {
                           ) : (
                             <p className="text-base font-bold mb-1">${product.price}</p>
                           )}
-
-                          {/* ⛔️ Sin chips de sabores en la card (solo en el popup) */}
                         </div>
 
                         <div className="flex justify-between mt-2 items-center">
@@ -228,6 +225,7 @@ const CatalogoCard: React.FC = () => {
                               className="bg-orange-500 p-2 rounded-full hover:bg-orange-600 transition cursor-pointer flex items-center justify-center"
                               onClick={() => openPopup(product)}
                               title="Añadir al carrito"
+                              type="button"
                             >
                               <FaShoppingCart className="text-white text-lg" />
                             </button>
@@ -238,7 +236,10 @@ const CatalogoCard: React.FC = () => {
                             className="border border-black rounded-full w-9 h-9 flex items-center justify-center hover:bg-gray-200 transition"
                             title="Ver detalles"
                           >
-                            <FaEye className="text-black" />
+                            <span className="sr-only">Ver detalles</span>
+                            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+                              <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 .001 6.001A3 3 0 0 0 12 9z"/>
+                            </svg>
                           </Link>
                         </div>
                       </div>
@@ -252,80 +253,84 @@ const CatalogoCard: React.FC = () => {
       })}
 
       {/* Popup de sabor + cantidad con chips */}
-      {selectedProduct && (
-        <div className="fixed inset-0 bg-black/70 flex justify-center items-center px-4 z-[1000]">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-bold">{selectedProduct.title}</h2>
-            <p className="text-gray-600">{selectedProduct.description}</p>
+      <AnimatePresence>
+        {selectedProduct && (
+          <div className="fixed inset-0 bg-black/70 flex justify-center items-center px-4 z-[1000]">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-lg font-bold">{selectedProduct.title}</h2>
+              <p className="text-gray-600">{selectedProduct.description}</p>
 
-            {selectedProduct.offerPrice ? (
-              <div className="mb-2">
-                <p className="text-sm text-gray-500 line-through">${selectedProduct.price}</p>
-                <p className="text-lg font-bold text-red-600">${selectedProduct.offerPrice}</p>
-              </div>
-            ) : (
-              <p className="text-lg font-bold">${selectedProduct.price}</p>
-            )}
-
-            {/* Chips clickeables para elegir sabor (solo aquí) */}
-            {Array.isArray((selectedProduct as any).sabores) && (selectedProduct as any).sabores.length > 0 && (
-              <div className="mb-4">
-                <p className="block text-sm font-medium text-gray-700 mb-2">Elegí un sabor:</p>
-                <div className="flex flex-wrap gap-2 cupo">
-                  {(selectedProduct as any).sabores.map((s: string) => {
-                    const active = (selectedProduct as any).selectedSabor === s.trim();
-                    return (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() =>
-                          setSelectedProduct((prev) =>
-                            prev ? { ...prev, selectedSabor: s.trim() } : prev
-                          )
-                        }
-                        className={[
-                          "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer",
-                          "ring-1",
-                          active
-                            ? "bg-rose-600 text-white ring-rose-600"
-                            : "bg-rose-50 text-rose-700 ring-rose-200 hover:bg-rose-100",
-                        ].join(" ")}
-                      >
-                        {s.trim()}
-                      </button>
-                    );
-                  })}
+              {selectedProduct.offerPrice ? (
+                <div className="mb-2">
+                  <p className="text-sm text-gray-500 line-through">${selectedProduct.price}</p>
+                  <p className="text-lg font-bold text-red-600">${selectedProduct.offerPrice}</p>
                 </div>
+              ) : (
+                <p className="text-lg font-bold">${selectedProduct.price}</p>
+              )}
+
+              {Array.isArray(selectedProduct.sabores) && selectedProduct.sabores.length > 0 && (
+                <div className="mb-4">
+                  <p className="block text-sm font-medium text-gray-700 mb-2">Elegí un sabor:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedProduct.sabores.map((s) => {
+                      const value = s.trim();
+                      const active = selectedProduct.selectedSabor === value;
+                      return (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() =>
+                            setSelectedProduct((prev) =>
+                              prev ? { ...prev, selectedSabor: value } : prev
+                            )
+                          }
+                          className={[
+                            "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer",
+                            "ring-1",
+                            active
+                              ? "bg-rose-600 text-white ring-rose-600"
+                              : "bg-rose-50 text-rose-700 ring-rose-200 hover:bg-rose-100",
+                          ].join(" ")}
+                        >
+                          {value}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center justify-center my-4">
+                <button className="px-4 py-2 bg-gray-200 rounded-l-lg" onClick={() => adjustQuantity(-1)} type="button">-</button>
+                <span className="px-4">{quantity}</span>
+                <button className="px-4 py-2 bg-gray-200 rounded-r-lg" onClick={() => adjustQuantity(1)} type="button">+</button>
               </div>
-            )}
 
-            <div className="flex items-center justify-center my-4">
-              <button className="px-4 py-2 bg-gray-200 rounded-l-lg" onClick={() => adjustQuantity(-1)}>-</button>
-              <span className="px-4">{quantity}</span>
-              <button className="px-4 py-2 bg-gray-200 rounded-r-lg" onClick={() => adjustQuantity(1)}>+</button>
+              <button
+                className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
+                onClick={addToCartHandler}
+                disabled={
+                  Array.isArray(selectedProduct.sabores) &&
+                  selectedProduct.sabores.length > 0 &&
+                  !selectedProduct.selectedSabor
+                }
+                type="button"
+              >
+                Añadir al carrito
+              </button>
+
+              <button
+                className="mt-2 w-full text-gray-600 bg-gray-200 py-2 rounded-lg hover:bg-gray-300 transition"
+                onClick={() => setSelectedProduct(null)}
+                type="button"
+              >
+                Cancelar
+              </button>
             </div>
-
-            <button
-              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
-              onClick={addToCartHandler}
-              disabled={
-                Array.isArray((selectedProduct as any).sabores) &&
-                (selectedProduct as any).sabores.length > 0 &&
-                !(selectedProduct as any).selectedSabor
-              }
-            >
-              Añadir al carrito
-            </button>
-
-            <button
-              className="mt-2 w-full text-gray-600 bg-gray-200 py-2 rounded-lg hover:bg-gray-300 transition"
-              onClick={() => setSelectedProduct(null)}
-            >
-              Cancelar
-            </button>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {showPopup && (
