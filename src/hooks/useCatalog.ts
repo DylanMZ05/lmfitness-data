@@ -3,7 +3,8 @@ import { db } from "../firebase";
 import {
   collection,
   getDoc,
-  getDocs,
+  getDocsFromServer,
+  getDocFromServer,
   doc,
   DocumentData,
   Timestamp,
@@ -15,7 +16,7 @@ import {
 export interface Product {
   id: string;
   title: string;
-  price: string;         // en catálogo mostramos string
+  price: string; // en catálogo mostramos string
   offerPrice?: string;
   description?: string;
   longDescription?: string;
@@ -23,7 +24,9 @@ export interface Product {
   sinStock?: boolean;
   selectedSabor?: string;
   sabores?: string[];
-  sabor?: string;        // lo usa el carrito
+  sabor?: string; // lo usa el carrito
+  /** posición dentro de la categoría (admin) */
+  orden?: number;
 }
 
 export interface Category {
@@ -46,6 +49,12 @@ const CACHE_KEY_INDEX = "catalogCacheV1:index"; // { [productId]: categorySlug }
    Utils
 =========================== */
 const hasWindow = typeof window !== "undefined";
+const byOrdenThenTitle = (a: Product, b: Product) => {
+  const ao = Number((a as any).orden ?? 9999);
+  const bo = Number((b as any).orden ?? 9999);
+  if (ao !== bo) return ao - bo;
+  return a.title.localeCompare(b.title, "es", { sensitivity: "base" });
+};
 
 /** Normaliza un producto proveniente de Firestore a nuestro tipo Product */
 function normalizeProduct(raw: DocumentData, id: string): Product {
@@ -64,6 +73,9 @@ function normalizeProduct(raw: DocumentData, id: string): Product {
     ? (raw.sabores as unknown[]).map((x) => String(x).trim())
     : undefined;
 
+  const orden =
+    typeof raw?.orden === "number" ? (raw.orden as number) : undefined;
+
   return {
     id,
     title: String(raw?.title ?? ""),
@@ -76,18 +88,20 @@ function normalizeProduct(raw: DocumentData, id: string): Product {
     images,
     sinStock: Boolean(raw?.sinStock),
     sabores,
+    orden,
   };
 }
 
 /* ===========================
    META: versión/updatedAt
+   (se escribe desde el admin en: meta/catalog)
 =========================== */
-export async function fetchCatalogVersion(): Promise<{
+export async function fetchCatalogMeta(): Promise<{
   version?: string | number;
   updatedAt?: number;
 } | null> {
   try {
-    const metaRef = doc(db, "productos_meta", "catalog");
+    const metaRef = doc(db, "meta", "catalog");
     const snap = await getDoc(metaRef);
     if (!snap.exists()) return null;
     const data = snap.data() as {
@@ -104,7 +118,7 @@ export async function fetchCatalogVersion(): Promise<{
           : undefined,
     };
   } catch (e) {
-    console.warn("No se pudo leer productos_meta/catalog:", e);
+    console.warn("No se pudo leer meta/catalog:", e);
     return null;
   }
 }
@@ -117,7 +131,7 @@ export async function fetchCatalogDataFromServer(): Promise<{
   categorias: Category[];
   index: Record<string, string>;
 }> {
-  const categoriasSnap = await getDocs(collection(db, "productos"));
+  const categoriasSnap = await getDocsFromServer(collection(db, "productos"));
   const categorias: Category[] = [];
   const index: Record<string, string> = {};
 
@@ -129,13 +143,15 @@ export async function fetchCatalogDataFromServer(): Promise<{
       continue;
     }
 
-    const itemsSnap = await getDocs(collection(catDoc.ref, "items"));
+    const itemsSnap = await getDocsFromServer(collection(catDoc.ref, "items"));
     const productos: Product[] = itemsSnap.docs.map((docu) => {
       const raw = docu.data();
       const p = normalizeProduct(raw, docu.id);
       index[p.id] = catDoc.id; // mapear producto -> categoria
       return p;
     });
+
+    productos.sort(byOrdenThenTitle);
 
     categorias.push({
       name: String(catData?.name || "Sin nombre"),
@@ -230,8 +246,8 @@ export async function loadCatalogWithCache(options?: {
   // Intento cache inmediato (el componente decide mostrarlo)
   const immediate = cached.data;
 
-  // 1 lectura: meta
-  const meta = await fetchCatalogVersion();
+  // 1 lectura: meta (versión/updatedAt)
+  const meta = await fetchCatalogMeta();
 
   // Con meta: comparar versión
   if (meta && (meta.version !== undefined || meta.updatedAt !== undefined)) {
@@ -286,7 +302,7 @@ export async function getProductByIdWithCache(
   const cached = readCache();
 
   // 1) Intento usar cache por versión/meta
-  const meta = await fetchCatalogVersion(); // 1 lectura
+  const meta = await fetchCatalogMeta(); // 1 lectura
   const cacheFreshByVersion =
     !!meta && cached.version !== undefined && String(cached.version) === String(meta.version);
 
@@ -312,9 +328,9 @@ export async function getProductByIdWithCache(
     try {
       const catSlug = cached.index![id];
       const ref = doc(db, "productos", catSlug, "items", id);
-      const snap = await getDoc(ref); // 1 lectura
+      const snap = await getDocFromServer(ref); // lectura directa fresca
       if (snap.exists()) {
-        const data = normalizeProduct(snap.data(), snap.id);
+        const data = normalizeProduct(snap.data()!, snap.id);
         return { product: data, categorySlug: catSlug, fromCache: false };
       }
       // si no existe, caemos al 3)

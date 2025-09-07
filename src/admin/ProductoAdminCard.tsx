@@ -1,8 +1,37 @@
 import { useState } from "react";
 import { Product, Category } from "./types";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, setDoc, serverTimestamp, increment } from "firebase/firestore";
 import { db } from "../firebase";
 import { FaEye } from "react-icons/fa";
+
+/* =====================================================
+   Helper: subir versión de catálogo e invalidar cache
+===================================================== */
+async function bumpCatalogVersion(note?: string) {
+  const metaRef = doc(db, "meta", "catalog");
+  await setDoc(
+    metaRef,
+    {
+      version: increment(1),
+      updatedAt: serverTimestamp(),
+      note: note ?? "admin",
+    },
+    { merge: true }
+  );
+
+  // limpieza de cache local en esta pestaña
+  try {
+    const KEYS = [
+      "catalogCacheV1:data",
+      "catalogCacheV1:version",
+      "catalogCacheV1:updatedAt",
+      "catalogCacheV1:index",
+    ];
+    KEYS.forEach((k) => localStorage.removeItem(k));
+  } catch (err) {
+    void err; // <- satisface el linter
+  }
+}
 
 interface Props {
   product: Product;
@@ -43,6 +72,9 @@ const ProductoAdminCard: React.FC<Props> = ({
         price: parsedPrice,
         offerPrice: offerEnabled ? parsedOffer : null,
       });
+
+      await bumpCatalogVersion("update price/offer");
+
       alert("✅ Precios actualizados");
       onUpdate();
     } catch (err) {
@@ -55,7 +87,7 @@ const ProductoAdminCard: React.FC<Props> = ({
     const ids: number[] = [];
     for (const category of allData) {
       for (const prod of category.products) {
-        const val = type === "featured" ? prod.featuredId : prod.exclusiveId;
+        const val = type === "featured" ? (prod as any).featuredId : (prod as any).exclusiveId;
         if (typeof val === "number") ids.push(val);
       }
     }
@@ -88,7 +120,6 @@ const ProductoAdminCard: React.FC<Props> = ({
           ))}
         </div>
       )}
-
 
       <p className="text-xs text-gray-500">{categorySlug}</p>
 
@@ -128,42 +159,54 @@ const ProductoAdminCard: React.FC<Props> = ({
       <label className="text-sm flex items-center gap-2 mb-1">
         <input
           type="checkbox"
-          checked={product.exclusiveId != null}
+          checked={(product as any).exclusiveId != null}
           onChange={async (e) => {
-            const ref = doc(db, "productos", categorySlug, "items", product.id.toString());
-            if (e.target.checked) {
-              const nextId = getNextAvailableId("exclusive");
-              await updateDoc(ref, { exclusiveId: nextId });
-            } else {
-              await updateDoc(ref, { exclusiveId: null });
+            try {
+              const ref = doc(db, "productos", categorySlug, "items", product.id.toString());
+              if (e.target.checked) {
+                const nextId = getNextAvailableId("exclusive");
+                await updateDoc(ref, { exclusiveId: nextId });
+              } else {
+                await updateDoc(ref, { exclusiveId: null });
+              }
+              await bumpCatalogVersion("toggle exclusive");
+              onUpdate();
+            } catch (err) {
+              console.error("❌ Error al actualizar exclusivo:", err);
+              alert("❌ Hubo un error al actualizar Exclusivo.");
             }
-            onUpdate();
           }}
         />
         Producto Exclusivo
-        {product.exclusiveId != null && (
-          <span className="text-xs text-gray-500 ml-1">#{product.exclusiveId}</span>
+        {(product as any).exclusiveId != null && (
+          <span className="text-xs text-gray-500 ml-1">#{(product as any).exclusiveId}</span>
         )}
       </label>
 
       <label className="text-sm flex items-center gap-2">
         <input
           type="checkbox"
-          checked={product.featuredId != null}
+          checked={(product as any).featuredId != null}
           onChange={async (e) => {
-            const ref = doc(db, "productos", categorySlug, "items", product.id.toString());
-            if (e.target.checked) {
-              const nextId = getNextAvailableId("featured");
-              await updateDoc(ref, { featuredId: nextId });
-            } else {
-              await updateDoc(ref, { featuredId: null });
+            try {
+              const ref = doc(db, "productos", categorySlug, "items", product.id.toString());
+              if (e.target.checked) {
+                const nextId = getNextAvailableId("featured");
+                await updateDoc(ref, { featuredId: nextId });
+              } else {
+                await updateDoc(ref, { featuredId: null });
+              }
+              await bumpCatalogVersion("toggle featured");
+              onUpdate();
+            } catch (err) {
+              console.error("❌ Error al actualizar destacado:", err);
+              alert("❌ Hubo un error al actualizar Destacado.");
             }
-            onUpdate();
           }}
         />
         Producto Destacado
-        {product.featuredId != null && (
-          <span className="text-xs text-gray-500 ml-1">#{product.featuredId}</span>
+        {(product as any).featuredId != null && (
+          <span className="text-xs text-gray-500 ml-1">#{(product as any).featuredId}</span>
         )}
       </label>
 
@@ -172,9 +215,15 @@ const ProductoAdminCard: React.FC<Props> = ({
           type="checkbox"
           checked={product.sinStock || false}
           onChange={async (e) => {
-            const ref = doc(db, "productos", categorySlug, "items", product.id.toString());
-            await updateDoc(ref, { sinStock: e.target.checked });
-            onUpdate();
+            try {
+              const ref = doc(db, "productos", categorySlug, "items", product.id.toString());
+              await updateDoc(ref, { sinStock: e.target.checked });
+              await bumpCatalogVersion("toggle sinStock");
+              onUpdate();
+            } catch (err) {
+              console.error("❌ Error al actualizar sinStock:", err);
+              alert("❌ Hubo un error al actualizar Sin stock.");
+            }
           }}
         />
         Sin stock

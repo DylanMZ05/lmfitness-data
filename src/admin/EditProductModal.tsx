@@ -1,8 +1,44 @@
 import { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
-import { doc, setDoc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  deleteDoc,
+  serverTimestamp,
+  increment,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { Product, Category } from "./types";
+
+/* =====================================================
+   Helper: subir versión de catálogo e invalidar cache
+===================================================== */
+async function bumpCatalogVersion(note?: string) {
+  const metaRef = doc(db, "meta", "catalog");
+  await setDoc(
+    metaRef,
+    {
+      version: increment(1),
+      updatedAt: serverTimestamp(),
+      note: note ?? "admin",
+    },
+    { merge: true }
+  );
+
+  // limpieza de cache local en esta pestaña
+  try {
+    const KEYS = [
+      "catalogCacheV1:data",
+      "catalogCacheV1:version",
+      "catalogCacheV1:updatedAt",
+      "catalogCacheV1:index",
+    ];
+    KEYS.forEach((k) => localStorage.removeItem(k));
+  } catch (err) {
+    // localStorage puede no estar disponible (SSR / modo privado)
+    void err;
+  }
+}
 
 interface Props {
   product: Product;
@@ -23,11 +59,14 @@ const EditProductModal: React.FC<Props> = ({
 }) => {
   const [title, setTitle] = useState(product.title);
   const [description, setDescription] = useState(product.description || "");
-  const [longDescription, setLongDescription] = useState(product.longDescription || "");
+  const [longDescription, setLongDescription] = useState(
+    product.longDescription || ""
+  );
   const [price, setPrice] = useState(product.price);
   const [sabores, setSabores] = useState<string[]>([]);
   const [usaSabores, setUsaSabores] = useState<boolean>(false);
   const [nuevoSabor, setNuevoSabor] = useState<string>("");
+  const [saving, setSaving] = useState(false);
 
   // ✅ Carga inicial de sabores desde el producto
   useEffect(() => {
@@ -40,6 +79,9 @@ const EditProductModal: React.FC<Props> = ({
 
   const handleSave = async () => {
     try {
+      if (saving) return;
+      setSaving(true);
+
       if (categoriasSeleccionadas.length === 0) {
         alert("❌ El producto debe pertenecer al menos a una categoría.");
         return;
@@ -62,8 +104,8 @@ const EditProductModal: React.FC<Props> = ({
             longDescription,
             price,
             offerPrice: product.offerPrice ?? null,
-            featuredId: product.featuredId ?? null,
-            exclusiveId: product.exclusiveId ?? null,
+            featuredId: (product as any).featuredId ?? null,
+            exclusiveId: (product as any).exclusiveId ?? null,
             images: product.images || [],
             sinStock: product.sinStock ?? false,
             sabores: usaSabores ? saboresFiltrados : [],
@@ -78,11 +120,15 @@ const EditProductModal: React.FC<Props> = ({
         }
       }
 
+      await bumpCatalogVersion("edit product / categories / sabores");
+
       alert("✅ Cambios guardados");
       onSave();
     } catch (err) {
       console.error("🔥 ERROR al guardar producto:", err);
       alert("❌ Hubo un error al guardar.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -167,7 +213,9 @@ const EditProductModal: React.FC<Props> = ({
                       />
                       <button
                         type="button"
-                        onClick={() => setSabores(sabores.filter((_, i) => i !== index))}
+                        onClick={() =>
+                          setSabores(sabores.filter((_, i) => i !== index))
+                        }
                         className="text-red-600 text-sm"
                       >
                         ✕
@@ -204,17 +252,27 @@ const EditProductModal: React.FC<Props> = ({
                 {categorias.map((cat) => {
                   const isChecked = categoriasSeleccionadas.includes(cat.slug);
                   return (
-                    <label key={cat.slug} className="text-sm flex items-center gap-2">
+                    <label
+                      key={cat.slug}
+                      className="text-sm flex items-center gap-2"
+                    >
                       <input
                         type="checkbox"
                         checked={isChecked}
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setCategoriasSeleccionadas((prev) => [...prev, cat.slug]);
+                            setCategoriasSeleccionadas((prev) => [
+                              ...prev,
+                              cat.slug,
+                            ]);
                           } else {
-                            const nuevas = categoriasSeleccionadas.filter((slug) => slug !== cat.slug);
+                            const nuevas = categoriasSeleccionadas.filter(
+                              (slug) => slug !== cat.slug
+                            );
                             if (nuevas.length === 0) {
-                              alert("❌ El producto debe pertenecer al menos a una categoría.");
+                              alert(
+                                "❌ El producto debe pertenecer al menos a una categoría."
+                              );
                               return;
                             }
                             setCategoriasSeleccionadas(nuevas);
@@ -230,10 +288,11 @@ const EditProductModal: React.FC<Props> = ({
           </div>
 
           <button
-            className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full"
+            className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full disabled:opacity-60"
             onClick={handleSave}
+            disabled={saving}
           >
-            Guardar cambios
+            {saving ? "Guardando..." : "Guardar cambios"}
           </button>
         </div>
       </div>

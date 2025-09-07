@@ -11,6 +11,7 @@ export interface Product {
   sinStock?: boolean;
   sabores?: string[];
   sabor?: string;
+  orden?: number;
 }
 
 export interface Category {
