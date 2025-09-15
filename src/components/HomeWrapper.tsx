@@ -30,6 +30,14 @@ const offerSlides = [
   },
 ];
 
+const atletas = [
+  {
+    imageDesktop: "assets/images/SLIDER/CATALOGO/Atletas-desktop.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/Atletas-mobile.webp",
+    link: "/atletas-lm",
+  }
+];
+
 const HomeWrapper = () => {
   const location = useLocation();
 
@@ -51,6 +59,12 @@ const HomeWrapper = () => {
     <>
       <Main />
       <HowBuy />
+      <section className="my-10 px-4">
+        <h2 className="text-4xl font-bold text-center mb-6 text-black">
+          ATLETAS LM FITNESS
+        </h2>
+        <ParallaxSlider slides={atletas} width="w-full" />
+      </section>
       <section className="my-10 px-4">
         <h2 className="text-4xl font-bold text-center mb-6 text-black">
           OFERTAS ESPECIALES
