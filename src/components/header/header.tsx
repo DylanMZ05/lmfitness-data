@@ -38,7 +38,7 @@ const Header: React.FC = () => {
   const [showCheckout, setShowCheckout] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'transferencia' | 'debito' | 'credito'>('transferencia');
   const [fullName, setFullName] = useState('');
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState(''); // "" | "Retiro por Local" | "Partido de La Costa" | "Otro"
   const [locality, setLocality] = useState('');
   const [otherCity, setOtherCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
@@ -52,14 +52,42 @@ const Header: React.FC = () => {
   const scrollToTop = useScrollToTop();
   const navigate = useNavigate();
 
+  const [showProductsMobile, setShowProductsMobile] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // ==============================
+  // 🔧 FIX HOVER MENU (nuevo)
+  // ==============================
+
+  const hoverCloseTimer = useRef<number | null>(null);
+
+  const keepOpen = () => {
+    if (hoverCloseTimer.current) window.clearTimeout(hoverCloseTimer.current);
+    setIsHoveringProducts(true);
+  };
+
+  const scheduleClose = () => {
+    if (hoverCloseTimer.current) window.clearTimeout(hoverCloseTimer.current);
+    hoverCloseTimer.current = window.setTimeout(() => {
+      setIsHoveringProducts(false);
+    }, 150); // pequeño delay para cruzar sin cerrar
+  };
+
+  // ==============================
+  // 🚚 LÓGICA DE ENVÍO / RETIRO
+  // ==============================
+
+  const isPickup = location === "Retiro por Local";
+
   // ✅ useMemo para evitar cálculos en cada render
   const envio = useMemo(() => {
+    if (isPickup) return 0; // 🚚 Sin envío cuando retira por local
     if (location === "Otro") return 8000;
     if (["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)) return 1000;
     if (["Nueva Atlantis"].includes(locality)) return 1500;
     if (location === "Partido de La Costa" && locality !== "") return 3500;
     return 0;
-  }, [location, locality]);
+  }, [location, locality, isPickup]);
 
   const sectionLabels: Record<string, string> = {
     'inicio': 'Inicio',
@@ -123,24 +151,43 @@ const Header: React.FC = () => {
     setShowProductsMobile(false);
   };
 
+  // 💳 recargo crédito (10%) y descuento por retiro/efectivo (5%)
+  const factor =
+    paymentMethod === "credito" ? 1.1 : 1;
 
+  const pickupDiscount = useMemo(() => {
+    // 5% de descuento si retira por local y paga en efectivo
+    return isPickup && paymentMethod === 'efectivo' ? total * 0.05 : 0;
+  }, [isPickup, paymentMethod, total]);
 
   const totalToPay = useMemo(() => {
-    const factor =
-      paymentMethod === "credito" ? 1.1 : paymentMethod === "efectivo" ? 1 : 1;
-    return (total + envio) * factor;
-  }, [total, envio, paymentMethod]);
+    return (total + envio) * factor - pickupDiscount;
+  }, [total, envio, factor, pickupDiscount]);
 
   const handleConfirmPurchase = () => {
-    if (
-      !fullName.trim() ||
-      !location ||
-      (location === "Partido de La Costa" && !locality) ||
-      (location === "Otro" && (!otherCity.trim() || !postalCode.trim())) ||
-      !street.trim()
-    ) {
-      window.alert("Por favor, completá todos los campos obligatorios.");
+    if (!fullName.trim()) {
+      window.alert("Por favor, ingresá tu nombre completo.");
       return;
+    }
+
+    // ✅ Validaciones condicionales: si NO es retiro por local, pedimos dirección
+    if (!isPickup) {
+      if (
+        !location ||
+        (location === "Partido de La Costa" && !locality) ||
+        (location === "Otro" && (!otherCity.trim() || !postalCode.trim())) ||
+        !street.trim()
+      ) {
+        window.alert("Por favor, completá todos los campos obligatorios de envío.");
+        return;
+      }
+    } else {
+      // Si es retiro por local, limpiamos los campos de dirección para no enviarlos al mensaje
+      setLocality('');
+      setOtherCity('');
+      setPostalCode('');
+      setStreet('');
+      setBetweenStreets('');
     }
 
     const productList = cart
@@ -154,21 +201,30 @@ const Header: React.FC = () => {
       })
       .join("\n");
 
+    const envioLinea = `*Envío:* $${envio}`;
+    const descuentoLinea = pickupDiscount > 0 ? `\n*Descuento (Retiro por Local + Efectivo, 5%):* -$${pickupDiscount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}` : "";
+
+    const direccionBloque = isPickup
+      ? `*Entrega:* Retiro por el local`
+      : [
+          `*Localidad:* ${location === "Partido de La Costa" ? locality : otherCity}`,
+          `*Código Postal:* ${location === "Otro" ? postalCode : "N/A"}`,
+          `*Calle:* ${street}`,
+          `*Entre calles:* ${betweenStreets || "N/A"}`
+        ].join("\n");
+
     const message = [
       "Hola LMFITNESS. Quisiera realizar la compra",
       "",
       `*Nombre completo:* ${fullName}`,
-      `*Localidad:* ${location === "Partido de La Costa" ? locality : otherCity}`,
-      `*Código Postal:* ${location === "Otro" ? postalCode : "N/A"}`,
-      `*Calle:* ${street}`,
-      `*Entre calles:* ${betweenStreets || "N/A"}`,
+      direccionBloque,
       "",
       "*Productos elegidos:*",
       productList,
       "",
       `*Método de pago:* ${paymentMethod}`,
-      `*Envío:* $${envio}`,
-      `*Total a pagar:* $${totalToPay.toLocaleString("es-AR", { minimumFractionDigits: 2 })}`
+      envioLinea + descuentoLinea,
+      `\n*Total a pagar:* $${totalToPay.toLocaleString("es-AR", { minimumFractionDigits: 2 })}`
     ].join("\n");
 
     const whatsappURL = `https://wa.me/+5492257531656?text=${encodeURIComponent(message)}`;
@@ -224,28 +280,6 @@ const Header: React.FC = () => {
       window.removeEventListener("producto-agregado", handleProductoAgregado);
     };
   }, []);
-
-  const [showProductsMobile, setShowProductsMobile] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  // ==============================
-  // 🔧 FIX HOVER MENU (nuevo)
-  // ==============================
-
-  const hoverCloseTimer = useRef<number | null>(null);
-
-  const keepOpen = () => {
-    if (hoverCloseTimer.current) window.clearTimeout(hoverCloseTimer.current);
-    setIsHoveringProducts(true);
-  };
-
-  const scheduleClose = () => {
-    if (hoverCloseTimer.current) window.clearTimeout(hoverCloseTimer.current);
-    hoverCloseTimer.current = window.setTimeout(() => {
-      setIsHoveringProducts(false);
-    }, 150); // pequeño delay para cruzar sin cerrar
-  };
-
 
   return (
     <>
@@ -586,8 +620,6 @@ const Header: React.FC = () => {
               ))}
             </ul>
 
-
-            
             <button onClick={() => setCartOpen(!cartOpen)} className="mr-10 relative text-white cursor-pointer">
               <ShoppingCart size={24} />
               {cart.length > 0 && (
@@ -779,20 +811,25 @@ const Header: React.FC = () => {
                 <select
                   value={location}
                   onChange={(e) => {
-                    setLocation(e.target.value);
+                    const val = e.target.value;
+                    setLocation(val);
+                    // limpiar campos de envío siempre que se cambia la zona
                     setLocality('');
                     setOtherCity('');
                     setPostalCode('');
+                    setStreet('');
+                    setBetweenStreets('');
                   }}
                   className="w-full border p-2 px-4 rounded-full mb-3"
                 >
                   <option value="">Seleccioná tu zona</option>
+                  <option value="Retiro por Local">Retiro por Local</option>
                   <option value="Partido de La Costa">Partido de La Costa</option>
                   <option value="Otro">Otro</option>
                 </select>
 
-                {/* Localidad o ciudad */}
-                {location === "Partido de La Costa" && (
+                {/* Localidad o ciudad (solo si no es retiro) */}
+                {!isPickup && location === "Partido de La Costa" && (
                   <select
                     value={locality}
                     onChange={(e) => setLocality(e.target.value)}
@@ -813,7 +850,7 @@ const Header: React.FC = () => {
                   </select>
                 )}
 
-                {location === "Otro" && (
+                {!isPickup && location === "Otro" && (
                   <>
                     <input
                       type="text"
@@ -832,22 +869,26 @@ const Header: React.FC = () => {
                   </>
                 )}
 
-                {/* Dirección */}
-                <input
-                  type="text"
-                  placeholder="Calle"
-                  className="w-full border p-2 px-4 rounded-full"
-                  value={street}
-                  onChange={(e) => setStreet(e.target.value)}
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Entre calles"
-                  className="w-full border p-2 px-4 rounded-full"
-                  value={betweenStreets}
-                  onChange={(e) => setBetweenStreets(e.target.value)}
-                />
+                {/* Dirección (solo si no es retiro) */}
+                {!isPickup && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Calle"
+                      className="w-full border p-2 px-4 rounded-full"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      required={!isPickup}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Entre calles"
+                      className="w-full border p-2 px-4 rounded-full"
+                      value={betweenStreets}
+                      onChange={(e) => setBetweenStreets(e.target.value)}
+                    />
+                  </>
+                )}
 
                 {/* Método de pago */}
                 <div className="mt-3">
@@ -889,8 +930,11 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Totales */}
-                <div className="mt-4 font-bold">
+                <div className="mt-4 font-bold space-y-1">
                   <p>Envío: <span className="text-blue-500">${envio}</span></p>
+                  {pickupDiscount > 0 && (
+                    <p>Descuento (Retiro + Efectivo 5%): <span className="text-green-700">- ${pickupDiscount.toFixed(2)}</span></p>
+                  )}
                   <p>Total Productos: <span className="text-blue-500">${total.toFixed(2)}</span></p>
                   <p>Total a Pagar: <span className="text-green-700">${totalToPay.toFixed(2)}</span></p>
                 </div>

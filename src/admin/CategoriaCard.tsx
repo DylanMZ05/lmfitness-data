@@ -25,14 +25,15 @@ type Props = {
   category: Category;
   data: Category[];
   onEditProduct: (p: Product) => void;
-  onUpdate: () => void;
+  onUpdate: () => void; // se usa solo para reordenar; evitamos dispararlo desde las tarjetas hijas
 };
 
-const byOrdenThenTitle = (a: Product, b: Product) => {
+// ✅ Orden estable: primero `orden`, si empatan, `id`
+const byOrdenThenId = (a: Product, b: Product) => {
   const ao = Number((a as any).orden ?? 9999);
   const bo = Number((b as any).orden ?? 9999);
   if (ao !== bo) return ao - bo;
-  return a.title.localeCompare(b.title, "es", { sensitivity: "base" });
+  return String(a.id).localeCompare(String(b.id), "es", { sensitivity: "base" });
 };
 
 const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdate }) => {
@@ -42,7 +43,7 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const sorted = [...category.products].sort(byOrdenThenTitle);
+    const sorted = [...category.products].sort(byOrdenThenId);
     setItems(sorted);
   }, [category.products]);
 
@@ -68,19 +69,29 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
   };
 
   const saveOrder = async () => {
+    if (saving) return;
+    setSaving(true);
     try {
-      if (saving) return;
-      setSaving(true);
-
       // asignamos índices 10,20,30... para permitir inserciones futuras
-      const batchWrites = items.map((p, i) => {
+      const writes = items.map((p, i) => {
         const ref = doc(db, "productos", category.slug, "items", p.id.toString());
         return updateDoc(ref, { orden: (i + 1) * 10 });
       });
 
-      await Promise.all(batchWrites);
-      await bumpCatalogVersion(`save order ${category.slug}`);
+      // ✅ Esperar todos los updates (evita avisos mezclados)
+      await Promise.all(writes);
+
+      // Versión no bloqueante (si falla, no mostramos error al usuario)
+      bumpCatalogVersion(`save order ${category.slug}`).catch((e) =>
+        console.warn("bumpCatalogVersion falló:", e)
+      );
+
+      // Aviso único de éxito
+      alert("✅ Orden guardado");
+
+      // Refresco externo (si tu padre hace refetch aquí, es consciente)
       onUpdate();
+
       setReorderMode(false);
     } catch (err) {
       console.error("❌ Error al guardar el orden:", err);
@@ -89,6 +100,9 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
       setSaving(false);
     }
   };
+
+  // ⛳ No-op para evitar refetches/alerts duplicados desde las tarjetas hijas
+  const noopUpdate = () => {};
 
   return (
     <section className="mb-6 border border-black/10 rounded-lg overflow-hidden bg-white">
@@ -181,7 +195,8 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
               categorySlug={category.slug}
               allData={data}
               onEdit={() => onEditProduct(product)}
-              onUpdate={onUpdate}
+              // ⚠️ Pasamos un onUpdate no-op para evitar refetch/alertes duplicados desde el hijo
+              onUpdate={noopUpdate}
             />
           </div>
         ))}

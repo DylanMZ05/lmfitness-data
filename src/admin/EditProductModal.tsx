@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import {
   doc,
@@ -34,9 +34,8 @@ async function bumpCatalogVersion(note?: string) {
       "catalogCacheV1:index",
     ];
     KEYS.forEach((k) => localStorage.removeItem(k));
-  } catch (err) {
-    // localStorage puede no estar disponible (SSR / modo privado)
-    void err;
+  } catch {
+    /* localStorage puede no estar disponible; ignorar */
   }
 }
 
@@ -46,7 +45,9 @@ interface Props {
   categoriasSeleccionadas: string[];
   setCategoriasSeleccionadas: React.Dispatch<React.SetStateAction<string[]>>;
   onClose: () => void;
-  onSave: () => void;
+
+  // ⬅️ el padre usará esto para actualizar estado local sin refetch
+  onSave: (updated: Product, prevCats: string[], newCats: string[]) => void;
 }
 
 const EditProductModal: React.FC<Props> = ({
@@ -68,6 +69,13 @@ const EditProductModal: React.FC<Props> = ({
   const [nuevoSabor, setNuevoSabor] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
+  // Guardamos las categorías originales para informar prevCats al onSave del padre
+  const initialCatsRef = useRef<string[]>([]);
+  useEffect(() => {
+    initialCatsRef.current = [...categoriasSeleccionadas];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // solo al montar
+
   // ✅ Carga inicial de sabores desde el producto
   useEffect(() => {
     if (Array.isArray(product.sabores) && product.sabores.length > 0) {
@@ -78,12 +86,13 @@ const EditProductModal: React.FC<Props> = ({
   }, [product.sabores]);
 
   const handleSave = async () => {
-    try {
-      if (saving) return;
-      setSaving(true);
+    if (saving) return;
+    setSaving(true);
 
+    try {
       if (categoriasSeleccionadas.length === 0) {
         alert("❌ El producto debe pertenecer al menos a una categoría.");
+        setSaving(false);
         return;
       }
 
@@ -92,6 +101,9 @@ const EditProductModal: React.FC<Props> = ({
         .filter((s, i, arr) => s && arr.indexOf(s) === i); // eliminar vacíos y duplicados
 
       const allSlugs = categorias.map((cat) => cat.slug);
+
+      // Construir todas las operaciones y esperar juntas
+      const writes: Promise<any>[] = [];
 
       for (const slug of allSlugs) {
         const ref = doc(db, "productos", slug, "items", product.id.toString());
@@ -103,27 +115,58 @@ const EditProductModal: React.FC<Props> = ({
             description,
             longDescription,
             price,
+            // campos mantenidos desde el producto original
             offerPrice: product.offerPrice ?? null,
             featuredId: (product as any).featuredId ?? null,
             exclusiveId: (product as any).exclusiveId ?? null,
             images: product.images || [],
             sinStock: product.sinStock ?? false,
             sabores: usaSabores ? saboresFiltrados : [],
+            // MUY IMPORTANTE: preservar 'orden' para no romper el orden estable
+            orden: (product as any).orden ?? 9999,
           };
 
-          await setDoc(ref, updatedData);
+          writes.push(setDoc(ref, updatedData, { merge: true }));
         } else {
-          const cat = categorias.find((c) => c.slug === slug);
-          if (cat && cat.products.some((p) => p.id === product.id)) {
-            await deleteDoc(ref);
-          }
+          // si estaba y ya no, lo removemos (no crítico → no rompemos flujo)
+          writes.push(deleteDoc(ref).catch(() => null));
         }
       }
 
-      await bumpCatalogVersion("edit product / categories / sabores");
+      // Esperar todas las escrituras antes de declarar éxito
+      await Promise.all(writes);
+
+      // Subir versión: no bloquear ni mostrar error al usuario si falla
+      bumpCatalogVersion("edit product / categories / sabores").catch((e) => {
+        console.warn("bumpCatalogVersion falló:", e);
+      });
+
+      // Construimos el objeto actualizado para actualización local en el padre
+      const updatedProduct: Product = {
+        ...product,
+        title,
+        description,
+        longDescription,
+        price,
+        sabores: usaSabores ? saboresFiltrados : [],
+        orden: (product as any).orden ?? 9999,
+        images: product.images || [],
+      };
+
+      const prevCats = initialCatsRef.current;
+      const newCats = [...categoriasSeleccionadas];
+
+      // 👉 Blindamos onSave para que un error del handler NO dispare el catch general
+      try {
+        onSave(updatedProduct, prevCats, newCats);
+      } catch (e) {
+        console.warn(
+          "onSave (padre) arrojó un error, pero la escritura en Firestore fue exitosa:",
+          e
+        );
+      }
 
       alert("✅ Cambios guardados");
-      onSave();
     } catch (err) {
       console.error("🔥 ERROR al guardar producto:", err);
       alert("❌ Hubo un error al guardar.");
