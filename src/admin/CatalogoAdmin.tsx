@@ -23,14 +23,18 @@ const CatalogoAdmin = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+
+      // 🔄 leer siempre fresco desde el server (evita cache local del SDK)
       const categoriasSnap = await getDocsFromServer(collection(db, "productos"));
       const categorias: Category[] = [];
 
       for (const catDoc of categoriasSnap.docs) {
         const catData = catDoc.data();
+
         const itemsSnap = await getDocsFromServer(collection(catDoc.ref, "items"));
         const productos: Product[] = itemsSnap.docs.map((docu) => {
           const d = docu.data() as any;
+
           return {
             id: docu.id,
             title: d.title,
@@ -45,7 +49,7 @@ const CatalogoAdmin = () => {
             longDescription: d.longDescription,
             sinStock: Boolean(d.sinStock),
             sabores: Array.isArray(d.sabores) ? d.sabores : [],
-            orden: typeof d.orden === "number" ? d.orden : 9999,
+            orden: typeof d.orden === "number" ? d.orden : 9999, // 👈 orden persistente
           };
         });
 
@@ -60,7 +64,9 @@ const CatalogoAdmin = () => {
         });
       }
 
+      // ordenar categorías por `orden`
       categorias.sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
+
       setData(categorias);
     } catch (e) {
       console.error("Error cargando catálogo:", e);
@@ -73,29 +79,50 @@ const CatalogoAdmin = () => {
     fetchData();
   }, []);
 
-  // ⬇️ Actualización local sin refetch
+  // =========================
+  // 🔧 Actualización local
+  // =========================
+  /**
+   * Reemplaza/ubica el producto actualizado dentro de las categorías afectadas,
+   * sin volver a consultar Firestore.
+   *
+   * @param updated producto ya guardado en Firestore (con sus campos finales)
+   * @param prevCats slugs donde estaba antes (p. ej. ["proteinas","creatinas"])
+   * @param newCats slugs donde debe quedar ahora (p. ej. ["proteinas","ofertas"])
+   */
   const applyLocalUpdate = (updated: Product, prevCats: string[], newCats: string[]) => {
     setData((prev) => {
       const next = prev.map((cat) => ({ ...cat, products: [...cat.products] }));
+
       const prevSet = new Set(prevCats);
       const newSet = new Set(newCats);
 
-      // remover donde ya no va
+      // 1) Remover de categorías que ya no correspondan
       for (const cat of next) {
         if (prevSet.has(cat.slug) && !newSet.has(cat.slug)) {
           const idx = cat.products.findIndex((p) => p.id === updated.id);
-          if (idx !== -1) cat.products.splice(idx, 1);
+          if (idx !== -1) {
+            cat.products.splice(idx, 1);
+          }
         }
       }
-      // insertar/actualizar donde corresponde
+
+      // 2) Insertar/Actualizar en categorías que correspondan
       for (const cat of next) {
         if (newSet.has(cat.slug)) {
           const idx = cat.products.findIndex((p) => p.id === updated.id);
-          if (idx === -1) cat.products.push(updated);
-          else cat.products[idx] = { ...cat.products[idx], ...updated };
+          if (idx === -1) {
+            // no estaba: lo agrego
+            cat.products.push(updated);
+          } else {
+            // estaba: lo reemplazo en su misma posición para minimizar “saltos”
+            cat.products[idx] = { ...cat.products[idx], ...updated };
+          }
+          // Re-ordenar SOLAMENTE esta categoría (estable: por orden, luego id)
           sortProductosEstable(cat.products);
         }
       }
+
       return next;
     });
   };
@@ -116,9 +143,9 @@ const CatalogoAdmin = () => {
               .map((cat) => cat.slug);
             setCategoriasSeleccionadas(cats);
           }}
-          // ⚠️ Importante: que CategoriaCard NO llame a refetch al cerrar el modal.
-          // Si CategoriaCard usa onUpdate para otras acciones (reordenar manual, etc.),
-          // podés dejar un handler que SOLO toque estado local y evite fetchData().
+          // 👇 Necesario por tipos. Si querés refrescar todo al guardar el REORDEN,
+          // reemplazá por: onUpdate={fetchData}
+          onUpdate={() => {}}
         />
       ))}
 
@@ -132,7 +159,10 @@ const CatalogoAdmin = () => {
             setSelectedProduct(null);
             setCategoriasSeleccionadas([]);
           }}
-          // 👉 sin refetch: aplicamos actualización local
+          /**
+           * 🧠 onSave recibe (updatedProduct, prevCats, newCats)
+           * y en vez de refetchear, aplicamos actualización local.
+           */
           onSave={(updatedProduct: Product, prevCats: string[], newCats: string[]) => {
             setSelectedProduct(null);
             setCategoriasSeleccionadas([]);

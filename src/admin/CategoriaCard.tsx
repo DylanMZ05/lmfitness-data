@@ -25,7 +25,7 @@ type Props = {
   category: Category;
   data: Category[];
   onEditProduct: (p: Product) => void;
-  onUpdate: () => void; // se usa solo para reordenar; evitamos dispararlo desde las tarjetas hijas
+  onUpdate: () => void;
 };
 
 // ✅ Orden estable: primero `orden`, si empatan, `id`
