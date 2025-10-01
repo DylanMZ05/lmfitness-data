@@ -5,6 +5,14 @@ import { Product, Category } from "./types";
 import EditProductModal from "./EditProductModal";
 import CategoriaCard from "./CategoriaCard";
 
+const normalizeImage = (img: string) => {
+  if (!img) return "";
+  const s = String(img).trim();
+  if (/^(https?:)?\/\//i.test(s) || /^data:/i.test(s)) return s; // http(s) o data URI
+  if (s.startsWith("/")) return s; // ya absoluto en tu sitio
+  return `/${s}`; // relativo → absoluto del sitio
+};
+
 const sortProductosEstable = (arr: Product[]) => {
   arr.sort((a, b) => {
     const ao = Number((a as any).orden ?? 9999);
@@ -23,50 +31,59 @@ const CatalogoAdmin = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-
-      // 🔄 leer siempre fresco desde el server (evita cache local del SDK)
+      // Colección de categorías
       const categoriasSnap = await getDocsFromServer(collection(db, "productos"));
-      const categorias: Category[] = [];
 
-      for (const catDoc of categoriasSnap.docs) {
-        const catData = catDoc.data();
+      // Mapear categorías base
+      const cats = categoriasSnap.docs.map((catDoc) => {
+        const catData = catDoc.data() as any;
+        return {
+          slug: catDoc.id,
+          name: String(catData.name ?? ""),
+          image: String(catData.image ?? ""),
+          orden: parseInt(String(catData.orden ?? "999"), 10),
+          ref: catDoc.ref,
+        };
+      });
 
-        const itemsSnap = await getDocsFromServer(collection(catDoc.ref, "items"));
-        const productos: Product[] = itemsSnap.docs.map((docu) => {
+      // Leer items en paralelo
+      const itemsSnaps = await Promise.all(
+        cats.map((c) => getDocsFromServer(collection(c.ref, "items")))
+      );
+
+      // Construir estructura final
+      const categorias: Category[] = cats.map((c, i) => {
+        const productos: Product[] = itemsSnaps[i].docs.map((docu) => {
           const d = docu.data() as any;
-
           return {
             id: docu.id,
             title: d.title,
             price: Number(d.price),
             offerPrice: d.offerPrice != null ? Number(d.offerPrice) : undefined,
-            images: Array.isArray(d.images)
-              ? d.images.map((img: string) => (img.startsWith("/") ? img : `/${img}`))
-              : [],
+            images: Array.isArray(d.images) ? d.images.map(normalizeImage) : [],
             featuredId: d.featuredId,
             exclusiveId: d.exclusiveId,
             description: d.description,
             longDescription: d.longDescription,
             sinStock: Boolean(d.sinStock),
             sabores: Array.isArray(d.sabores) ? d.sabores : [],
-            orden: typeof d.orden === "number" ? d.orden : 9999, // 👈 orden persistente
+            orden: typeof d.orden === "number" ? d.orden : 9999,
           };
         });
 
         sortProductosEstable(productos);
 
-        categorias.push({
-          name: catData.name,
-          slug: catDoc.id,
-          image: catData.image,
-          orden: parseInt(catData.orden ?? "999", 10),
+        return {
+          name: c.name,
+          slug: c.slug,
+          image: c.image,
+          orden: c.orden,
           products: productos,
-        });
-      }
+        };
+      });
 
-      // ordenar categorías por `orden`
+      // Ordenar categorías por orden ascendente
       categorias.sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
-
       setData(categorias);
     } catch (e) {
       console.error("Error cargando catálogo:", e);
@@ -77,52 +94,35 @@ const CatalogoAdmin = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // =========================
-  // 🔧 Actualización local
-  // =========================
-  /**
-   * Reemplaza/ubica el producto actualizado dentro de las categorías afectadas,
-   * sin volver a consultar Firestore.
-   *
-   * @param updated producto ya guardado en Firestore (con sus campos finales)
-   * @param prevCats slugs donde estaba antes (p. ej. ["proteinas","creatinas"])
-   * @param newCats slugs donde debe quedar ahora (p. ej. ["proteinas","ofertas"])
-   */
+  // ✅ Actualización local (sin refetch) cuando se guarda desde el modal
   const applyLocalUpdate = (updated: Product, prevCats: string[], newCats: string[]) => {
     setData((prev) => {
       const next = prev.map((cat) => ({ ...cat, products: [...cat.products] }));
-
       const prevSet = new Set(prevCats);
       const newSet = new Set(newCats);
 
-      // 1) Remover de categorías que ya no correspondan
+      // Remover de categorías que ya no correspondan
       for (const cat of next) {
         if (prevSet.has(cat.slug) && !newSet.has(cat.slug)) {
           const idx = cat.products.findIndex((p) => p.id === updated.id);
-          if (idx !== -1) {
-            cat.products.splice(idx, 1);
-          }
+          if (idx !== -1) cat.products.splice(idx, 1);
         }
       }
-
-      // 2) Insertar/Actualizar en categorías que correspondan
+      // Insertar / merge en nuevas categorías
       for (const cat of next) {
         if (newSet.has(cat.slug)) {
           const idx = cat.products.findIndex((p) => p.id === updated.id);
           if (idx === -1) {
-            // no estaba: lo agrego
             cat.products.push(updated);
           } else {
-            // estaba: lo reemplazo en su misma posición para minimizar “saltos”
             cat.products[idx] = { ...cat.products[idx], ...updated };
           }
-          // Re-ordenar SOLAMENTE esta categoría (estable: por orden, luego id)
           sortProductosEstable(cat.products);
         }
       }
-
       return next;
     });
   };
@@ -143,9 +143,9 @@ const CatalogoAdmin = () => {
               .map((cat) => cat.slug);
             setCategoriasSeleccionadas(cats);
           }}
-          // 👇 Necesario por tipos. Si querés refrescar todo al guardar el REORDEN,
-          // reemplazá por: onUpdate={fetchData}
-          onUpdate={() => {}}
+          onUpdate={() => {
+            /* opcional: podés usar fetchData si necesitás refetch global tras reorden */
+          }}
         />
       ))}
 
@@ -159,10 +159,6 @@ const CatalogoAdmin = () => {
             setSelectedProduct(null);
             setCategoriasSeleccionadas([]);
           }}
-          /**
-           * 🧠 onSave recibe (updatedProduct, prevCats, newCats)
-           * y en vez de refetchear, aplicamos actualización local.
-           */
           onSave={(updatedProduct: Product, prevCats: string[], newCats: string[]) => {
             setSelectedProduct(null);
             setCategoriasSeleccionadas([]);

@@ -1,9 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
-import { doc, updateDoc, setDoc, serverTimestamp, increment } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  setDoc,
+  serverTimestamp,
+  increment,
+  writeBatch,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { Category, Product } from "./types";
 import ProductoAdminCard from "./ProductoAdminCard";
-import { FaArrowUp, FaArrowDown, FaSave, FaSortAlphaDown, FaGripLines } from "react-icons/fa";
+import {
+  FaArrowUp,
+  FaArrowDown,
+  FaSave,
+  FaSortAlphaDown,
+  FaGripLines,
+  FaChevronDown,
+  FaChevronRight,
+} from "react-icons/fa";
 
 /* ==============================
    bump de versión (invalidar caché)
@@ -18,7 +33,7 @@ async function bumpCatalogVersion(note?: string) {
   try {
     ["catalogCacheV1:data","catalogCacheV1:version","catalogCacheV1:updatedAt","catalogCacheV1:index"]
       .forEach((k) => localStorage.removeItem(k));
-  } catch (err) { void err; }
+  } catch { /* noop */ }
 }
 
 type Props = {
@@ -42,10 +57,16 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
   const [reorderMode, setReorderMode] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  // 👇 SIEMPRE cerradas al cargar (no se persiste entre recargas)
+  const [collapsed, setCollapsed] = useState<boolean>(true);
+
   useEffect(() => {
     const sorted = [...category.products].sort(byOrdenThenId);
     setItems(sorted);
   }, [category.products]);
+
+  // Imagen portada: siempre la del primer producto con imagen
+  const coverImage = items.find((p) => p.images && p.images[0])?.images?.[0] ?? "";
 
   const canMove = useMemo(
     () => (idx: number, dir: number) => {
@@ -64,7 +85,9 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
   };
 
   const sortAZ = () => {
-    const next = [...items].sort((a, b) => a.title.localeCompare(b.title, "es", { sensitivity: "base" }));
+    const next = [...items].sort((a, b) =>
+      a.title.localeCompare(b.title, "es", { sensitivity: "base" })
+    );
     setItems(next);
   };
 
@@ -72,26 +95,17 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
     if (saving) return;
     setSaving(true);
     try {
-      // asignamos índices 10,20,30... para permitir inserciones futuras
-      const writes = items.map((p, i) => {
+      const batch = writeBatch(db);
+      items.forEach((p, i) => {
         const ref = doc(db, "productos", category.slug, "items", p.id.toString());
-        return updateDoc(ref, { orden: (i + 1) * 10 });
+        batch.update(ref, { orden: (i + 1) * 10 }); // 10,20,30...
       });
+      await batch.commit();
 
-      // ✅ Esperar todos los updates (evita avisos mezclados)
-      await Promise.all(writes);
+      bumpCatalogVersion(`save order ${category.slug}`).catch(console.warn);
 
-      // Versión no bloqueante (si falla, no mostramos error al usuario)
-      bumpCatalogVersion(`save order ${category.slug}`).catch((e) =>
-        console.warn("bumpCatalogVersion falló:", e)
-      );
-
-      // Aviso único de éxito
       alert("✅ Orden guardado");
-
-      // Refresco externo (si tu padre hace refetch aquí, es consciente)
-      onUpdate();
-
+      onUpdate(); // si no querés refetch global, dejá noop desde el padre
       setReorderMode(false);
     } catch (err) {
       console.error("❌ Error al guardar el orden:", err);
@@ -101,18 +115,42 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
     }
   };
 
+  // 🔧 Patch optimista recibido desde ProductoAdminCard (acceso rápido)
+  const onQuickPatch = (productId: string | number, patch: Partial<Product>) => {
+    setItems((prev) => {
+      const next = prev.map((p) => (p.id === productId ? { ...p, ...patch } : p));
+      return next.sort(byOrdenThenId);
+    });
+  };
+
   // ⛳ No-op para evitar refetches/alerts duplicados desde las tarjetas hijas
   const noopUpdate = () => {};
 
   return (
     <section className="mb-6 border border-black/10 rounded-lg overflow-hidden bg-white">
       <header className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b">
-        <div className="flex items-center gap-3">
-          {category.image && (
-            <img src={category.image} alt={category.name} className="h-8 w-8 object-contain" />
+        <button
+          type="button"
+          className="flex items-center gap-3 group"
+          onClick={() => setCollapsed((v) => !v)}
+          title={collapsed ? "Desplegar" : "Colapsar"}
+        >
+          <span className="text-gray-500">
+            {collapsed ? <FaChevronRight /> : <FaChevronDown />}
+          </span>
+
+          {coverImage ? (
+            <img
+              src={coverImage}
+              alt={category.name}
+              className="h-8 w-8 object-cover rounded"
+            />
+          ) : (
+            <div className="h-8 w-8 rounded bg-gray-200" />
           )}
-          <h3 className="text-lg font-bold">{category.name}</h3>
-        </div>
+
+          <h3 className="text-lg font-bold group-hover:underline">{category.name}</h3>
+        </button>
 
         <div className="flex items-center gap-2">
           <button
@@ -154,53 +192,59 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
         </div>
       </header>
 
-      {/* Grid de productos */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-3">
-        {items.map((product, idx) => (
-          <div key={`${product.id}-${category.slug}`} className="relative">
-            {/* Controles de orden visibles solo en modo reordenar */}
-            {reorderMode && (
-              <div className="absolute -top-2 -right-2 z-10 flex flex-col gap-1">
-                <button
-                  className={`p-1 rounded-full shadow border bg-white ${!canMove(idx, -1) ? "opacity-40 cursor-not-allowed" : ""}`}
-                  onClick={() => move(idx, -1)}
-                  disabled={!canMove(idx, -1)}
-                  type="button"
-                  title="Subir"
-                >
-                  <FaArrowUp />
-                </button>
-                <button
-                  className={`p-1 rounded-full shadow border bg-white ${!canMove(idx, +1) ? "opacity-40 cursor-not-allowed" : ""}`}
-                  onClick={() => move(idx, +1)}
-                  disabled={!canMove(idx, +1)}
-                  type="button"
-                  title="Bajar"
-                >
-                  <FaArrowDown />
-                </button>
-              </div>
-            )}
+      {/* Grid de productos (oculto si está colapsado) */}
+      {!collapsed && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-3">
+          {items.map((product, idx) => (
+            <div key={`${product.id}-${category.slug}`} className="relative">
+              {/* Controles de orden visibles solo en modo reordenar */}
+              {reorderMode && (
+                <div className="absolute -top-2 -right-2 z-10 flex flex-col gap-1">
+                  <button
+                    className={`p-1 rounded-full shadow border bg-white ${
+                      !canMove(idx, -1) ? "opacity-40 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() => move(idx, -1)}
+                    disabled={!canMove(idx, -1)}
+                    type="button"
+                    title="Subir"
+                  >
+                    <FaArrowUp />
+                  </button>
+                  <button
+                    className={`p-1 rounded-full shadow border bg-white ${
+                      !canMove(idx, +1) ? "opacity-40 cursor-not-allowed" : ""
+                    }`}
+                    onClick={() => move(idx, +1)}
+                    disabled={!canMove(idx, +1)}
+                    type="button"
+                    title="Bajar"
+                  >
+                    <FaArrowDown />
+                  </button>
+                </div>
+              )}
 
-            {/* Número de orden actual */}
-            {reorderMode && (
-              <span className="absolute -top-2 -left-2 bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
-                {idx + 1}
-              </span>
-            )}
+              {/* Número de orden actual */}
+              {reorderMode && (
+                <span className="absolute -top-2 -left-2 bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                  {idx + 1}
+                </span>
+              )}
 
-            {/* Card existente del admin */}
-            <ProductoAdminCard
-              product={product}
-              categorySlug={category.slug}
-              allData={data}
-              onEdit={() => onEditProduct(product)}
-              // ⚠️ Pasamos un onUpdate no-op para evitar refetch/alertes duplicados desde el hijo
-              onUpdate={noopUpdate}
-            />
-          </div>
-        ))}
-      </div>
+              {/* Card del admin */}
+              <ProductoAdminCard
+                product={product}
+                categorySlug={category.slug}
+                allData={data}
+                onEdit={() => onEditProduct(product)}
+                onUpdate={noopUpdate}
+                onQuickPatch={onQuickPatch}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };
