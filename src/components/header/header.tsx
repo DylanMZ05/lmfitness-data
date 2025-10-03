@@ -38,7 +38,7 @@ const Header: React.FC = () => {
   const [showCheckout, setShowCheckout] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'transferencia' | 'debito' | 'credito'>('transferencia');
   const [fullName, setFullName] = useState('');
-  const [location, setLocation] = useState(''); // "" | "Retiro por Local" | "Partido de La Costa" | "Otro"
+  const [location, setLocation] = useState(''); // "" | "Retiro por Domicilio" | "Partido de La Costa" | "Otro"
   const [locality, setLocality] = useState('');
   const [otherCity, setOtherCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
@@ -77,7 +77,7 @@ const Header: React.FC = () => {
   // 🚚 LÓGICA DE ENVÍO / RETIRO
   // ==============================
 
-  const isPickup = location === "Retiro por Local";
+  const isPickup = location === "Retiro por Domicilio";
 
   // ✅ useMemo para evitar cálculos en cada render
   const envio = useMemo(() => {
@@ -170,7 +170,7 @@ const Header: React.FC = () => {
       return;
     }
 
-    // ✅ Validaciones condicionales: si NO es retiro por local, pedimos dirección
+    // ✅ Validaciones condicionales: si NO es Retiro por Domicilio, pedimos dirección
     if (!isPickup) {
       if (
         !location ||
@@ -182,7 +182,7 @@ const Header: React.FC = () => {
         return;
       }
     } else {
-      // Si es retiro por local, limpiamos los campos de dirección para no enviarlos al mensaje
+      // Si es Retiro por Domicilio, limpiamos los campos de dirección para no enviarlos al mensaje
       setLocality('');
       setOtherCity('');
       setPostalCode('');
@@ -202,10 +202,10 @@ const Header: React.FC = () => {
       .join("\n");
 
     const envioLinea = `*Envío:* $${envio}`;
-    const descuentoLinea = pickupDiscount > 0 ? `\n*Descuento (Retiro por Local + Efectivo, 5%):* -$${pickupDiscount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}` : "";
+    const descuentoLinea = pickupDiscount > 0 ? `\n*Descuento (Retiro por Domicilio + Efectivo, 5%):* -$${pickupDiscount.toLocaleString("es-AR", { minimumFractionDigits: 2 })}` : "";
 
     const direccionBloque = isPickup
-      ? `*Entrega:* Retiro por el local`
+      ? `*Entrega:* Retiro por domicilio`
       : [
           `*Localidad:* ${location === "Partido de La Costa" ? locality : otherCity}`,
           `*Código Postal:* ${location === "Otro" ? postalCode : "N/A"}`,
@@ -823,7 +823,7 @@ const Header: React.FC = () => {
                   className="w-full border p-2 px-4 rounded-full mb-3"
                 >
                   <option value="">Seleccioná tu zona</option>
-                  <option value="Retiro por Local">Retiro por Local</option>
+                  <option value="Retiro por Domicilio">Retiro por Domicilio</option>
                   <option value="Partido de La Costa">Partido de La Costa</option>
                   <option value="Otro">Otro</option>
                 </select>

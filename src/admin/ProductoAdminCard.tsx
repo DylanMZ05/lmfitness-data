@@ -39,6 +39,8 @@ interface Props {
   allData: Category[];
   onEdit: () => void;
   onUpdate: () => void;
+  /** Callback opcional para actualizar la UI del listado de forma optimista */
+  onQuickPatch?: (productId: string | number, patch: Partial<Product>) => void;
 }
 
 const stop = (e: MouseEvent | React.ChangeEvent<any>) => {
@@ -52,6 +54,7 @@ const ProductoAdminCard: React.FC<Props> = ({
   allData,
   onEdit,
   onUpdate,
+  onQuickPatch,
 }) => {
   // ====== Estado local para edición de precios ======
   const [price, setPrice] = useState(product.price.toString());
@@ -105,7 +108,7 @@ const ProductoAdminCard: React.FC<Props> = ({
     }
   };
 
-  // Siguiente ID disponible para featured/exclusive (simple y suficiente para admin)
+  // Siguiente ID disponible para featured/exclusive
   const getNextAvailableId = (type: "featured" | "exclusive") => {
     const ids: number[] = [];
     for (const category of allData) {
@@ -128,13 +131,14 @@ const ProductoAdminCard: React.FC<Props> = ({
 
     // optimista
     setExclusiveId(next);
+    onQuickPatch?.(product.id, { exclusiveId: next as any });
     try {
       await updateDoc(itemRef, { exclusiveId: next });
       await bumpCatalogVersion("toggle exclusive");
-      // onUpdate(); // opcional: con estado optimista ya se ve bien
     } catch (err) {
       console.error("❌ Error al actualizar exclusivo:", err);
-      setExclusiveId(prev); // rollback
+      setExclusiveId(prev); // rollback local
+      onQuickPatch?.(product.id, { exclusiveId: prev as any }); // rollback listado
       alert("❌ Hubo un error al actualizar Exclusivo.");
     } finally {
       setTogglingExclusive(false);
@@ -149,14 +153,15 @@ const ProductoAdminCard: React.FC<Props> = ({
     const prev = featuredId;
     const next = e.target.checked ? getNextAvailableId("featured") : null;
 
-    // optimista
     setFeaturedId(next);
+    onQuickPatch?.(product.id, { featuredId: next as any });
     try {
       await updateDoc(itemRef, { featuredId: next });
       await bumpCatalogVersion("toggle featured");
     } catch (err) {
       console.error("❌ Error al actualizar destacado:", err);
-      setFeaturedId(prev); // rollback
+      setFeaturedId(prev);
+      onQuickPatch?.(product.id, { featuredId: prev as any });
       alert("❌ Hubo un error al actualizar Destacado.");
     } finally {
       setTogglingFeatured(false);
@@ -171,21 +176,22 @@ const ProductoAdminCard: React.FC<Props> = ({
     const prev = sinStock;
     const next = e.target.checked;
 
-    // optimista
     setSinStock(next);
+    onQuickPatch?.(product.id, { sinStock: next });
     try {
       await updateDoc(itemRef, { sinStock: next });
       await bumpCatalogVersion("toggle sinStock");
     } catch (err) {
       console.error("❌ Error al actualizar sinStock:", err);
-      setSinStock(prev); // rollback
+      setSinStock(prev);
+      onQuickPatch?.(product.id, { sinStock: prev });
       alert("❌ Hubo un error al actualizar Sin stock.");
     } finally {
       setTogglingSinStock(false);
     }
   };
 
-  // Para evitar que cualquier input/checkbox abra el modal
+  // Evitar que inputs abran el modal
   const stopClickOpenModal = (e: MouseEvent) => stop(e);
 
   return (

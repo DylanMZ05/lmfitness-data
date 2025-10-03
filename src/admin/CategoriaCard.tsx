@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   doc,
-  updateDoc,
   setDoc,
   serverTimestamp,
   increment,
@@ -31,9 +30,15 @@ async function bumpCatalogVersion(note?: string) {
     { merge: true }
   );
   try {
-    ["catalogCacheV1:data","catalogCacheV1:version","catalogCacheV1:updatedAt","catalogCacheV1:index"]
-      .forEach((k) => localStorage.removeItem(k));
-  } catch { /* noop */ }
+    [
+      "catalogCacheV1:data",
+      "catalogCacheV1:version",
+      "catalogCacheV1:updatedAt",
+      "catalogCacheV1:index",
+    ].forEach((k) => localStorage.removeItem(k));
+  } catch {
+    /* noop */
+  }
 }
 
 type Props = {
@@ -239,7 +244,7 @@ const CategoriaCard: React.FC<Props> = ({ category, data, onEditProduct, onUpdat
                 allData={data}
                 onEdit={() => onEditProduct(product)}
                 onUpdate={noopUpdate}
-                onQuickPatch={onQuickPatch}
+                onQuickPatch={onQuickPatch} // requiere que ProductoAdminCard defina prop opcional onQuickPatch
               />
             </div>
           ))}
