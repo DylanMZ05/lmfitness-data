@@ -1,8 +1,125 @@
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+# -------------------------------------------------------------------
+# BASE
+# -------------------------------------------------------------------
+# Evitar listado de directorios
+Options -Indexes
+
+# Usar UTF-8 por defecto
+AddDefaultCharset utf-8
+
+# Extensiones/MIME de fuentes (por si faltan en el server)
+AddType font/ttf              .ttf
+AddType font/otf              .otf
+AddType application/vnd.ms-fontobject .eot
+AddType font/woff             .woff
+AddType font/woff2            .woff2
+AddType image/svg+xml         .svg
+
+# CORS para fuentes (evita bloqueos al servir desde subdominios/CDN)
+<FilesMatch "\.(ttf|otf|eot|woff|woff2)$">
+  Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# -------------------------------------------------------------------
+# HTTPS (comenta si tu proveedor ya lo maneja)
+# -------------------------------------------------------------------
+RewriteEngine On
+
+# Forzar HTTPS (y opcionalmente quitar www)
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+# Si NO querés quitar www, usá esto en su lugar:
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# -------------------------------------------------------------------
+# COMPRESIÓN (Brotli primero, Gzip fallback)
+# -------------------------------------------------------------------
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+  # Nivel razonable (0-11)
+  BrotliCompressionQuality 5
 </IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# Servir archivos precomprimidos si existen (Vite puede generar .br/.gz en algunos setups)
+# -- Brotli
+RewriteCond %{HTTP:Accept-encoding} br
+RewriteCond %{REQUEST_FILENAME}\.br -f
+RewriteRule ^(.+)$ $1.br [QSA,L]
+<FilesMatch "\.br$">
+  Header set Content-Encoding br
+  Header set Vary "Accept-Encoding"
+  # Limpia el tipo si lo necesitás: Header set Content-Type "text/javascript"
+</FilesMatch>
+# -- Gzip
+RewriteCond %{HTTP:Accept-encoding} gzip
+RewriteCond %{REQUEST_FILENAME}\.gz -f
+RewriteRule ^(.+)$ $1.gz [QSA,L]
+<FilesMatch "\.gz$">
+  Header set Content-Encoding gzip
+  Header set Vary "Accept-Encoding"
+</FilesMatch>
+
+# -------------------------------------------------------------------
+# CACHÉ AGRESIVA PARA ASSETS HASHEADOS (Vite /assets/*)
+# -------------------------------------------------------------------
+# Los bundles hasheados son inmutables: 1 año + immutable
+<IfModule mod_headers.c>
+  <FilesMatch "^assets/.*\.(js|mjs|css|woff2|woff|ttf|otf|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Imágenes (si están hasheadas, mismo trato; si no, 30d)
+  <FilesMatch "^assets/.*\.(png|jpg|jpeg|webp|gif|avif)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "^(?!assets/).*\.(png|jpg|jpeg|webp|gif|avif)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  # HTML y raíz: cache corto
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# (Opcional) Desactivar ETag para evitar duplicados entre balanceadores
+#FileETag None
+#Header unset ETag
+
+# -------------------------------------------------------------------
+# HEADERS DE SEGURIDAD (seguros para SPA)
+# -------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # HSTS: habilitar solo si TODO el sitio sirve por HTTPS y estás listo para preload
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Permisos mínimos (ajusta según necesites)
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  # Ayuda a Lighthouse en PWA/tema
+  Header always set X-UA-Compatible "IE=edge"
+</IfModule>
+
+# -------------------------------------------------------------------
+# SPA ROUTING (React Router): fallback a index.html
+# -------------------------------------------------------------------
+# Deja pasar archivos reales y directorios (assets, robots, sitemap, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Resto de rutas -> index.html (el router del cliente resuelve)
+RewriteRule . /index.html [L]
+
+# -------------------------------------------------------------------
+# (Opcional) MANEJO 404 personalizado
+# -------------------------------------------------------------------
+#ErrorDocument 404 /index.html

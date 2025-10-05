@@ -1,15 +1,100 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image" href="src/assets/logo.webp" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <!-- ===== SEO básico ===== -->
     <title>LMFITNESS | SUPLEMENTOS DEPORTIVOS</title>
-    <link rel="preload" href="/assets/index-gYdmeEZx.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/index-gYdmeEZx.css"></noscript>
+    <meta
+      name="description"
+      content="LMFitness: suplementos deportivos de calidad — proteínas, creatina, aminoácidos y más. Envíos rápidos y asesoría personalizada."
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#0f1c3f" />
+
+    <!-- (Opcional) Canónica: reemplaza con tu dominio si lo tenés fijo -->
+    <!-- <link rel="canonical" href="https://tudominio.com/" /> -->
+
+    <!-- ===== Iconos / PWA ===== -->
+    <!-- Usa SVG/PNG para compatibilidad amplia; deja WebP como extra -->
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/assets/favicon.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#0f1c3f" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- ===== Open Graph / Twitter Cards ===== -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LMFitness" />
+    <meta property="og:title" content="LMFITNESS | Suplementos Deportivos" />
+    <meta
+      property="og:description"
+      content="Suplementos deportivos de calidad: proteínas, creatina, aminoácidos y más. Envíos rápidos y asesoría personalizada."
+    />
+    <meta property="og:image" content="/assets/og-image.jpg" />
+    <meta property="og:image:alt" content="LMFitness - Suplementos deportivos" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LMFITNESS | Suplementos Deportivos" />
+    <meta
+      name="twitter:description"
+      content="Suplementos deportivos de calidad con envío rápido."
+    />
+    <meta name="twitter:image" content="/assets/og-image.jpg" />
+
+    <!-- ===== CSS crítico / rendimiento ===== -->
+    <!-- Preload no bloqueante del CSS principal (fallback para no-JS) -->
+    <link
+      rel="preload"
+      href="/assets/index-gYdmeEZx.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+      fetchpriority="high"
+    />
+    <noscript><link rel="stylesheet" href="/assets/index-gYdmeEZx.css" /></noscript>
+
+    <!-- (Opcional) Preload de la imagen LCP si tenés una hero fija: actualiza la ruta -->
+    <!--
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/hero-lcp.webp"
+      imagesrcset="/assets/hero-lcp.webp 1x, /assets/hero-lcp@2x.webp 2x"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+    -->
+
+    <!-- (Opcional) Política de referer más privada sin romper analíticas básicas -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
   </head>
+
   <body>
     <div id="root"></div>
+
+    <!-- ===== App entry (Vite) =====
+         En dev apunta a /src/main.tsx; en build Vite reescribe a assets/index-*.js -->
     <script type="module" src="/src/main.tsx"></script>
+
+    <noscript>
+      Necesitás habilitar JavaScript para usar este sitio.
+    </noscript>
+
+    <!-- ===== Datos estructurados (Organization) — opcional pero suma a SEO ===== -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LMFitness",
+        "url": "/",
+        "logo": "/assets/favicon.png",
+        "sameAs": []
+      }
+    </script>
   </body>
 </html>

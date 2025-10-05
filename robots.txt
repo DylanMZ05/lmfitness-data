@@ -1,0 +1,12 @@
+# robots.txt — LMFitness
+# Fecha: 2025-10-04
+
+# Regla general: permitir el sitio y bloquear rutas de administración.
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/dashboard
+
+# Mapa del sitio (ajusta el dominio)
+Sitemap: https://tu-dominio.com/sitemap.xml
