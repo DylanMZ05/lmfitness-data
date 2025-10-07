@@ -20,6 +20,21 @@ interface Product {
   sabores?: string[];
 }
 
+/* ===================== Helpers ===================== */
+// Ruta absoluta para fallback (colocar fallback.png en /public/assets/)
+const FALLBACK = "/assets/fallback.png";
+
+// Normaliza URLs de imagen: convierte "assets/..." -> "/assets/..."
+// Respeta http(s):// y rutas que ya empiezan con "/"
+const toAbsAssetUrl = (u?: string) => {
+  const s = (u ?? "").trim();
+  if (!s) return s;
+  if (s.startsWith("http")) return s;
+  if (s.startsWith("/")) return s;
+  if (s.startsWith("assets/")) return `/${s}`;
+  return s;
+};
+
 const ProductoDetalle: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const { addToCart } = useCart();
@@ -65,9 +80,19 @@ const ProductoDetalle: React.FC = () => {
           const offerNum =
             (product as any).offerPrice !== undefined
               ? Number(
-                  (product as any).offerPrice?.toString().replace(/[^\d.-]/g, "")
+                  (product as any).offerPrice
+                    ?.toString()
+                    .replace(/[^\d.-]/g, "")
                 )
               : undefined;
+
+          // Normalizo array de imágenes a rutas absolutas dentro del sitio
+          const rawImages = Array.isArray((product as any).images)
+            ? ((product as any).images as string[])
+            : [];
+          const cleanedImages = rawImages
+            .map((u) => toAbsAssetUrl(u))
+            .filter((u): u is string => !!u && u.length > 0);
 
           const p: Product = {
             id: (product as any).id,
@@ -77,9 +102,7 @@ const ProductoDetalle: React.FC = () => {
               offerNum !== undefined && Number.isFinite(offerNum)
                 ? (offerNum as number)
                 : undefined,
-            images: Array.isArray((product as any).images)
-              ? ((product as any).images as string[])
-              : [],
+            images: cleanedImages,
             description: (product as any).description,
             longDescription: (product as any).longDescription,
             sinStock: Boolean((product as any).sinStock),
@@ -108,13 +131,18 @@ const ProductoDetalle: React.FC = () => {
   const images: string[] =
     (foundProduct?.images?.length ?? 0) > 0
       ? (foundProduct!.images as string[])
-      : ["assets/fallback.png"];
+      : [FALLBACK];
 
   const isSinStock = foundProduct?.sinStock === true;
   const saboresList: string[] = Array.isArray(foundProduct?.sabores)
     ? (foundProduct!.sabores as string[])
     : [];
   const hasSabores = saboresList.length > 0;
+
+  // Reset de slide al cambiar de producto
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [foundProduct?.id]);
 
   // Keydown global (Enter/Escape)
   useEffect(() => {
@@ -135,7 +163,6 @@ const ProductoDetalle: React.FC = () => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-    // deps cubren lo que usa el handler
   }, [modalOpen, zoomOpen, hasSabores, selectedSabor, foundProduct]);
 
   // --- early returns DESPUÉS de todos los hooks ---
@@ -219,8 +246,12 @@ const ProductoDetalle: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               onClick={openZoom}
+              loading="lazy"
+              decoding="async"
+              referrerPolicy="no-referrer"
               onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = "assets/fallback.png";
+                const img = e.currentTarget as HTMLImageElement;
+                if (!img.src.includes("fallback")) img.src = FALLBACK;
               }}
             />
 
@@ -229,22 +260,27 @@ const ProductoDetalle: React.FC = () => {
                 SIN STOCK
               </span>
             )}
-            <button
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
-              onClick={prevSlide}
-              aria-label="Imagen anterior"
-              type="button"
-            >
-              <FaArrowLeft />
-            </button>
-            <button
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
-              onClick={nextSlide}
-              aria-label="Imagen siguiente"
-              type="button"
-            >
-              <FaArrowRight />
-            </button>
+
+            {images.length > 1 && (
+              <>
+                <button
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
+                  onClick={prevSlide}
+                  aria-label="Imagen anterior"
+                  type="button"
+                >
+                  <FaArrowLeft />
+                </button>
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-100 p-2 rounded-full"
+                  onClick={nextSlide}
+                  aria-label="Imagen siguiente"
+                  type="button"
+                >
+                  <FaArrowRight />
+                </button>
+              </>
+            )}
           </div>
 
           <div className="w-full md:w-1/2 px-5">
@@ -344,7 +380,7 @@ const ProductoDetalle: React.FC = () => {
           >
             <div className="relative">
               <button
-                className="absolute -top-15 -right-15 m-4 text-white text-3xl font-bold hover:text-red-500"
+                className="absolute -top-4 -right-4 m-4 text-white text-3xl font-bold hover:text-red-500"
                 onClick={closeZoom}
                 type="button"
               >
@@ -356,7 +392,8 @@ const ProductoDetalle: React.FC = () => {
                 className="max-w-full max-h-screen object-contain"
                 onClick={(e) => e.stopPropagation()}
                 onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = "assets/fallback.png";
+                  const img = e.currentTarget as HTMLImageElement;
+                  if (!img.src.includes("fallback")) img.src = FALLBACK;
                 }}
               />
             </div>

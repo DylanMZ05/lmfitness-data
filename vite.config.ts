@@ -8,5 +8,13 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
-  base: '/'
+
+  base: '/', 
+
+
+  build: {
+    sourcemap: true,        // genera *.map (podés quitarlo si no querés subir maps)
+    assetsDir: 'assets',    // default igual, lo dejo explícito
+    // cssCodeSplit: true    // default
+  }
 })

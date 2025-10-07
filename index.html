@@ -2,10 +2,7 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
     <!-- ===== SEO básico ===== -->
     <title>LMFITNESS | SUPLEMENTOS DEPORTIVOS</title>
@@ -16,11 +13,10 @@
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#0f1c3f" />
 
-    <!-- (Opcional) Canónica: reemplaza con tu dominio si lo tenés fijo -->
+    <!-- (Opcional) Canónica -->
     <!-- <link rel="canonical" href="https://tudominio.com/" /> -->
 
     <!-- ===== Iconos / PWA ===== -->
-    <!-- Usa SVG/PNG para compatibilidad amplia; deja WebP como extra -->
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/assets/favicon.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
@@ -47,18 +43,11 @@
     />
     <meta name="twitter:image" content="/assets/og-image.jpg" />
 
-    <!-- ===== CSS crítico / rendimiento ===== -->
-    <!-- Preload no bloqueante del CSS principal (fallback para no-JS) -->
-    <link
-      rel="preload"
-      href="/assets/index-gYdmeEZx.css"
-      as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
-      fetchpriority="high"
-    />
-    <noscript><link rel="stylesheet" href="/assets/index-gYdmeEZx.css" /></noscript>
+    <!-- ===== CSS principal ===== -->
+    <!-- Carga normal para no retrasar LCP ni generar FOUC -->
+    <link rel="stylesheet" href="/assets/index-gYdmeEZx.css" />
 
-    <!-- (Opcional) Preload de la imagen LCP si tenés una hero fija: actualiza la ruta -->
+    <!-- (Opcional) Preload de la imagen LCP si tu home tiene una hero fija -->
     <!--
     <link
       rel="preload"
@@ -70,22 +59,19 @@
     />
     -->
 
-    <!-- (Opcional) Política de referer más privada sin romper analíticas básicas -->
+    <!-- (Opcional) Política de referrer más privada -->
     <meta name="referrer" content="strict-origin-when-cross-origin" />
   </head>
 
   <body>
     <div id="root"></div>
 
-    <!-- ===== App entry (Vite) =====
-         En dev apunta a /src/main.tsx; en build Vite reescribe a assets/index-*.js -->
+    <!-- Entrada de la app Vite -->
     <script type="module" src="/src/main.tsx"></script>
 
-    <noscript>
-      Necesitás habilitar JavaScript para usar este sitio.
-    </noscript>
+    <noscript>Necesitás habilitar JavaScript para usar este sitio.</noscript>
 
-    <!-- ===== Datos estructurados (Organization) — opcional pero suma a SEO ===== -->
+    <!-- ===== Datos estructurados básicos ===== -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

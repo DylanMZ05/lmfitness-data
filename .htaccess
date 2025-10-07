@@ -1,122 +1,115 @@
 # -------------------------------------------------------------------
 # BASE
 # -------------------------------------------------------------------
+
 # Evitar listado de directorios
 Options -Indexes
 
-# Usar UTF-8 por defecto
+# Forzar UTF-8
 AddDefaultCharset utf-8
 
-# Extensiones/MIME de fuentes (por si faltan en el server)
+# Tipos MIME extra (fuentes y SVG)
 AddType font/ttf              .ttf
 AddType font/otf              .otf
 AddType application/vnd.ms-fontobject .eot
 AddType font/woff             .woff
 AddType font/woff2            .woff2
 AddType image/svg+xml         .svg
+AddType image/webp            .webp
+AddType application/javascript .js
+AddType text/css              .css
 
-# CORS para fuentes (evita bloqueos al servir desde subdominios/CDN)
+# Permitir que fuentes funcionen si se cargan desde otro dominio/CDN
 <FilesMatch "\.(ttf|otf|eot|woff|woff2)$">
   Header set Access-Control-Allow-Origin "*"
 </FilesMatch>
 
 # -------------------------------------------------------------------
-# HTTPS (comenta si tu proveedor ya lo maneja)
+# REDIRECCIÓN A HTTPS (simple, sin dobles 301)
 # -------------------------------------------------------------------
 RewriteEngine On
 
-# Forzar HTTPS (y opcionalmente quitar www)
-RewriteCond %{HTTPS} !=on [OR]
-RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+# Forzar HTTPS sin alterar www
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# Si NO querés quitar www, usá esto en su lugar:
-# RewriteCond %{HTTPS} !=on
-# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+# (Opcional) quitar www — descomenta si querés siempre sin www
+#RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+#RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
 # -------------------------------------------------------------------
-# COMPRESIÓN (Brotli primero, Gzip fallback)
+# COMPRESIÓN (brotli/gzip si el servidor lo soporta)
 # -------------------------------------------------------------------
 <IfModule mod_brotli.c>
-  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
-  # Nivel razonable (0-11)
   BrotliCompressionQuality 5
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
 </IfModule>
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
 </IfModule>
 
-# Servir archivos precomprimidos si existen (Vite puede generar .br/.gz en algunos setups)
-# -- Brotli
-RewriteCond %{HTTP:Accept-encoding} br
-RewriteCond %{REQUEST_FILENAME}\.br -f
-RewriteRule ^(.+)$ $1.br [QSA,L]
-<FilesMatch "\.br$">
-  Header set Content-Encoding br
-  Header set Vary "Accept-Encoding"
-  # Limpia el tipo si lo necesitás: Header set Content-Type "text/javascript"
-</FilesMatch>
-# -- Gzip
-RewriteCond %{HTTP:Accept-encoding} gzip
-RewriteCond %{REQUEST_FILENAME}\.gz -f
-RewriteRule ^(.+)$ $1.gz [QSA,L]
-<FilesMatch "\.gz$">
-  Header set Content-Encoding gzip
-  Header set Vary "Accept-Encoding"
-</FilesMatch>
+# -------------------------------------------------------------------
+# CACHÉ DE ESTÁTICOS
+# -------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # 1 año para estáticos versionados (Vite usa hash en nombre)
+  ExpiresByType text/css                             "access plus 1 year"
+  ExpiresByType application/javascript               "access plus 1 year"
+  ExpiresByType image/svg+xml                        "access plus 1 year"
+  ExpiresByType image/webp                           "access plus 1 year"
+  ExpiresByType image/avif                           "access plus 1 year"
+  ExpiresByType image/png                            "access plus 1 year"
+  ExpiresByType image/jpg                            "access plus 1 year"
+  ExpiresByType image/jpeg                           "access plus 1 year"
+  ExpiresByType image/gif                            "access plus 1 year"
+  ExpiresByType font/woff2                           "access plus 1 year"
+  ExpiresByType font/woff                            "access plus 1 year"
+  ExpiresByType font/ttf                             "access plus 1 year"
+  ExpiresByType font/otf                             "access plus 1 year"
+</IfModule>
 
-# -------------------------------------------------------------------
-# CACHÉ AGRESIVA PARA ASSETS HASHEADOS (Vite /assets/*)
-# -------------------------------------------------------------------
-# Los bundles hasheados son inmutables: 1 año + immutable
 <IfModule mod_headers.c>
-  <FilesMatch "^assets/.*\.(js|mjs|css|woff2|woff|ttf|otf|svg)$">
+  # "immutable" para archivos hasheados (CSS/JS/imagenes/fuentes)
+  <FilesMatch "\.(?:js|mjs|css|woff2|woff|ttf|otf|svg|png|jpe?g|gif|webp|avif)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 
-  # Imágenes (si están hasheadas, mismo trato; si no, 30d)
-  <FilesMatch "^assets/.*\.(png|jpg|jpeg|webp|gif|avif)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </FilesMatch>
-  <FilesMatch "^(?!assets/).*\.(png|jpg|jpeg|webp|gif|avif)$">
-    Header set Cache-Control "public, max-age=2592000"
-  </FilesMatch>
-
-  # HTML y raíz: cache corto
-  <FilesMatch "\.(html)$">
+  # HTML sin caché
+  <FilesMatch "\.html?$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
 </IfModule>
 
-# (Opcional) Desactivar ETag para evitar duplicados entre balanceadores
-#FileETag None
-#Header unset ETag
-
 # -------------------------------------------------------------------
-# HEADERS DE SEGURIDAD (seguros para SPA)
+# SEGURIDAD
 # -------------------------------------------------------------------
 <IfModule mod_headers.c>
-  # HSTS: habilitar solo si TODO el sitio sirve por HTTPS y estás listo para preload
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  # Permisos mínimos (ajusta según necesites)
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
-  # Ayuda a Lighthouse en PWA/tema
   Header always set X-UA-Compatible "IE=edge"
 </IfModule>
 
 # -------------------------------------------------------------------
-# SPA ROUTING (React Router): fallback a index.html
+# SPA ROUTING (React Router)
 # -------------------------------------------------------------------
-# Deja pasar archivos reales y directorios (assets, robots, sitemap, etc.)
+
+# 1) Si el archivo o carpeta existe, SERVIRLO tal cual
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Resto de rutas -> index.html (el router del cliente resuelve)
+# 2) Muy importante:
+#    Si piden algo bajo /assets/ y NO existe, devolver 404 real.
+#    Esto evita que un CSS/JS inexistente caiga al index.html (MIME text/html).
+RewriteCond %{REQUEST_URI} ^/assets/ [NC]
+RewriteRule . - [R=404,L]
+
+# 3) Todo lo demás → index.html (fallback SPA)
 RewriteRule . /index.html [L]
 
 # -------------------------------------------------------------------
