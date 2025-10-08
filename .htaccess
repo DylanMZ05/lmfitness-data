@@ -1,118 +1,121 @@
-# -------------------------------------------------------------------
+# ----------------------------------------
 # BASE
-# -------------------------------------------------------------------
-
-# Evitar listado de directorios
+# ----------------------------------------
 Options -Indexes
-
-# Forzar UTF-8
 AddDefaultCharset utf-8
 
-# Tipos MIME extra (fuentes y SVG)
-AddType font/ttf              .ttf
-AddType font/otf              .otf
+# Tipos MIME comunes
+AddType font/ttf  .ttf
+AddType font/otf  .otf
 AddType application/vnd.ms-fontobject .eot
-AddType font/woff             .woff
-AddType font/woff2            .woff2
-AddType image/svg+xml         .svg
-AddType image/webp            .webp
+AddType font/woff .woff
+AddType font/woff2 .woff2
+AddType image/svg+xml .svg
+AddType image/webp .webp
 AddType application/javascript .js
-AddType text/css              .css
+AddType text/css .css
 
-# Permitir que fuentes funcionen si se cargan desde otro dominio/CDN
+# CORS para fuentes (si algún día se sirve desde otro dominio/CDN)
 <FilesMatch "\.(ttf|otf|eot|woff|woff2)$">
   Header set Access-Control-Allow-Origin "*"
 </FilesMatch>
 
-# -------------------------------------------------------------------
-# REDIRECCIÓN A HTTPS (simple, sin dobles 301)
-# -------------------------------------------------------------------
+# ----------------------------------------
+# HTTPS
+# ----------------------------------------
 RewriteEngine On
-
-# Forzar HTTPS sin alterar www
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# (Opcional) quitar www — descomenta si querés siempre sin www
-#RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-#RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
-
-# -------------------------------------------------------------------
-# COMPRESIÓN (brotli/gzip si el servidor lo soporta)
-# -------------------------------------------------------------------
+# ----------------------------------------
+# COMPRESIÓN
+# ----------------------------------------
 <IfModule mod_brotli.c>
   BrotliCompressionQuality 5
   AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
 </IfModule>
-
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
 </IfModule>
 
-# -------------------------------------------------------------------
-# CACHÉ DE ESTÁTICOS
-# -------------------------------------------------------------------
+# ----------------------------------------
+# CACHÉ
+# ----------------------------------------
 <IfModule mod_expires.c>
   ExpiresActive On
-  # 1 año para estáticos versionados (Vite usa hash en nombre)
-  ExpiresByType text/css                             "access plus 1 year"
-  ExpiresByType application/javascript               "access plus 1 year"
-  ExpiresByType image/svg+xml                        "access plus 1 year"
-  ExpiresByType image/webp                           "access plus 1 year"
-  ExpiresByType image/avif                           "access plus 1 year"
-  ExpiresByType image/png                            "access plus 1 year"
-  ExpiresByType image/jpg                            "access plus 1 year"
-  ExpiresByType image/jpeg                           "access plus 1 year"
-  ExpiresByType image/gif                            "access plus 1 year"
-  ExpiresByType font/woff2                           "access plus 1 year"
-  ExpiresByType font/woff                            "access plus 1 year"
-  ExpiresByType font/ttf                             "access plus 1 year"
-  ExpiresByType font/otf                             "access plus 1 year"
+  ExpiresByType text/css                       "access plus 1 year"
+  ExpiresByType application/javascript         "access plus 1 year"
+  ExpiresByType image/svg+xml                  "access plus 1 year"
+  ExpiresByType image/webp                     "access plus 1 year"
+  ExpiresByType image/avif                     "access plus 1 year"
+  ExpiresByType image/png                      "access plus 1 year"
+  ExpiresByType image/jpg                      "access plus 1 year"
+  ExpiresByType image/jpeg                     "access plus 1 year"
+  ExpiresByType image/gif                      "access plus 1 year"
+  ExpiresByType font/woff2                     "access plus 1 year"
+  ExpiresByType font/woff                      "access plus 1 year"
+  ExpiresByType font/ttf                       "access plus 1 year"
+  ExpiresByType font/otf                       "access plus 1 year"
 </IfModule>
 
 <IfModule mod_headers.c>
-  # "immutable" para archivos hasheados (CSS/JS/imagenes/fuentes)
   <FilesMatch "\.(?:js|mjs|css|woff2|woff|ttf|otf|svg|png|jpe?g|gif|webp|avif)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
-
-  # HTML sin caché
   <FilesMatch "\.html?$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
 </IfModule>
 
-# -------------------------------------------------------------------
-# SEGURIDAD
-# -------------------------------------------------------------------
+# ----------------------------------------
+# SEGURIDAD / BEST PRACTICES
+# ----------------------------------------
 <IfModule mod_headers.c>
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
-  Header always set X-UA-Compatible "IE=edge"
+  # Aísla el browsing context (satisface el check de COOP)
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  # Limita quién puede “embeber” recursos tuyos
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+
+  # CSP pragmática (apta para React + Firebase). Si el JSON-LD está inline, dejamos 'unsafe-inline'
+  Header always set Content-Security-Policy "
+    default-src 'self';
+    base-uri 'self';
+    object-src 'none';
+    frame-ancestors 'self';
+    form-action 'self';
+    connect-src 'self'
+      https://firestore.googleapis.com
+      https://www.googleapis.com
+      https://securetoken.googleapis.com
+      https://identitytoolkit.googleapis.com
+      https://firebasestorage.googleapis.com
+      https://www.gstatic.com;
+    img-src 'self' data: blob:
+      https://firebasestorage.googleapis.com
+      https://*.gstatic.com
+      https://*.googleapis.com;
+    font-src 'self' data: https://fonts.gstatic.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    script-src 'self' https://www.gstatic.com 'unsafe-inline';
+    require-trusted-types-for 'script';
+    trusted-types default;
+  "
 </IfModule>
 
-# -------------------------------------------------------------------
-# SPA ROUTING (React Router)
-# -------------------------------------------------------------------
-
-# 1) Si el archivo o carpeta existe, SERVIRLO tal cual
+# ----------------------------------------
+# SPA ROUTING
+# ----------------------------------------
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# 2) Muy importante:
-#    Si piden algo bajo /assets/ y NO existe, devolver 404 real.
-#    Esto evita que un CSS/JS inexistente caiga al index.html (MIME text/html).
+# /assets faltantes → 404 real (evita MIME text/html en CSS/JS)
 RewriteCond %{REQUEST_URI} ^/assets/ [NC]
 RewriteRule . - [R=404,L]
 
-# 3) Todo lo demás → index.html (fallback SPA)
+# Fallback SPA
 RewriteRule . /index.html [L]
-
-# -------------------------------------------------------------------
-# (Opcional) MANEJO 404 personalizado
-# -------------------------------------------------------------------
-#ErrorDocument 404 /index.html
