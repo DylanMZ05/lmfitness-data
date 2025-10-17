@@ -29,6 +29,30 @@
     <meta name="twitter:image" content="/assets/og-image.jpg" />
 
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- ================================
+         PRELOAD DEL LCP (HERO SLIDE #1)
+         - Declaramos variantes responsive para evitar doble descarga
+       ================================= -->
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/images/SLIDER/HOME/01.webp"
+      imagesrcset="/assets/images/SLIDER/HOME/01.webp 720w, /assets/images/SLIDER/HOME/01-desktop.webp 1440w"
+      imagesizes="100vw"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
+    <!-- (Opcional recomendado) Preload de la siguiente diapositiva para suavizar el carrusel -->
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/images/SLIDER/HOME/02.webp"
+      imagesrcset="/assets/images/SLIDER/HOME/02.webp 720w, /assets/images/SLIDER/HOME/02-desktop.webp 1440w"
+      imagesizes="100vw"
+      type="image/webp"
+    />
   </head>
   <body>
     <div id="root"></div>
