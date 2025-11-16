@@ -10,12 +10,14 @@ import ShippingMarquee from "../../components/ShippingMarquee";
 ========================= */
 const useIsDesktop = () => {
   const [isDesktop, setIsDesktop] = useState(false);
+
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 768);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+
   return isDesktop;
 };
 
@@ -76,13 +78,19 @@ const PreloadLCPLinks: React.FC<{ isDesktop: boolean }> = ({ isDesktop }) => {
   useLayoutEffect(() => {
     const ensurePreload = (href: string, fetchPriority?: "high" | "auto") => {
       if (!href) return;
+
       const already = Array.from(
         document.head.querySelectorAll('link[rel="preload"][as="image"]')
       ).some((n) => {
         const el = n as HTMLLinkElement;
-        return el.getAttribute("href") === href || el.href.endsWith(href.replace(/^\.?\//, ""));
+        return (
+          el.getAttribute("href") === href ||
+          el.href.endsWith(href.replace(/^\.?\//, ""))
+        );
       });
+
       if (already) return;
+
       const link = document.createElement("link");
       link.rel = "preload";
       link.as = "image";
@@ -95,14 +103,19 @@ const PreloadLCPLinks: React.FC<{ isDesktop: boolean }> = ({ isDesktop }) => {
     ensurePreload(isDesktop ? first.bgDesktop : first.bgMobile, "high");
 
     const second = slides[1];
-    if (second) ensurePreload(isDesktop ? second.bgDesktop : second.bgMobile, "auto");
+    if (second) {
+      ensurePreload(
+        isDesktop ? second.bgDesktop : second.bgMobile,
+        "auto"
+      );
+    }
   }, [isDesktop]);
 
   return null;
 };
 
 const Slide: React.FC<{
-  slide: typeof slides[number];
+  slide: (typeof slides)[number];
   slideIndex: number;
   current: number;
   isDesktop: boolean;
@@ -110,21 +123,27 @@ const Slide: React.FC<{
   <div className="relative w-full flex-shrink-0" style={{ minWidth: "100%" }}>
     <div className="relative w-full">
       <picture>
+        {/* Versión desktop */}
         <source
-          media="(min-width: 768px)"
+          media="(min-width: 1024px)"
           type="image/webp"
-          srcSet={`${slide.bgDesktop} 1440w, ${slide.bgMobile} 720w`}
-          sizes="100vw"
+          srcSet={`${slide.bgDesktop} 1440w`}
+          sizes="(min-width: 1024px) 1440px, 100vw"
         />
+        {/* Fallback + mobile/tabla */}
         <img
-          src={slide.bgMobile}              // ABSOLUTA
+          src={slide.bgMobile} // ABSOLUTA
+          srcSet={`${slide.bgMobile} 720w, ${slide.bgDesktop} 1440w`}
+          sizes="(min-width: 1024px) 1440px, 100vw"
           alt={slide.alt}
           width={slide.width}
           height={slide.height}
           className="w-full h-auto object-contain block"
           loading={slideIndex === 0 ? "eager" : "lazy"}
           decoding="async"
-          {...({ fetchpriority: slideIndex === 0 ? "high" : "auto" } as any)}
+          {...({
+            fetchpriority: slideIndex === 0 ? "high" : "auto",
+          } as any)}
         />
       </picture>
 
@@ -136,7 +155,9 @@ const Slide: React.FC<{
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
           className={`absolute z-10 w-full px-2 transform ${
-            isDesktop ? slide.button.positionDesktop : slide.button.positionMobile
+            isDesktop
+              ? slide.button.positionDesktop
+              : slide.button.positionMobile
           }`}
         >
           <div className="flex justify-center">
@@ -179,8 +200,15 @@ const Main: React.FC = () => {
     };
   }, []);
 
-  const handleNext = () => { setIndex((p) => (p === slides.length - 1 ? 0 : p + 1)); resetInterval(); };
-  const handlePrev = () => { setIndex((p) => (p === 0 ? slides.length - 1 : p - 1)); resetInterval(); };
+  const handleNext = () => {
+    setIndex((p) => (p === slides.length - 1 ? 0 : p + 1));
+    resetInterval();
+  };
+
+  const handlePrev = () => {
+    setIndex((p) => (p === 0 ? slides.length - 1 : p - 1));
+    resetInterval();
+  };
 
   return (
     <>
@@ -192,11 +220,24 @@ const Main: React.FC = () => {
             className="flex transition-transform duration-700 ease-in-out"
             style={{ transform: `translateX(-${index * 100}%)` }}
           >
-            {!hydrated
-              ? <Slide slide={slides[0]} slideIndex={0} current={0} isDesktop={isDesktop} />
-              : slides.map((s, i) => (
-                  <Slide key={s.id} slide={s} slideIndex={i} current={index} isDesktop={isDesktop} />
-                ))}
+            {!hydrated ? (
+              <Slide
+                slide={slides[0]}
+                slideIndex={0}
+                current={0}
+                isDesktop={isDesktop}
+              />
+            ) : (
+              slides.map((s, i) => (
+                <Slide
+                  key={s.id}
+                  slide={s}
+                  slideIndex={i}
+                  current={index}
+                  isDesktop={isDesktop}
+                />
+              ))
+            )}
           </div>
 
           <button

@@ -620,10 +620,19 @@ const Header: React.FC = () => {
               ))}
             </ul>
 
-            <button onClick={() => setCartOpen(!cartOpen)} className="mr-10 relative text-white cursor-pointer">
-              <ShoppingCart size={24} />
+            <button
+              type="button"
+              onClick={() => setCartOpen(!cartOpen)}
+              className="mr-10 relative text-white cursor-pointer"
+              aria-label={cartOpen ? "Cerrar carrito" : "Abrir carrito"}
+              title={cartOpen ? "Cerrar carrito" : "Abrir carrito"}
+            >
+              <ShoppingCart size={24} aria-hidden="true" />
               {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+                <span
+                  className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2"
+                  aria-label={`${cart.reduce((acc, item) => acc + item.quantity, 0)} productos en el carrito`}
+                >
                   {cart.reduce((acc, item) => acc + item.quantity, 0)}
                 </span>
               )}

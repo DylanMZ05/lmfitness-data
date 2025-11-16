@@ -43,32 +43,52 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4 text-center md:text-left">Contactános</h3>
             <div className="flex items-center justify-center md:justify-start gap-4 text-2xl">
+
               <a
                 href="https://wa.me/5492257531656"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:scale-110 transition-transform"
+                aria-label="Contactar por WhatsApp"
+                title="WhatsApp"
               >
-                <FaWhatsapp className="text-[#25D366] hover:text-[#74f3a3] text-3xl" />
+                <FaWhatsapp
+                  className="text-[#25D366] hover:text-[#74f3a3] text-3xl"
+                  aria-hidden="true"
+                />
               </a>
+
               <a
                 href="https://www.instagram.com/lm.fitness_1/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:scale-110 transition-transform"
+                aria-label="Visitar Instagram de LM Fitness"
+                title="Instagram"
               >
-                <FaInstagram className="text-[#E1306C] hover:text-[#e0779a] text-3xl" />
+                <FaInstagram
+                  className="text-[#E1306C] hover:text-[#e0779a] text-3xl"
+                  aria-hidden="true"
+                />
               </a>
+
               <a
                 href="https://www.tiktok.com/@lm.fitness_1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:scale-110 transition-transform"
+                aria-label="Visitar TikTok de LM Fitness"
+                title="TikTok"
               >
-                <SiTiktok className="text-white hover:text-gray-300 text-3xl" />
+                <SiTiktok
+                  className="text-white hover:text-gray-300 text-3xl"
+                  aria-hidden="true"
+                />
               </a>
+
             </div>
           </div>
+
         </div>
       </section>
 

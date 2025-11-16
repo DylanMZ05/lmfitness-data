@@ -7,6 +7,7 @@ interface Slide {
   imageDesktop: string;
   imageMobile: string;
   link?: string;
+  alt?: string;
 }
 
 interface ParallaxSliderProps {
@@ -14,7 +15,10 @@ interface ParallaxSliderProps {
   width?: string;
 }
 
-const ParallaxSlider: React.FC<ParallaxSliderProps> = ({ slides, width = "w-[96vw]" }) => {
+const ParallaxSlider: React.FC<ParallaxSliderProps> = ({
+  slides,
+  width = "w-[96vw]",
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoSlideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoSlideDelay = 7000;
@@ -130,17 +134,36 @@ const ParallaxSlider: React.FC<ParallaxSliderProps> = ({ slides, width = "w-[96v
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {slides.map((slide, index) => {
-          const imageUrl = isMobile ? slide.imageMobile : slide.imageDesktop;
+          const imageUrlDesktop = slide.imageDesktop.startsWith("/")
+            ? slide.imageDesktop
+            : `/${slide.imageDesktop}`;
+          const imageUrlMobile = slide.imageMobile.startsWith("/")
+            ? slide.imageMobile
+            : `/${slide.imageMobile}`;
+
           return (
             <div
               key={index}
               className="w-full aspect-[1/1] md:aspect-[16/7] flex-shrink-0 relative overflow-hidden group"
             >
-              <Link to={slide.link || "#"} onClick={scrollToTop} className="absolute inset-0 block">
-                <div
-                  className="w-full h-full bg-cover bg-center transition-transform duration-300 ease-in-out group-hover:scale-110"
-                  style={{ backgroundImage: `url(${imageUrl})` }}
-                />
+              <Link
+                to={slide.link || "#"}
+                onClick={scrollToTop}
+                className="absolute inset-0 block"
+                aria-label={slide.alt ? `Ir a ${slide.alt}` : "Ver más detalles"}
+              >
+                <picture>
+                  <source media="(min-width: 768px)" srcSet={imageUrlDesktop} />
+                  <img
+                    src={isMobile ? imageUrlMobile : imageUrlDesktop}
+                    srcSet={`${imageUrlMobile} 768w, ${imageUrlDesktop} 1280w`}
+                    sizes="(min-width: 1024px) 70vw, 96vw"
+                    alt={slide.alt ?? ""}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
+                  />
+                </picture>
               </Link>
             </div>
           );
@@ -173,7 +196,9 @@ const ParallaxSlider: React.FC<ParallaxSliderProps> = ({ slides, width = "w-[96v
           {slides.map((_, index) => (
             <button
               key={index}
-              className={`h-3 w-3 rounded-full ${index === currentIndex ? "bg-black" : "bg-black/30"}`}
+              className={`h-3 w-3 rounded-full ${
+                index === currentIndex ? "bg-black" : "bg-black/30"
+              }`}
               onClick={() => goToSlide(index)}
               aria-label={`Ir al slide ${index + 1}`}
             />

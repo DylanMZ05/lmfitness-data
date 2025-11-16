@@ -12,6 +12,13 @@ import { CartProvider } from "./context/CartContext";
 import WspButton from "./components/WspButton";
 import FeaturedAthletesPage from "./pages/atletas/FeaturedAthletesPage";
 
+
+// AÑADIR PRODUCTO A FIREBASE
+
+// import "./data/añadirProducto.js";
+
+
+
 // Home NO lazy para asegurar primer render sólido
 import HomeWrapper from "./components/HomeWrapper";
 

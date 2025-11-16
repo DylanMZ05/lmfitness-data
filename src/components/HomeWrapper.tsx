@@ -12,21 +12,25 @@ const offerSlides = [
     imageDesktop: "assets/images/SLIDER/CATALOGO/07-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/07-mobile.webp",
     link: "/producto/83",
+    alt: "Ver proteína en oferta LM Fitness",
   },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/04-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/04-mobile.webp",
     link: "/producto/72",
+    alt: "Ver creatina en oferta LM Fitness",
   },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/02-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/02-mobile.webp",
     link: "/producto/70",
+    alt: "Ver suplemento en oferta LM Fitness",
   },
   {
     imageDesktop: "assets/images/SLIDER/CATALOGO/01-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/01-mobile.webp",
     link: "/producto/69",
+    alt: "Ver combo de suplementos en oferta LM Fitness",
   },
 ];
 
@@ -35,7 +39,8 @@ const atletas = [
     imageDesktop: "assets/images/SLIDER/CATALOGO/Atletas-desktop.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/Atletas-mobile.webp",
     link: "/atletas-lm",
-  }
+    alt: "Conocé a los atletas LM Fitness",
+  },
 ];
 
 const HomeWrapper = () => {
@@ -59,12 +64,14 @@ const HomeWrapper = () => {
     <>
       <Main />
       <HowBuy />
+
       <section className="my-10 px-4">
         <h2 className="text-4xl font-bold text-center mb-6 text-black">
           ATLETAS LM FITNESS
         </h2>
         <ParallaxSlider slides={atletas} width="w-full" />
       </section>
+
       <section className="my-10 px-4">
         <h2 className="text-4xl font-bold text-center mb-6 text-black">
           OFERTAS ESPECIALES

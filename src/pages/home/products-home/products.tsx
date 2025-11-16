@@ -1,34 +1,45 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-const Products: React.FC = () => {
-  const products = [
-    {
-      title: "",
-      imageUrl: "assets/images/HOME-CARDS/01.webp",
-      link: "/catalogo#pre-entrenos",
-    },
-    {
-      title: "",
-      imageUrl: "assets/images/HOME-CARDS/02.webp",
-      link: "/catalogo#proteinas",
-    },
-    {
-      title: "",
-      imageUrl: "assets/images/HOME-CARDS/03.webp",
-      link: "/catalogo#creatinas",
-    },
-  ];
+type HomeProduct = {
+  id: string;
+  title: string;
+  imageUrl: string;
+  link: string;
+};
 
+const products: HomeProduct[] = [
+  {
+    id: "home-pre-entrenos",
+    title: "",
+    imageUrl: "/assets/images/HOME-CARDS/01.webp",
+    link: "/catalogo#pre-entrenos",
+  },
+  {
+    id: "home-proteinas",
+    title: "",
+    imageUrl: "/assets/images/HOME-CARDS/02.webp",
+    link: "/catalogo#proteinas",
+  },
+  {
+    id: "home-creatinas",
+    title: "",
+    imageUrl: "/assets/images/HOME-CARDS/03.webp",
+    link: "/catalogo#creatinas",
+  },
+];
+
+const Products: React.FC = () => {
   return (
     <section
       id="productos"
       className="h-max flex justify-center items-center gap-6 flex-wrap py-15 shadow-2xl"
+      aria-label="Categorías destacadas de suplementos"
     >
       <div className="flex flex-wrap justify-center gap-6 w-full px-4">
-        {products.map((product, index) => (
+        {products.map((product) => (
           <ProductCard
-            key={index}
+            key={product.id}
             title={product.title}
             imageUrl={product.imageUrl}
             link={product.link}

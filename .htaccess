@@ -24,18 +24,30 @@ AddType text/css .css
 # HTTPS
 # ----------------------------------------
 RewriteEngine On
+
+# Redirección forzada a HTTPS
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# HSTS (solo tiene sentido si SIEMPRE usás HTTPS)
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
 
 # ----------------------------------------
 # COMPRESIÓN
 # ----------------------------------------
 <IfModule mod_brotli.c>
   BrotliCompressionQuality 5
-  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+  AddOutputFilterByType BROTLI_COMPRESS \
+    text/html text/plain text/css text/javascript application/javascript \
+    application/json application/xml image/svg+xml
 </IfModule>
+
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+  AddOutputFilterByType DEFLATE \
+    text/html text/plain text/css text/javascript application/javascript \
+    application/json application/xml image/svg+xml
 </IfModule>
 
 # ----------------------------------------
@@ -43,6 +55,8 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 # ----------------------------------------
 <IfModule mod_expires.c>
   ExpiresActive On
+
+  # Assets estáticos (CSS/JS/imagenes/fuentes)
   ExpiresByType text/css                       "access plus 1 year"
   ExpiresByType application/javascript         "access plus 1 year"
   ExpiresByType image/svg+xml                  "access plus 1 year"
@@ -59,9 +73,12 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 </IfModule>
 
 <IfModule mod_headers.c>
+  # Cache largo para assets estáticos (con hash o poco cambiantes)
   <FilesMatch "\.(?:js|mjs|css|woff2|woff|ttf|otf|svg|png|jpe?g|gif|webp|avif)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set Cache-Control "public, max-age=31536000, stale-while-revalidate=86400"
   </FilesMatch>
+
+  # HTML: sin cache fuerte (para que veas cambios al actualizar)
   <FilesMatch "\.html?$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
@@ -75,47 +92,28 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
-  # Aísla el browsing context (satisface el check de COOP)
+  # Aísla el browsing context (COOP)
   Header always set Cross-Origin-Opener-Policy "same-origin"
-  # Limita quién puede “embeber” recursos tuyos
+  # Limita quién puede “embeber” recursos tuyos (CORP)
   Header always set Cross-Origin-Resource-Policy "same-origin"
 
-  # CSP pragmática (apta para React + Firebase). Si el JSON-LD está inline, dejamos 'unsafe-inline'
-  Header always set Content-Security-Policy "
-    default-src 'self';
-    base-uri 'self';
-    object-src 'none';
-    frame-ancestors 'self';
-    form-action 'self';
-    connect-src 'self'
-      https://firestore.googleapis.com
-      https://www.googleapis.com
-      https://securetoken.googleapis.com
-      https://identitytoolkit.googleapis.com
-      https://firebasestorage.googleapis.com
-      https://www.gstatic.com;
-    img-src 'self' data: blob:
-      https://firebasestorage.googleapis.com
-      https://*.gstatic.com
-      https://*.googleapis.com;
-    font-src 'self' data: https://fonts.gstatic.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    script-src 'self' https://www.gstatic.com 'unsafe-inline';
-    require-trusted-types-for 'script';
-    trusted-types default;
-  "
+  # CSP pragmática (apta para React + Firebase).
+  # IMPORTANTE: todo en una sola línea para evitar problemas de Apache.
+  Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com https://www.gstatic.com; img-src 'self' data: blob: https://firebasestorage.googleapis.com https://*.gstatic.com https://*.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' https://www.gstatic.com 'unsafe-inline'; require-trusted-types-for 'script'; trusted-types default;"
 </IfModule>
 
 # ----------------------------------------
 # SPA ROUTING
 # ----------------------------------------
+
+# Si el archivo o directorio existe, se sirve tal cual
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# /assets faltantes → 404 real (evita MIME text/html en CSS/JS)
+# /assets faltantes → 404 real (evita servir index.html como CSS/JS)
 RewriteCond %{REQUEST_URI} ^/assets/ [NC]
 RewriteRule . - [R=404,L]
 
-# Fallback SPA
+# Fallback SPA: todo lo demás a index.html
 RewriteRule . /index.html [L]

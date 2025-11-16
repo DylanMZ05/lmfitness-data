@@ -6,24 +6,50 @@ import {
   FaBoxOpen,
 } from "react-icons/fa";
 
-const steps = [
+type Step = {
+  id: string;
+  text: string;
+  icon: "clipboard" | "cart" | "check" | "box";
+};
+
+const steps: Step[] = [
   {
+    id: "intro",
     text: "Comprá tus productos en tres simples pasos",
-    icon: <FaClipboardList className="text-5xl text-black/80" aria-hidden="true" />,
+    icon: "clipboard",
   },
   {
+    id: "step-1",
     text: "Paso 1: Selecciona tus productos",
-    icon: <FaShoppingCart className="text-5xl text-black/80" aria-hidden="true" />,
+    icon: "cart",
   },
   {
+    id: "step-2",
     text: "Paso 2: Agrega al carrito y procede al pago",
-    icon: <FaCheckCircle className="text-5xl text-black/80" aria-hidden="true" />,
+    icon: "check",
   },
   {
+    id: "step-3",
     text: "Paso 3: Recibe tu pedido y disfruta",
-    icon: <FaBoxOpen className="text-5xl text-black/80" aria-hidden="true" />,
+    icon: "box",
   },
 ];
+
+const renderIcon = (icon: Step["icon"]) => {
+  const common = "text-5xl text-black/80";
+  switch (icon) {
+    case "clipboard":
+      return <FaClipboardList className={common} aria-hidden="true" />;
+    case "cart":
+      return <FaShoppingCart className={common} aria-hidden="true" />;
+    case "check":
+      return <FaCheckCircle className={common} aria-hidden="true" />;
+    case "box":
+      return <FaBoxOpen className={common} aria-hidden="true" />;
+    default:
+      return null;
+  }
+};
 
 const HowBuy: React.FC = () => {
   return (
@@ -37,19 +63,20 @@ const HowBuy: React.FC = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => {
+          {steps.map((step) => {
             const pasoMatch = step.text.match(/^(Paso \d+:)(.*)/);
             const isIntro = step.text.includes("tres simples pasos");
 
             return (
               <article
-                key={index}
+                key={step.id}
                 className="flex flex-col items-center"
                 aria-label={step.text}
               >
                 <div className="w-20 h-20 flex items-center justify-center rounded-full bg-neutral-500/20 mb-4 border-2 border-black/80">
-                  {step.icon}
+                  {renderIcon(step.icon)}
                 </div>
+
                 <h3 className="text-sm text-black/80 leading-snug">
                   {pasoMatch ? (
                     <>
