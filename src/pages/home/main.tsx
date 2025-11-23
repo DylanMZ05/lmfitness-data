@@ -7,6 +7,7 @@ import ShippingMarquee from "../../components/ShippingMarquee";
 
 /* =========================
    Hook: desktop breakpoint
+   Sincronizado a 768px para coincidir con Tailwind 'md'
 ========================= */
 const useIsDesktop = () => {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -22,8 +23,7 @@ const useIsDesktop = () => {
 };
 
 /* =========================
-   Slides data (LCP = slide[0])
-   RUTAS ABSOLUTAS para matchear preload del <head>
+   Slides data
 ========================= */
 const slides = [
   {
@@ -71,49 +71,49 @@ const slides = [
 ];
 
 /* ========================================
-   Preload de LCP (y del siguiente slide)
-   Útil como backup SPA (el temprano ya está en index.html)
+   Preload de LCP Inteligente
+   Añade el atributo media para que el navegador sepa qué priorizar
 ======================================== */
-const PreloadLCPLinks: React.FC<{ isDesktop: boolean }> = ({ isDesktop }) => {
+const PreloadLCPLinks: React.FC = () => {
   useLayoutEffect(() => {
-    const ensurePreload = (href: string, fetchPriority?: "high" | "auto") => {
+    const first = slides[0];
+    
+    // Función auxiliar para inyectar preload
+    const addPreload = (href: string, media?: string, fetchPriority: "high" | "auto" = "auto") => {
       if (!href) return;
-
-      const already = Array.from(
-        document.head.querySelectorAll('link[rel="preload"][as="image"]')
-      ).some((n) => {
-        const el = n as HTMLLinkElement;
-        return (
-          el.getAttribute("href") === href ||
-          el.href.endsWith(href.replace(/^\.?\//, ""))
-        );
-      });
-
-      if (already) return;
+      // Evitar duplicados
+      if (document.head.querySelector(`link[rel="preload"][href="${href}"]`)) return;
 
       const link = document.createElement("link");
       link.rel = "preload";
       link.as = "image";
       link.href = href;
-      if (fetchPriority) link.setAttribute("fetchpriority", fetchPriority);
+      if (media) link.media = media;
+      link.setAttribute("fetchpriority", fetchPriority);
       document.head.appendChild(link);
     };
 
-    const first = slides[0];
-    ensurePreload(isDesktop ? first.bgDesktop : first.bgMobile, "high");
+    // 1. Preload Desktop (Solo si la pantalla es >= 768px)
+    addPreload(first.bgDesktop, "(min-width: 768px)", "high");
 
+    // 2. Preload Mobile (Solo si la pantalla es < 768px)
+    addPreload(first.bgMobile, "(max-width: 767.98px)", "high");
+
+    // Opcional: Preload del segundo slide (baja prioridad)
     const second = slides[1];
     if (second) {
-      ensurePreload(
-        isDesktop ? second.bgDesktop : second.bgMobile,
-        "auto"
-      );
+      addPreload(second.bgDesktop, "(min-width: 768px)", "auto");
+      addPreload(second.bgMobile, "(max-width: 767.98px)", "auto");
     }
-  }, [isDesktop]);
+  }, []);
 
   return null;
 };
 
+/* ========================================
+   Componente Slide Individual
+   Usa <picture> correctamente para Art Direction
+======================================== */
 const Slide: React.FC<{
   slide: (typeof slides)[number];
   slideIndex: number;
@@ -123,22 +123,29 @@ const Slide: React.FC<{
   <div className="relative w-full flex-shrink-0" style={{ minWidth: "100%" }}>
     <div className="relative w-full">
       <picture>
-        {/* Versión desktop */}
+        {/* FUENTE DESKTOP: 
+          Se activa SOLO si el ancho es >= 768px.
+        */}
         <source
-          media="(min-width: 1024px)"
+          media="(min-width: 768px)"
+          srcSet={slide.bgDesktop}
           type="image/webp"
-          srcSet={`${slide.bgDesktop} 1440w`}
-          sizes="(min-width: 1024px) 1440px, 100vw"
         />
-        {/* Fallback + mobile/tabla */}
+        
+        {/* FUENTE MOBILE (Default/Fallback):
+          Aquí está el arreglo: NO ponemos bgDesktop en el srcSet de la img.
+          Esto fuerza al móvil a usar bgMobile, sin importar su densidad de píxeles.
+        */}
         <img
-          src={slide.bgMobile} // ABSOLUTA
-          srcSet={`${slide.bgMobile} 720w, ${slide.bgDesktop} 1440w`}
-          sizes="(min-width: 1024px) 1440px, 100vw"
+          src={slide.bgMobile}
           alt={slide.alt}
           width={slide.width}
           height={slide.height}
+          // sizes="100vw" ayuda al navegador a calcular el espacio ocupado
+          sizes="100vw"
           className="w-full h-auto object-contain block"
+          
+          // Optimización para Lighthouse (Solo el primero es eager/high)
           loading={slideIndex === 0 ? "eager" : "lazy"}
           decoding="async"
           {...({
@@ -147,6 +154,7 @@ const Slide: React.FC<{
         />
       </picture>
 
+      {/* Lógica del botón (posicionamiento condicional) */}
       {current === slideIndex && (
         <motion.div
           key={slide.id}
@@ -174,18 +182,22 @@ const Slide: React.FC<{
   </div>
 );
 
+/* ========================================
+   Componente Main (Carrusel)
+======================================== */
 const Main: React.FC = () => {
   const [index, setIndex] = useState(0);
-  const [hydrated, setHydrated] = useState(false); // pinta primero solo el slide 0
+  const [hydrated, setHydrated] = useState(false); 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isDesktop = useIsDesktop();
 
-  // Hidratar el resto del carrusel después del primer frame
+  // Hidratación progresiva
   useEffect(() => {
     const id = requestAnimationFrame(() => setHydrated(true));
     return () => cancelAnimationFrame(id);
   }, []);
 
+  // Lógica del intervalo automático
   const resetInterval = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
@@ -212,7 +224,8 @@ const Main: React.FC = () => {
 
   return (
     <>
-      <PreloadLCPLinks isDesktop={isDesktop} />
+      {/* Preload Links se maneja independiente de isDesktop ahora */}
+      <PreloadLCPLinks />
 
       <div className="relative w-full overflow-hidden max-w-screen">
         <div className="relative w-full">
