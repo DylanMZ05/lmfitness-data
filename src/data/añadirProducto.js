@@ -1,5 +1,5 @@
 // src/data/añadirProducto.js
-import { db } from "../firebase";
+import { db } from "../firebase"; // Asumo que esta ruta funciona
 import {
   doc,
   setDoc,
@@ -8,9 +8,10 @@ import {
   getDocs,
 } from "firebase/firestore";
 
-const ONE_SHOT_KEY = "__seed_multivitaminico_sinstock_done__";
+const ONE_SHOT_KEY = "__seed_colageno_y_vitc_done__";
 
-function banner(msg, isError = false) {
+// Exportamos 'banner'
+export function banner(msg, isError = false) { 
   try {
     const el = document.createElement("div");
     el.textContent = msg;
@@ -30,9 +31,9 @@ function banner(msg, isError = false) {
   } catch {}
 }
 
-async function getGlobalMaxId() {
+// Exportamos 'getGlobalMaxId' (aunque solo se usa internamente)
+export async function getGlobalMaxId() {
   let maxId = 0;
-  // Busca en TODAS las subcolecciones "items"
   const snap = await getDocs(collectionGroup(db, "items"));
   snap.forEach((d) => {
     const byDocId = Number(d.id);
@@ -45,69 +46,92 @@ async function getGlobalMaxId() {
   return maxId;
 }
 
-async function run() {
-  // Evitar que corra 2 veces si refrescás
+// Exportamos la función principal
+export async function runAddColagenos() {
   if (localStorage.getItem(ONE_SHOT_KEY) === "1") {
-    console.log("⏭️ Seed ya corrido (omitido).");
+    console.log("⏭️ Seed de colágenos ya corrido (omitido por localStorage).");
+    banner("⏭️ Seed de Colágenos ya corrido", false);
     return;
   }
 
-  const CATEGORY_ID = "sin-stock";
-
-  // 1) calcular ID siguiente global
-  const maxId = await getGlobalMaxId();
-  const nextId = maxId + 1;
-
-  // 2) armar ref y producto
+  const CATEGORY_ID = "colagenos"; 
   const categoryRef = doc(db, "productos", CATEGORY_ID);
-  const itemRef = doc(collection(categoryRef, "items"), String(nextId));
+  
+  // 1) calcular ID siguiente global
+  let maxId = await getGlobalMaxId();
+  let nextId = maxId + 1;
+  
+  // --- Definición de los productos a añadir ---
+  const newProducts = [
+    // --- Producto 1: COLAGENO - HYDROFLEX XBODY ---
+    {
+      id: nextId,
+      images: [
+        "assets/images/COLAGENOS/COLAGENO-HYDROFLEX-XBODY.webp",
+      ],
+      title: "COLÁGENO - HYDROFLEX XBODY",
+      description:
+        "Fórmula ultra-completa: Colágeno, Ácido Hialurónico, Coenzima Q10, Resveratrol, Biotina y Vitaminas C y E.",
+      price: "CONSULTAR", 
+      offerPrice: null,
+      longDescription:
+        "**COLÁGENO - HYDROFLEX XBODY** // " +
+        "**Cantidad:** 240gr // **Porción:** 11gr (2 scoops) // **Servicios por envase:** 22 // " +
+        "**Modo de uso:** Tomar 1 porción (2 scoops) en un vaso de agua al día, preferentemente por la mañana. // " +
+        "**Beneficios principales:** // " +
+        "• Fórmula más completa para el cuidado de piel, pelo, uñas y articulaciones. // " +
+        "• Con Ácido Hialurónico, Coenzima Q10, Resveratrol, Biotina, Vitamina E y Vitamina C. // " +
+        "• Cabello más fuerte y brilloso, uñas y huesos resistentes. // " +
+        "• Piel suave y reluciente, retrasa el envejecimiento celular y previene arrugas.",
+      featuredId: "novedad",
+      exclusiveId: null,
+      sinStock: false,
+    },
+    
+    // --- Producto 2: VITAMINA C - ONEFIT ---
+    {
+      id: nextId + 1, 
+      images: [
+        "assets/images/COLAGENOS/vit-c-onefit.webp",
+      ],
+      title: "VITAMINA C - ONEFIT",
+      description:
+        "Vitamina C en polvo de alta pureza. Refuerza defensas, poderoso antioxidante. 150 gramos.",
+      price: "CONSULTAR", 
+      offerPrice: null,
+      longDescription:
+        "**VITAMINA C - ONEFIT** // " +
+        "**Cantidad:** 150GR // **Porción:** 2.5GR (cucharita de te) // **Servicios por envase:** 60 // " +
+        "**Modo de uso:** Tomar 1 porción (cucharita de te) por día, en cualquier momento del dia. // " +
+        "**Beneficios principales:** // " +
+        "• Refuerza el sistema inmunológico. // " +
+        "• Potente antioxidante. // " +
+        "• Favorece la recuperación muscular. // " +
+        "• Estimula la producción de colágeno. // " +
+        "• Mejora la absorción del hierro. // " +
+        "• Apoya la salud cardiovascular.",
+      featuredId: null, 
+      exclusiveId: null,
+      sinStock: false,
+    },
+  ];
 
-  const product = {
-    id: nextId,
-    images: [
-      "assets/images/MULTIVITAMINICO-Y-COLAGENO/MULTIVITAMINICO-STAR-NUTRITION.webp",
-      "assets/images/MULTIVITAMINICO-Y-COLAGENO/INFO-MULTIVITAMINICO-STAR-NUTRITION.webp",
-    ],
-    title: "MULTIVITAMINICO - STAR NUTRITION",
-    description:
-      "Multivitamínico completo con vitaminas y minerales esenciales. 60 comprimidos.",
-    price: "CONSULTAR",
-    offerPrice: null,
-    longDescription:
-      "**MULTIVITAMINICO - STAR NUTRITION** // " +
-      "**Cantidad:** 60 comprimidos // **Porción:** 1 comprimido // **Servicios por envase:** 60 // " +
-      "**Modo de uso:** Tomar 1 comprimido diario en un vaso de agua, preferentemente por la mañana. // " +
-      "**Beneficios principales:** // " +
-      "• Completa la dieta con vitaminas y minerales esenciales. // " +
-      "• Fortalece el sistema inmunológico. // " +
-      "• Aumenta la energía y reduce la fatiga. // " +
-      "• Mejora la concentración y función cerebral. // " +
-      "• Promueve la salud de piel, cabello y uñas. // " +
-      "• Apoya el sistema nervioso.",
-    featuredId: null,
-    exclusiveId: null,
-    sinStock: true, // importante: está en SIN STOCK
-  };
+  // --- 3) Iterar y subir los productos ---
+  const uploadedPaths = [];
+  for (const product of newProducts) {
+    const itemRef = doc(collection(categoryRef, "items"), String(product.id));
+    await setDoc(itemRef, product, { merge: true });
+    uploadedPaths.push(itemRef.path);
+  }
+  
+  // 4) Crear la metadata de la categoría 'colagenos'
+  await setDoc(categoryRef, {
+      name: "COLÁGENOS",
+      orden: 200, 
+      slug: "colagenos",
+  }, { merge: true });
 
-  // 3) escribir
-  await setDoc(itemRef, product, { merge: true });
-
-  console.log(`✅ Subido a: ${itemRef.path}`);
-  banner("✅ MULTIVITAMINICO subido a SIN STOCK");
-  localStorage.setItem(ONE_SHOT_KEY, "1");
-}
-
-// Ejecutar cuando el DOM esté listo
-if (typeof window !== "undefined" && document.readyState !== "loading") {
-  run().catch((e) => {
-    console.error(e);
-    banner("❌ Error al subir (ver consola)", true);
-  });
-} else if (typeof window !== "undefined") {
-  window.addEventListener("DOMContentLoaded", () =>
-    run().catch((e) => {
-      console.error(e);
-      banner("❌ Error al subir (ver consola)", true);
-    })
-  );
+  console.log(`✅ Subidos ${newProducts.length} productos a Firestore.`);
+  banner(`✅ ${newProducts.length} productos de COLÁGENOS y la categoría subidos`);
+  localStorage.setItem(ONE_SHOT_KEY, "1"); 
 }
