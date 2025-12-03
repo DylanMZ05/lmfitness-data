@@ -9,9 +9,6 @@ import {
   User,
 } from "firebase/auth";
 import { auth } from "../firebase";
-// --- MODIFICACIÓN 1: NUEVA IMPORTACIÓN ---
-import { runAddColagenos, banner } from "../data/añadirProducto"; 
-
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -20,7 +17,6 @@ const Dashboard: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const [isSeeding, setIsSeeding] = useState(false); // MODIFICACIÓN 2: Estado para deshabilitar el botón
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -48,27 +44,6 @@ const Dashboard: React.FC = () => {
       console.error("Error al cerrar sesión:", error);
     }
   };
-
-  // --- MODIFICACIÓN 3: FUNCIÓN PARA AÑADIR PRODUCTOS ---
-  const handleAddColagenos = async () => {
-    if (isSeeding) return; 
-
-    setIsSeeding(true);
-    // Usa el banner para notificar al usuario que la subida comenzó
-    banner("⏳ Subiendo Colágenos. No refrescar la página...", false); 
-    console.log("Iniciando carga de Colágenos...");
-    
-    try {
-        await runAddColagenos();
-    } catch (error) {
-        console.error("❌ Error FATAL al subir Colágenos:", error);
-        // El error de runtime que viste podría ser un error de conexión/permisos de Firebase
-        banner("❌ Error al subir Colágenos (ver consola)", true);
-    } finally {
-        setIsSeeding(false);
-    }
-  };
-  // ------------------------------------------
 
   if (checkingAuth) {
     return (
@@ -119,19 +94,6 @@ const Dashboard: React.FC = () => {
       <div className="flex justify-between items-center px-6 mb-6 flex-wrap gap-4">
         <h2 className="text-4xl font-bold text-black">ADMIN PANEL</h2>
         <div className="flex gap-2">
-          {/* --- MODIFICACIÓN 4: BOTÓN NUEVO PARA AÑADIR PRODUCTOS --- */}
-          <button
-            onClick={handleAddColagenos}
-            disabled={isSeeding}
-            className={`text-white px-4 py-2 rounded cursor-pointer ${
-                isSeeding 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-green-600 hover:bg-green-700'
-            }`}
-          >
-            {isSeeding ? 'Añadiendo Colágenos...' : 'Añadir COLÁGENOS'}
-          </button>
-          {/* ------------------------------------------------------------ */}
           <button
             onClick={() => setShowPopup(true)}
             className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded cursor-pointer"
