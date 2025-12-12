@@ -946,6 +946,14 @@ export const productData: Category[] = [
     ],
   },
   {
+    name: "COLÁGENOS",
+    slug: "colagenos",
+    image: "/assets/images/COLAGENOS/COLAGENO-HYDROFLEX-XBODY.webp",
+    orden: 200,
+    products: [
+    ],
+  },
+  {
     name: "SIN STOCK",
     slug: "sin-stock",
     image: "assets/images/SHAKERS/Shaker-GOT-PROTEIN-BLENDER_c5417a30-e671-4fea-95ea-b6e0b102dd93.webp",
