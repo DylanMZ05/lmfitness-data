@@ -91,40 +91,11 @@ const Catalogo: React.FC = () => {
   const { hash } = useLocation();
 
   useEffect(() => {
-    if (hash) {
-      const targetId = hash.replace("#", "");
-
-      // Función interna para ejecutar el scroll
-      const attemptScroll = () => {
-        const element = document.getElementById(targetId);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-          return true; // Encontrado
-        }
-        return false; // No encontrado aún
-      };
-
-      // 1. Intentamos scrollear de inmediato por si ya está cargado
-      if (!attemptScroll()) {
-        // 2. Si no está, usamos MutationObserver para detectar cuándo aparece el ID en el DOM
-        const observer = new MutationObserver(() => {
-          if (attemptScroll()) {
-            observer.disconnect(); // Dejamos de observar cuando lo logramos
-          }
-        });
-
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true,
-        });
-
-        // Limpieza: si en 3 segundos no aparece, desconectamos para evitar fugas de memoria
-        return () => observer.disconnect();
-      }
-    } else {
-      // Si no hay hash, siempre arriba
+    if (!hash) {
       window.scrollTo(0, 0);
     }
+    // Eliminamos el MutationObserver de aquí porque ahora 
+    // CatalogoCard se encarga de su propio scroll interno por hash.
   }, [hash]);
 
   return (

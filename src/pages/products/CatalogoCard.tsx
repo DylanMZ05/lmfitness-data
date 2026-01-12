@@ -31,6 +31,16 @@ const CatalogoCard: React.FC = () => {
   const scrollToTop = useScrollToTop();
   const location = useLocation();
 
+  // Función de scroll reutilizable con offset para el Header
+  const executeScroll = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const yOffset = -120; // Ajuste para que el Header no tape el título
+      const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
   // Bloquear scroll del body cuando hay popup abierto
   useEffect(() => {
     if (!selectedProduct) return;
@@ -41,7 +51,7 @@ const CatalogoCard: React.FC = () => {
     };
   }, [selectedProduct]);
 
-  // Carga de catálogo con apertura automática de categoría por Hash
+  // Carga de catálogo con apertura automática y SCROLL GARANTIZADO
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -53,10 +63,16 @@ const CatalogoCard: React.FC = () => {
       setData(catalogData);
       setLoading(false);
 
-      // Si entramos con un hash (ej: #proteinas), abrimos la categoría inmediatamente
       const hash = location.hash.replace("#", "");
       if (hash) {
+        // 1. Abrimos la categoría inmediatamente
         setOpenCategory(hash);
+        
+        // 2. Esperamos a que el DOM se renderice y la animación de apertura progrese
+        // Usamos un tiempo ligeramente superior a la duración de la animación (0.3s)
+        setTimeout(() => {
+          executeScroll(hash);
+        }, 350); 
       }
     })();
     return () => {
@@ -64,22 +80,19 @@ const CatalogoCard: React.FC = () => {
     };
   }, [location.hash]);
 
-  const smoothScrollTo = (el: HTMLElement, offset = 120) => {
-    const y = el.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
-
   const toggleCategory = (slug: string) => {
     if (openCategory === slug) {
       setOpenCategory(null);
       return;
     }
+    
     setOpenCategory(slug);
-    // Solo scrolleamos manualmente si el usuario hace click (no en carga inicial)
+
+    // Solo scrolleamos manualmente si el usuario hace click.
+    // Esperamos a que se expanda el acordeón para calcular la posición real.
     setTimeout(() => {
-      const el = document.getElementById(slug);
-      if (el) smoothScrollTo(el, 120);
-    }, 320);
+      executeScroll(slug);
+    }, 350);
   };
 
   const openPopup = (product: Product) => {
@@ -156,7 +169,7 @@ const CatalogoCard: React.FC = () => {
             </div>
 
             <motion.div
-              initial={false} // Evita animaciones extrañas al montar con categoría abierta
+              initial={false}
               animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="overflow-hidden bg-gray-100 rounded-b-lg"
