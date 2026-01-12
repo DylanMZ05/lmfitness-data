@@ -14,11 +14,8 @@ interface Product {
   description?: string;
   images: string[];
   sinStock?: boolean;
-  // selección temporal en el modal
   selectedSabor?: string;
-  // sabores disponibles
   sabores?: string[];
-  // sabor elegido que viaja al carrito
   sabor?: string;
 }
 
@@ -34,7 +31,7 @@ const CatalogoCard: React.FC = () => {
   const scrollToTop = useScrollToTop();
   const location = useLocation();
 
-  // bloquear scroll del body cuando hay popup abierto
+  // Bloquear scroll del body cuando hay popup abierto
   useEffect(() => {
     if (!selectedProduct) return;
     const prev = document.body.style.overflow;
@@ -44,7 +41,7 @@ const CatalogoCard: React.FC = () => {
     };
   }, [selectedProduct]);
 
-  // Carga con cache + lectura única de meta/versión
+  // Carga de catálogo con apertura automática de categoría por Hash
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -52,13 +49,20 @@ const CatalogoCard: React.FC = () => {
         fallbackTtlMs: 6 * 60 * 60 * 1000,
       });
       if (!alive) return;
+      
       setData(catalogData);
       setLoading(false);
+
+      // Si entramos con un hash (ej: #proteinas), abrimos la categoría inmediatamente
+      const hash = location.hash.replace("#", "");
+      if (hash) {
+        setOpenCategory(hash);
+      }
     })();
     return () => {
       alive = false;
     };
-  }, []);
+  }, [location.hash]);
 
   const smoothScrollTo = (el: HTMLElement, offset = 120) => {
     const y = el.getBoundingClientRect().top + window.scrollY - offset;
@@ -71,6 +75,7 @@ const CatalogoCard: React.FC = () => {
       return;
     }
     setOpenCategory(slug);
+    // Solo scrolleamos manualmente si el usuario hace click (no en carga inicial)
     setTimeout(() => {
       const el = document.getElementById(slug);
       if (el) smoothScrollTo(el, 120);
@@ -99,19 +104,6 @@ const CatalogoCard: React.FC = () => {
     window.dispatchEvent(new CustomEvent("producto-agregado"));
   };
 
-  // hash deep-link
-  useEffect(() => {
-    const hash = location.hash.replace("#", "");
-    if (hash) {
-      setOpenCategory(hash);
-      const el = document.getElementById(hash);
-      if (el) {
-        setTimeout(() => smoothScrollTo(el, 115), 350);
-      }
-    }
-  }, [location]);
-
-  // teclado: Enter confirma, Esc cierra
   const onKeyHandler = useCallback(
     (e: KeyboardEvent) => {
       if (!selectedProduct) return;
@@ -125,7 +117,7 @@ const CatalogoCard: React.FC = () => {
         }
       }
     },
-    [selectedProduct] // addToCartHandler usa selectedProduct, así que con esto alcanza
+    [selectedProduct]
   );
 
   useEffect(() => {
@@ -135,7 +127,7 @@ const CatalogoCard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
+      <div className="flex flex-col items-center justify-center py-16 text-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-orange-500 mb-4" />
         <p className="text-gray-700 font-medium">Cargando productos...</p>
       </div>
@@ -143,7 +135,7 @@ const CatalogoCard: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
+    <div className="w-full max-w-4xl mx-auto p-4 min-h-[80vh]">
       {data.map((category) => {
         const isOpen = openCategory === category.slug;
         return (
@@ -164,7 +156,7 @@ const CatalogoCard: React.FC = () => {
             </div>
 
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
+              initial={false} // Evita animaciones extrañas al montar con categoría abierta
               animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="overflow-hidden bg-gray-100 rounded-b-lg"
@@ -252,7 +244,6 @@ const CatalogoCard: React.FC = () => {
         );
       })}
 
-      {/* Popup de sabor + cantidad con chips */}
       <AnimatePresence>
         {selectedProduct && (
           <div className="fixed inset-0 bg-black/70 flex justify-center items-center px-4 z-[1000]">

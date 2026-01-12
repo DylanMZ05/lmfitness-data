@@ -1,5 +1,5 @@
 // src/data/añadirProducto.js
-import { db } from "../firebase"; // Asumo que esta ruta funciona
+import { db } from "../firebase";
 import {
   doc,
   setDoc,
@@ -9,7 +9,8 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-const ONE_SHOT_KEY = "__seed_creatina_proteina_ena_v2__";
+// Nueva clave para asegurar que se ejecute este cambio específico
+const ONE_SHOT_KEY = "__seed_combo_ena_creapure_proteina_v1__";
 
 // Función para mostrar notificaciones en pantalla
 export function banner(msg, isError = false) { 
@@ -47,91 +48,45 @@ export async function getGlobalMaxId() {
   return maxId;
 }
 
-// Función principal para añadir los productos
+// Función principal para añadir el combo
 export async function runAddProductosNuevos() {
   if (localStorage.getItem(ONE_SHOT_KEY) === "1") {
-    console.log("⏭️ Seed ya ejecutado anteriormente.");
+    console.log("⏭️ Seed del combo ya ejecutado.");
     return;
   }
 
-  // 1) Calcular ID siguiente global
+  // 1) Calcular ID siguiente global para evitar duplicados
   let maxId = await getGlobalMaxId();
   let nextId = maxId + 1;
 
-  // 2) Definición de productos por categoría (IDs según captura de pantalla)
+  // 2) Definición del Combo (Creatina ENA Creapure + Proteína ENA True Made)
   const dataToSeed = [
     {
-      categoryId: "creatinas",
-      categoryName: "CREATINAS MONOHIDRATO",
-      orden: 60, // Ajustar según preferencia
+      categoryId: "combos-exclusivos",
+      categoryName: "COMBOS EXCLUSIVOS",
+      orden: 1, 
       items: [
         {
-          id: nextId++,
-          images: ["assets/images/CREATINAS/myprotein-creatina-250gr.webp"],
-          title: "CREATINA - MYPROTEIN",
-          description: "Calidad importada premium. Una de las marcas más vendidas del mundo. 250 gramos.",
+          id: nextId,
+          // Nota: Asegúrate de que esta imagen exista en tu carpeta assets
+          images: ["assets/images/COMBOS/combo-ena-creatina-proteina.webp"], 
+          title: "COMBO ENA: CREATINA CREAPURE + PROTEÍNA TRUE MADE",
+          description: "Pack Crecimiento: 1 Creatina Creapure (200g) + 1 Proteína True Made (453g). Máxima pureza y recuperación.",
           price: "CONSULTAR",
           offerPrice: null,
           longDescription:
-            "**CREATINA - MYPROTEIN** // " +
-            "**Cantidad:** 250g // **Sabor:** Sin sabor // **Porciones:** 50 (5g por porción) // " +
-            "**Detalle:** MYPROTEIN es una de las marcas más vendidas a lo amplio del mundo con la mayor calidad del mercado. Sin dudas de las mejores creatinas IMPORTADAS. // " +
-            "**Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // " +
+            "**COMBO CRECIMIENTO - ENA SPORT** // " +
+            "Este pack exclusivo combina los dos pilares fundamentales de la suplementación para deportistas exigentes. // " +
+            "**Incluye:** 1 Creatina Creapure (200g) + 1 Proteína True Made (453g). // " +
+            "**Detalle de los productos:** // " +
+            "• **Creatina Creapure:** Monohidrato de pureza farmacológica con sello de certificación internacional para máxima fuerza y potencia. // " +
+            "• **Proteína True Made:** Mezcla de suero lácteo concentrado y aislado con 25g de proteína por porción para el desarrollo muscular. // " +
+            "**Modo de uso sugerido:** Mezclar 1 medida de proteína (31g) en agua o leche post-entrenamiento. Tomar 1 porción de creatina (5g) diariamente en cualquier momento del día para mantener la saturación muscular. // " +
             "**Beneficios principales:** // " +
-            "• Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // " +
-            "• Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // " +
-            "• Recuperación más rápida, reduciendo el daño muscular y la inflamación. // " +
-            "• Beneficios cognitivos, ayudando a funciones como la memoria y concentración.",
-          featuredId: "novedad",
-          exclusiveId: null,
-          sinStock: false,
-        },
-        {
-          id: nextId++,
-          images: ["assets/images/CREATINAS/creatina-creapure-ena-sport-200gr.webp"],
-          title: "CREATINA - CREAPURE ENA SPORT",
-          description: "Máxima pureza garantizada con sello Creapure®. Creatina Monohidrato de 200g.",
-          price: "CONSULTAR",
-          offerPrice: null,
-          longDescription:
-            "**CREATINA - CREAPURE ENA SPORT (200gr)** // " +
-            "**Cantidad:** 200g // **Sabor:** Sin sabor // **Porciones:** 40 (5g por porción) // " +
-            "**Detalle:** Con sello de CERTIFICACION CREAPURE garantizando la mayor pureza en Creatina Monohidrato. // " +
-            "**Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // " +
-            "**Beneficios principales:** // " +
-            "• Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // " +
-            "• Aumento de la masa muscular. // " +
-            "• Recuperación muscular optimizada. // " +
-            "• Mayor pureza y calidad farmacológica gracias al sello Creapure.",
-          featuredId: null,
-          exclusiveId: null,
-          sinStock: false,
-        }
-      ]
-    },
-    {
-      categoryId: "proteinas",
-      categoryName: "PROTEÍNAS",
-      orden: 100, // Ajustar según preferencia
-      items: [
-        {
-          id: nextId++,
-          images: ["assets/images/PROTEINAS/proteina-ena-true-made.webp"],
-          title: "PROTEINA – ENA TRUE MADE",
-          description: "Suero lácteo concentrado y aislado. 25g de proteína por porción. Favorece desarrollo muscular.",
-          price: "CONSULTAR",
-          offerPrice: null,
-          longDescription:
-            "**PROTEINA – ENA TRUE MADE** // " +
-            "**Cantidad:** 453 g // **Porción:** 31 g // **Servicios:** 14 // " +
-            "**Información nutricional (31g):** Proteína: 25g | Carbohidratos: 1.9g | Grasas: 2.3g // " +
-            "**Detalle:** Proteína de suero lácteo concentrada y aislada de alta calidad, diseñada para favorecer el desarrollo muscular y acelerar la recuperación. // " +
-            "**Modo de uso:** Mezclar 1 medida (31g) en 200-250 ml de agua o leche. Consumir después del entrenamiento o en cualquier momento del día. Máximo 2 porciones al día. // " +
-            "**Beneficios principales:** // " +
-            "• Favorece el desarrollo y mantenimiento de la masa muscular. // " +
-            "• Acelera la recuperación post-entrenamiento. // " +
-            "• Aporta proteína de alta calidad y rápida absorción. // " +
-            "• Ideal para complementar tu dieta de forma práctica.",
+            "• Favorece el desarrollo y mantenimiento de la masa muscular magra. // " +
+            "• Acelera la recuperación post-esfuerzo reduciendo la inflamación. // " +
+            "• Mejora el rendimiento físico en ejercicios de alta intensidad. // " +
+            "• Aporta aminoácidos de alta calidad y rápida absorción.",
           featuredId: "novedad",
           exclusiveId: null,
           sinStock: false,
@@ -146,14 +101,14 @@ export async function runAddProductosNuevos() {
     for (const group of dataToSeed) {
       const categoryRef = doc(db, "productos", group.categoryId);
 
-      // Actualizar metadata de categoría (merge para no borrar lo existente)
+      // Actualizar metadata de categoría (sin borrar lo que ya tenga)
       await setDoc(categoryRef, {
         name: group.categoryName,
         slug: group.categoryId,
         orden: group.orden
       }, { merge: true });
 
-      // Subir cada producto a la subcolección 'items'
+      // Subir el combo a la subcolección 'items'
       for (const product of group.items) {
         const itemRef = doc(collection(categoryRef, "items"), String(product.id));
         await setDoc(itemRef, {
@@ -164,11 +119,11 @@ export async function runAddProductosNuevos() {
       }
     }
 
-    console.log(`✅ Se han añadido/actualizado ${totalAdded} productos.`);
-    banner(`✅ ${totalAdded} productos subidos correctamente.`);
+    console.log(`✅ Se ha añadido el combo a la categoría ${dataToSeed[0].categoryId}.`);
+    banner(`✅ Combo ENA subido correctamente.`);
     localStorage.setItem(ONE_SHOT_KEY, "1");
   } catch (error) {
-    console.error("❌ Error al subir productos:", error);
-    banner("❌ Error al subir productos a Firestore.", true);
+    console.error("❌ Error al subir el combo:", error);
+    banner("❌ Error al subir el combo a Firestore.", true);
   }
 }

@@ -9,6 +9,18 @@ import FeaturedSliderContainer from "../pages/home/FeaturedSliderContainer";
 
 const offerSlides = [
   {
+    imageDesktop: "assets/images/SLIDER/CATALOGO/12-1-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/12-1-mobile.webp",
+    link: "/producto/204",
+    alt: "Ver proteína en oferta LM Fitness",
+  },
+  {
+    imageDesktop: "assets/images/SLIDER/CATALOGO/11-1-desktop-1.webp",
+    imageMobile: "assets/images/SLIDER/CATALOGO/11-1-mobile.webp",
+    link: "/producto/207",
+    alt: "Ver proteína en oferta LM Fitness",
+  },
+  {
     imageDesktop: "assets/images/SLIDER/CATALOGO/07-desktop-1.webp",
     imageMobile: "assets/images/SLIDER/CATALOGO/07-mobile.webp",
     link: "/producto/83",
@@ -67,13 +79,6 @@ const HomeWrapper = () => {
 
       <section className="my-10 px-4">
         <h2 className="text-4xl font-bold text-center mb-6 text-black">
-          ATLETAS LM FITNESS
-        </h2>
-        <ParallaxSlider slides={atletas} width="w-full" />
-      </section>
-
-      <section className="my-10 px-4">
-        <h2 className="text-4xl font-bold text-center mb-6 text-black">
           OFERTAS ESPECIALES
         </h2>
         <ParallaxSlider slides={offerSlides} width="w-full" />
@@ -91,6 +96,14 @@ const HomeWrapper = () => {
 
       <hr className="text-black/20" />
       <Products />
+      <hr className="text-black/20" />
+      
+      <section className="py-10 px-4 bg-white">
+        <h2 className="text-4xl font-bold text-center mb-6 text-black">
+          ATLETAS LM FITNESS
+        </h2>
+        <ParallaxSlider slides={atletas} width="w-full" />
+      </section>
       <AboutUs />
     </>
   );
