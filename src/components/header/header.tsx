@@ -80,14 +80,20 @@ const Header: React.FC = () => {
   const isPickup = location === "Retiro por Domicilio";
 
   // ✅ useMemo para evitar cálculos en cada render
-  const envio = useMemo(() => {
-    if (isPickup) return 0; // 🚚 Sin envío cuando retira por local
-    if (location === "Otro") return 8000;
-    if (["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)) return 1500;
-    if (["Nueva Atlantis"].includes(locality)) return 2000;
-    if (location === "Partido de La Costa" && locality !== "") return 3500;
-    return 0;
-  }, [location, locality, isPickup]);
+    const envio = useMemo(() => {
+      if (isPickup) return 0; // 🚚 Sin envío cuando retira por local
+      if (location === "Otro") return 8000;
+      
+      // Localidades con tarifas específicas
+      if (["Mar de Ajó", "San Bernardo", "Costa Azul", "La Lucila"].includes(locality)) return 1500;
+      if (["Nueva Atlantis"].includes(locality)) return 2000;
+      if (["Las Toninas", "San Clemente"].includes(locality)) return 4000;
+      
+      // Regla general para el resto del Partido de La Costa
+      if (location === "Partido de La Costa" && locality !== "") return 3500;
+      
+      return 0;
+    }, [location, locality, isPickup]);
 
   const sectionLabels: Record<string, string> = {
     'inicio': 'Inicio',

@@ -13,10 +13,12 @@ import WspButton from "./components/WspButton";
 import FeaturedAthletesPage from "./pages/atletas/FeaturedAthletesPage";
 
 
-// AÑADIR PRODUCTO A FIREBASE
-
-// import "./data/añadirProducto.js";
-
+// ==========================================
+// SEEDER: AÑADIR PRODUCTO A FIREBASE
+// Comentar la línea de abajo para producción
+// ==========================================
+import "./data/añadirProducto.js";
+// ==========================================
 
 
 // Home NO lazy para asegurar primer render sólido
@@ -62,7 +64,7 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
             fontSize: 13,
           }}
         >
-{String(err?.stack || err?.message || err)}
+          {String(err?.stack || err?.message || err)}
         </pre>
       </div>
     );

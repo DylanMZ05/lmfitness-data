@@ -9,8 +9,8 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-// Nueva clave para asegurar que se ejecute este cambio específico
-const ONE_SHOT_KEY = "__seed_combo_ena_creapure_proteina_v1__";
+// Nueva clave para asegurar que se ejecute este cambio específico (Creatina Gold en SIN-STOCK)
+const ONE_SHOT_KEY = "__seed_creatina_gold_sinstock_v1__";
 
 // Función para mostrar notificaciones en pantalla
 export function banner(msg, isError = false) { 
@@ -48,10 +48,10 @@ export async function getGlobalMaxId() {
   return maxId;
 }
 
-// Función principal para añadir el combo
+// Función principal para añadir el producto
 export async function runAddProductosNuevos() {
   if (localStorage.getItem(ONE_SHOT_KEY) === "1") {
-    console.log("⏭️ Seed del combo ya ejecutado.");
+    console.log("⏭️ Seed de Creatina Gold (Sin Stock) ya ejecutado.");
     return;
   }
 
@@ -59,37 +59,37 @@ export async function runAddProductosNuevos() {
   let maxId = await getGlobalMaxId();
   let nextId = maxId + 1;
 
-  // 2) Definición del Combo (Creatina ENA Creapure + Proteína ENA True Made)
+  // 2) Definición del Producto en categoría SIN-STOCK
   const dataToSeed = [
     {
-      categoryId: "combos-exclusivos",
-      categoryName: "COMBOS EXCLUSIVOS",
-      orden: 1, 
+      categoryId: "SIN-STOCK",
+      categoryName: "SIN STOCK",
+      orden: 999, 
       items: [
         {
           id: nextId,
-          // Nota: Asegúrate de que esta imagen exista en tu carpeta assets
-          images: ["assets/images/COMBOS/combo-ena-creatina-proteina.webp"], 
-          title: "COMBO ENA: CREATINA CREAPURE + PROTEÍNA TRUE MADE",
-          description: "Pack Crecimiento: 1 Creatina Creapure (200g) + 1 Proteína True Made (453g). Máxima pureza y recuperación.",
+          images: ["assets/images/CREATINAS/creatina-gold-nutrition-creapure.webp"], 
+          title: "CREATINA - GOLD NUTRITION CREAPURE (200gr)",
+          description: "Creatina monohidrato de pureza alemana con sello Creapure. Máxima calidad farmacéutica para potencia y fuerza.",
           price: "CONSULTAR",
           offerPrice: null,
           longDescription:
-            "**COMBO CRECIMIENTO - ENA SPORT** // " +
-            "Este pack exclusivo combina los dos pilares fundamentales de la suplementación para deportistas exigentes. // " +
-            "**Incluye:** 1 Creatina Creapure (200g) + 1 Proteína True Made (453g). // " +
-            "**Detalle de los productos:** // " +
-            "• **Creatina Creapure:** Monohidrato de pureza farmacológica con sello de certificación internacional para máxima fuerza y potencia. // " +
-            "• **Proteína True Made:** Mezcla de suero lácteo concentrado y aislado con 25g de proteína por porción para el desarrollo muscular. // " +
-            "**Modo de uso sugerido:** Mezclar 1 medida de proteína (31g) en agua o leche post-entrenamiento. Tomar 1 porción de creatina (5g) diariamente en cualquier momento del día para mantener la saturación muscular. // " +
+            "**CREATINA CREAPURE | PUREZA ALEMANA, POTENCIA GOLD NUTRITION** // " +
+            "La creatina más pura y reconocida del mundo ahora también es Gold. // " +
+            "**Detalles del producto:** // " +
+            "• Cantidad: 200g // " +
+            "• Sabor: Sin sabor // " +
+            "• Porciones: 40 (5g por porción) // " +
+            "Con sello Creapure y código oficial de autenticidad 25GL21. Ideal para quienes buscan calidad farmacéutica y resultados reales. // " +
+            "**Modo de uso:** 1 porción diaria (5g), post-entreno o en cualquier momento del día. Mantener la constancia. // " +
             "**Beneficios principales:** // " +
-            "• Favorece el desarrollo y mantenimiento de la masa muscular magra. // " +
-            "• Acelera la recuperación post-esfuerzo reduciendo la inflamación. // " +
-            "• Mejora el rendimiento físico en ejercicios de alta intensidad. // " +
-            "• Aporta aminoácidos de alta calidad y rápida absorción.",
-          featuredId: "novedad",
+            "• Aumento de rendimiento físico, mejorando la fuerza y potencia muscular. // " +
+            "• Aumento de la masa muscular, aumentando la síntesis de proteína a largo plazo. // " +
+            "• Recuperación más rápida, reduciendo el daño muscular y la inflamación. // " +
+            "• Beneficios cognitivos, ayudando a las funciones cerebrales como la memoria, la concentración y la atención.",
+          featuredId: null,
           exclusiveId: null,
-          sinStock: false,
+          sinStock: true, // Marcado como sin stock
         }
       ]
     }
@@ -101,14 +101,14 @@ export async function runAddProductosNuevos() {
     for (const group of dataToSeed) {
       const categoryRef = doc(db, "productos", group.categoryId);
 
-      // Actualizar metadata de categoría (sin borrar lo que ya tenga)
+      // Actualizar metadata de categoría
       await setDoc(categoryRef, {
         name: group.categoryName,
         slug: group.categoryId,
         orden: group.orden
       }, { merge: true });
 
-      // Subir el combo a la subcolección 'items'
+      // Subir el producto a la subcolección 'items'
       for (const product of group.items) {
         const itemRef = doc(collection(categoryRef, "items"), String(product.id));
         await setDoc(itemRef, {
@@ -119,11 +119,14 @@ export async function runAddProductosNuevos() {
       }
     }
 
-    console.log(`✅ Se ha añadido el combo a la categoría ${dataToSeed[0].categoryId}.`);
-    banner(`✅ Combo ENA subido correctamente.`);
+    console.log(`✅ Se ha añadido el producto a la categoría ${dataToSeed[0].categoryId}.`);
+    banner(`✅ Producto añadido a SIN STOCK.`);
     localStorage.setItem(ONE_SHOT_KEY, "1");
   } catch (error) {
-    console.error("❌ Error al subir el combo:", error);
-    banner("❌ Error al subir el combo a Firestore.", true);
+    console.error("❌ Error al subir el producto:", error);
+    banner("❌ Error al subir el producto a Firestore.", true);
   }
 }
+
+// EJECUCIÓN AUTOMÁTICA AL IMPORTAR EL ARCHIVO
+runAddProductosNuevos();
